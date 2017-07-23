@@ -59,8 +59,23 @@ case $(uname) in
         # export PATH=/usr/local/Cellar/privoxy/3.0.26/sbin:$PATH
         ;;
 esac
-alias halt='sudo shutdown -h now'
-alias reboot='sudo reboot'
+if command -v sudo >/dev/null 2>&1;then
+    #当使用sudo执行alias地时候会找不到alias，需要这样设置
+    alias sudo='sudo '
+    alias halt='sudo shutdown -h now'
+    alias reboot='sudo reboot'
+    if command -v apt-get >/dev/null 2>&1;then
+        alias apt-get='sudo apt-get'
+    fi
+
+    if command -v yum >/dev/null 2>&1;then
+        alias yum='sudo yum'
+    fi
+
+    if command -v dnf >/dev/null 2>&1;then
+        alias dnf='sudo dnf'
+    fi
+fi
 alias cd..='cd ..'
 alias cd-='cd -'
 alias grep='grep --color=auto'
@@ -68,24 +83,10 @@ alias grep='grep --color=auto'
 alias listen='netstat -tan|grep LISTEN'
 #udp listen
 alias ulisten='netstat -uan|grep LISTEN'
-#当使用sudo执行alias地时候会找不到alias，需要这样设置
-alias sudo='sudo '
 alias cdgo="cd $GOPATH/src"
 
 if command -v vim >/dev/null 2>&1;then
     alias vi='vim'
-fi
-
-if command -v apt-get >/dev/null 2>&1;then
-    alias apt-get='sudo apt-get'
-fi
-
-if command -v yum >/dev/null 2>&1;then
-    alias yum='sudo yum'
-fi
-
-if command -v dnf >/dev/null 2>&1;then
-    alias dnf='sudo dnf'
 fi
 
 if command -v emacs >/dev/null 2>&1;then
@@ -203,75 +204,6 @@ proxystatus(){
     else
         echo "http proxy is not set"
     fi
-}
-
-function incrementBackup(){
-    if (($# !=2));then
-        echo "Usage: incrementBackup srcDir dstDir"
-        return 1
-    fi
-    src="$1"
-    dst="$2"
-
-    if [ ! -e "$src" ];then
-        echo "*Warning* $src does not exist,bye."
-        return 1
-    fi
-
-    #把src转成绝对路径
-    if [[  "${src:0:1}" != "/" ]];then
-        src="$PWD/$src"
-    fi
-
-    #把dst转成绝对路径
-    if [[  "${dst:0:1}" != "/" ]];then
-        dst="$PWD/$dst"
-    fi
-
-    echo "source directory is: $src"
-    echo "destination directory is: $dst"
-
-    if [[ ! -d "$dst" ]];then
-        mkdir -pv "$dst"
-    fi
-
-    #遍历src下的文件
-    for eachItem in $(\ls $src);do
-        srcItem="$src/$eachItem"
-        dstItem="$dst/$eachItem"
-        echo "srcItem is $srcItem"
-        echo "dstItem is $dstItem"
-        #如果srcItem是目录
-        if [[ -d "$srcItem" ]];then
-            #如果dstItem不存在，则直接复制过去，否则递归调用本函数
-            if [[ ! -e "$dstItem" ]];then
-                echo "cp -r $srcItem $dstItem"
-                cp -r "$srcItem" "$dstItem"
-            else
-                #要求dstItem也是目录
-                if [[ ! -d "$dstItem" ]];then
-                    echo "*Error* $srcItem is directory but $dstItem is not"
-                    return 1
-                fi
-                echo "incrementBackup $srcItem $dstItem"
-                incrementBackup "$srcItem" "$dstItem"
-            fi
-
-        #如果srcItem是文件
-        else
-            #不存在的话直接复制过去
-            if [[ ! -e "$dstItem" ]];then
-                echo "cp $srcItem $dstItem"
-                cp -f "$srcItem" "$dstItem"
-            else
-            #存在的话则比较文件日期，当srcItem比dstItem新的时候覆盖掉后者
-                if [[ "$srcItem" -nt "$dstItem" ]];then
-                    echo "cp $srcItem $dstItem"
-                    cp -f "$srcItem" "$dstItem"
-                fi
-            fi
-        fi
-    done
 }
 
 #创建目录并进入该目录
