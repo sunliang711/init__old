@@ -1,0 +1,68 @@
+#install
+apt install -y samba samba-common
+mv /etc/samba/smb.conf{,.bak}
+
+smbname=debian
+
+anonymousePath=/home/share/anonymous
+mkdir -p $anonymousePath
+chmod -R 0775 $anonymousePath
+chown -R nobody:nogroup $anonymousePath
+
+cat>/etc/samba/smb.conf<<EOF
+[global]
+workgroup = WORKGROUP
+server string = Samber Server %v
+netbios name = $smbname
+security = user
+map to guest = bad user
+dns proxy = no
+EOF
+cat>>/etc/samba/smb.conf<<EOF
+[allusers]
+#只有users组用户可登录
+comment = All Users
+path = /home/shares/allusers
+#force group = users
+create mask = 0660
+directory mask = 0771
+
+#users组用户可读写,其他人只读
+guest ok = yes
+writable = no
+write list = @users
+EOF
+
+[global]
+workgroup = WORKGROUP
+server string = Samber Server %v
+netbios name = debian
+security = user
+map to guest = bad user
+dns proxy = no
+
+[allusers]
+#只有users组用户可登录
+comment = All Users
+path = /home/shares/allusers
+#valid users = @users
+#force group = users
+create mask = 0660
+directory mask = 0771
+#writable = yes
+
+#users组用户可读写,其他人只读
+guest ok = yes
+writable = no
+write list = @users
+
+[anonymous]
+#所有人可读写
+path = /home/shares/anonymous
+force group = users
+create mask = 0660
+directory mask = 0771
+browsable = yes
+writable = yes
+guest ok = yes
+参考 https://www.howtoforge.com/tutorial/debian-samba-server/
