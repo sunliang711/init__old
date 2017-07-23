@@ -1,0 +1,129 @@
+#!/bin/bash
+thisScriptDir=$(cd $(dirname ${BASH_SOURCE}) && pwd)
+cd ${thisScriptDir}
+
+source functions
+
+help=0
+proxy=""
+vimGo=0
+ycm=0
+
+whichVim=""
+cfg=""
+root=""
+while getopts "hgpy" opt;do
+    case "$opt" in
+        h)
+            help=1
+            ;;
+        g)
+            vimGo=1
+            ;;
+        p)
+            proxy="socks5://localhost:1080"
+            echo "Proxy is :$proxy"
+            ;;
+        y)
+            ycm=1
+            ;;
+        *)
+            help
+            ;;
+    esac
+done
+
+if (($help==1));then
+    help
+    exit 0
+fi
+
+shift $((OPTIND-1))
+whichVim=$1
+if [[ "$whichVim" == "nvim" ]];then
+    root="$HOME/.config/nvim"
+    cfg="$root/init.vim"
+elif [[ "$whichVim" == "vim" ]];then
+    root="$HOME/.vim"
+    cfg="$HOME/.vimrc"
+
+    #TODO mac 下的grep不支持-P
+    # version=$(\vim --version | grep -Po '(?<=Vi IMproved )\d+\.\d+')
+    # echo "vim version is ${version}"
+    # if (( $(echo "$version>=7.4" | bc -l) )) ;then
+    #     #vim 7.4以后，vimrc文件可以放到.vim目录中
+    #     cfg="$root/vimrc"
+    # fi
+else
+    echo "Unknown vim type: $whichVim! Not vim or nvim."
+    exit 1
+fi
+
+#在whichVim后面还有个参数,则这个参数作为socks5代理
+#这样用来应对非本地socks5代理的情况,也就是不用socks5://localhost:1080
+if [ -n "$2" ];then
+    proxy=$2
+fi
+
+echo "Install supervim for $whichVim"
+echo "Config file is $cfg"
+echo "Root dir is $root"
+
+checkCmd $whichVim
+
+CURL=curl
+if [ -n "$proxy" ];then
+    CURL="curl --socks5 $proxy"
+    echo "set git proxy to $proxy"
+    git config --global http.proxy "$proxy"
+    git config --global https.proxy "$proxy"
+fi
+
+installBasic
+
+if (($ycm==1));then
+    sed -ibak "s|\"[ ]*\(Plug 'Valloric/YouCompleteMe'\)|\1|" $cfg
+    rm -f "${cfg}bak"
+
+    if [[ "$whichVim" == "vim" ]];then
+        dest="$HOME/.vim/plugins/YouCompleteMe"
+    elif [[ "$whichVim" == "nvim" ]];then
+        dest="$HOME/.config/nvim/plugins/YouCompleteMe"
+    fi
+fi
+if (($vimGo==1));then
+    sed -ibak "s|\"[ ]*\(Plug 'fatih/vim-go'\)|\1|" $cfg
+    rm -f "${cfg}bak"
+    export GOPATH=~/go
+
+fi
+
+echo "Install plugins..."
+$whichVim +PlugInstall +qall
+
+if (($ycm==1));then
+    echo "Install YouCompleteMe..."
+    if [ -d "$dest" ];then
+        cd "$dest"
+        option=
+        read -p "Ycm for clang(cpp)? [Y/n]" clang
+        if [[ "$clang" != [nN] ]];then
+            option+=" --clang-completer "
+            option+=" --system-libclang "
+        fi
+        read -p "Ycm for golang? [Y/n]"  golang
+        if [[ "$golang" != [nN] ]];then
+            option+=" --gocode-completer "
+        fi
+
+        #./install.py  --gocode-completer --clang-completer --system-libclang 
+        eval ./install.py  "$option"
+    else
+        echo "Doesn't exist $dest"
+    fi
+fi
+
+if (($vimGo==1));then
+    echo "Install vim-go..."
+    $whichVim +GoInstallBinaries +qall
+fi

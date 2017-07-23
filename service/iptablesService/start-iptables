@@ -1,0 +1,44 @@
+#!/bin/bash
+#ROOT是变量，在安装的时候会被替换
+db=ROOT/db
+
+iptables -t filter -P INPUT DROP
+iptables -t filter -P OUTPUT ACCEPT
+iptables -t filter -P FORWARD ACCEPT
+iptables -t filter -F
+
+iptables -t filter -A INPUT -m state --state ESTABLISHED,RELATED -j ACCEPT
+iptables -t filter -A INPUT -i lo -j ACCEPT
+iptables -t filter -A INPUT -p icmp -j ACCEPT
+##不应该删除plugin,而应该把这条禁用,如果删除的话,那么它以前记录的流量也都没了
+#1先删除plugin为1的所有目录
+#sqlite3 "$db" "delete from portConfig where plugin=1;"
+##
+#1把plugin为1的记录disable
+sqlite3 "$db" "update portConfig set enabled=0 where plugin=1;"
+#2执行plugin目录下的所有脚本
+for s in $(ls ROOT/plugin/*);do
+    echo "plugin: $s"
+    if file $s | grep -q 'shell script';then
+        bash "$s"
+    fi
+done
+#3从portConfig数据表中读取
+enabledPorts=$(sqlite3 "$db" "select type,port from portConfig where enabled=1;")
+#debug
+echo "enabledPorts: $enabledPorts"
+
+if [ -n "$enabledPorts" ];then
+    echo "$enabledPorts" | while read record;do
+        type=$(echo $record | awk -F'|' '{print $1}')
+        port=$(echo $record | awk -F'|' '{print $2}')
+        #debug
+        echo "type: $type"
+        echo "port: $port"
+        cmd="iptables -t filter -A INPUT -p $type -m $type --dport $port -j ACCEPT"
+        #为了监控从这个端口的输出流量
+        outputcmd="iptables -t filter -A OUTPUT -p $type --sport $port"
+        bash -c "$outputcmd"
+        bash -c "$cmd"
+    done
+fi

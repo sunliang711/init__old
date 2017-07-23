@@ -1,0 +1,151 @@
+#!/bin/bash
+SCRIPTDIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+cd "$SCRIPTDIR"
+
+case $(uname) in
+    Darwin)
+        OS="Darwin"
+        ;;
+    Linux)
+        if command -v pacman >/dev/null 2>&1;then
+            OS="Arch"
+        elif command -v dnf >/dev/null 2>&1;then
+            OS="Fedora"
+        elif command -v apt-get >/dev/null 2>&1;then
+            if lsb_release -a 2>/dev/null |grep Debian >/dev/null 2>&1;then
+                OS="Debian"
+            fi
+            if lsb_release -a 2>/dev/null |grep Ubuntu >/dev/null 2>&1;then
+                OS="Ubuntu"
+            fi
+        fi
+        ;;
+    *)
+        echo "Not support your OS!"
+        exit 1
+esac
+echo "OS: $OS"
+
+installDev=y
+setGit=y
+setShell=y
+setSupervim=y
+
+setDocker=n
+setProxy=n
+setGolang=n
+# read -p "Install dev tools? [Y/n] " installDev
+# read -p "Set proxy?(ie http_proxy https_proxy)[Y/n] " setProxy
+# read -p "Set git? [Y/n] " setGit
+# read -p "Set docker? [y/N] (only support arch)" setDocker
+# read -p "Set golang? [y/N] " setGolang
+# read -p "Set shell? [Y/n] (install zsh,zsh theme,source .custom-shell) " setShell
+# read -p "Set supervim? [Y/n] " setSupervim
+##Install dev tools
+if [[ "$installDev" != [nN] ]];then
+    echo "Install dev tools..."
+    cd dev
+    case "$OS" in
+        "Arch")
+            sudo /bin/bash dev-arch
+            ;;
+        "Fedora")
+            sudo /bin/bash dev-fedora
+            ;;
+        "Ubuntu")
+            sudo /bin/bash dev-ubuntu
+            ;;
+        "Debian")
+            /bin/bash dev-debian
+            read -p "set iptables? [Y/n] " setIp
+            if [[ "$setIp" != [nN] ]];then
+                cd service/iptablesService && bash install.sh && cd -
+            fi
+            ;;
+        "Darwin")
+            /bin/bash dev-mac
+            ;;
+    esac
+    cd -
+    echo "Done."
+fi
+
+##Set proxy
+if [[ "$setProxy" != [nN] ]];then
+    # echo "Set proxy..."
+    # if [ ! -e /usr/local/bin/ss-client ];then
+    #     echo "Error: Can't find ss-client!"
+    #     exit 1
+    # fi
+    # sudo /usr/local/bin/ss-client globalRestart
+    ssclient-go globalRestart
+    if netstat -tan |grep -q 8118;then
+        export http_proxy=localhost:8118
+        export HTTP_PROXY=localhost:8118
+        export https_proxy=localhost:8118
+        export HTTPS_PROXY=localhost:8118
+    else
+        echo "Warning:http(s) proxy set error: can not find listen port on 8118"
+    fi
+fi
+##Set git
+if [[ "$setGit" != [nN] ]];then
+    echo "Set git..."
+    cd git
+    /bin/bash setGit
+    cd -
+    echo "Done."
+fi
+
+##Set docker
+if [[ "$setDocker" == [yY] ]];then
+    echo "Set docker..."
+    cd docker
+    case "$OS" in
+        "Arch")
+            /bin/bash docker-arch install
+            ;;
+    esac
+    cd -
+    echo "Done."
+fi
+
+##Set golang
+if [[ "$setGolang" == [yY] ]];then
+    if ! command -v go >/dev/null 2>&1;then
+        read -p "install golang manaually,input socks5 proxy for curl:(empty for not use proxy) " sp
+        bash ./golang/installGo.sh -p "$sp"
+    fi
+    GOPATH=$HOME/go
+    if [ ! -d $GOPATH ];then
+        mkdir -pv $GOPATH/src
+    fi
+fi
+
+##Set shell
+if [[ "$setShell" != [nN] ]];then
+    echo "Install zsh and oh-my-zsh..."
+    cd shell
+    /bin/bash 10-zsh-installer.sh
+    /bin/bash 20-set-zsh-theme.sh
+    /bin/bash 30-config-shell.sh install
+    cd -
+    echo "Done."
+fi
+
+
+##Set vim
+if [[ "$setSupervim" != [nN] ]];then
+    echo "Install supervim without vim-go and YouCompleteMe..."
+    cd supervim
+    case "$OS" in
+        Arch|Darwin)
+            /bin/bash install nvim
+            ;;
+        *)
+            /bin/bash install vim
+            ;;
+    esac
+    cd -
+    echo "Done."
+fi

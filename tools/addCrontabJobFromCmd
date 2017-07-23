@@ -1,0 +1,7 @@
+
+#delete job
+crontab -l 2>/dev/null|grep -v checkTraffic.sh|crontab -
+crontab -l 2>/dev/null|grep -v clearTraffic.sh|crontab -
+#add job
+(crontab -l 2>/dev/null;echo "*/10 * * * * /usr/local/bin/checkTraffic.sh")|crontab -
+(crontab -l 2>/dev/null;echo "0 0 1 * * /usr/local/bin/clearTraffic.sh")|crontab -

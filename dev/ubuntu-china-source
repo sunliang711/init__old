@@ -1,0 +1,25 @@
+#!/bin/bash
+
+if ! grep -q 'Ubuntu' /etc/issue;then
+    echo "Not ubuntu,quit"
+    exit 1
+fi
+version=$(lsb_release  -a 2>/dev/null|grep 'Codename'|awk '{print $2}')
+if [ -z "version" ];then
+    echo "Not Ubuntu ?? Cannot find codename in the output of 'lsb_release -a'"
+    exit 1
+fi
+mv /etc/apt/sources.list{,.bak}
+
+cat>/etc/apt/sources.list<<EOF
+deb http://mirrors.163.com/ubuntu/ ${version} main restricted universe multiverse
+deb http://mirrors.163.com/ubuntu/ ${version}-security main restricted universe multiverse
+deb http://mirrors.163.com/ubuntu/ ${version}-updates main restricted universe multiverse
+deb http://mirrors.163.com/ubuntu/ ${version}-proposed main restricted universe multiverse
+deb http://mirrors.163.com/ubuntu/ ${version}-backports main restricted universe multiverse
+deb-src http://mirrors.163.com/ubuntu/ ${version} main restricted universe multiverse
+deb-src http://mirrors.163.com/ubuntu/ ${version}-security main restricted universe multiverse
+deb-src http://mirrors.163.com/ubuntu/ ${version}-updates main restricted universe multiverse
+deb-src http://mirrors.163.com/ubuntu/ ${version}-proposed main restricted universe multiverse
+deb-src http://mirrors.163.com/ubuntu/ ${version}-backports main restricted universe multiverse
+EOF

@@ -1,0 +1,48 @@
+#!/bin/bash
+SCRIPTDIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+cd "$SCRIPTDIR"
+
+if ! command -v pacman >/dev/null 2>&1;then
+    echo "Only support archlinux currently!"
+    exit 1
+fi
+
+install(){
+    echo "Install docker..."
+    sudo pacman -S docker --noconfirm --needed >/dev/null 2>&1
+    #set docker
+    #add user to docker group
+    if command -v docker>/dev/null 2>&1;then
+        read -p "Which user do you want to add to group 'docker' ?[default $USER] "  dockeruser
+        if [ -z "$dockeruser" ];then
+            dockeruser=$USER
+        fi
+        sudo usermod -a -G docker $dockeruser
+        sudo systemctl enable docker
+    fi
+    read -p "Set docker proxy?[Y/n]"  proxy
+    if [[ "$proxy"!=[nN] ]];then
+        sudo ./docker-proxy@arch.sh
+    fi
+}
+
+uninstall(){
+    sudo pacman -R docker --noconfirm
+}
+
+usage(){
+    echo "Uage: $(basename $0) install|uninstall"
+    exit 1
+}
+
+case "$1" in
+    install)
+        install
+        ;;
+    uninstall)
+        uninstall
+        ;;
+    *)
+        usage
+        ;;
+esac

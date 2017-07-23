@@ -1,0 +1,22 @@
+#!/bin/bash
+
+if [[ "$(uname)" != "Darwin" ]];then
+    echo "Not macOS"
+    exit 1
+fi
+
+#install homebrew
+if ! command -v brew >/dev/null;then
+    echo "install homebrew"
+    /usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
+fi
+
+shopt -s expand_aliases
+alias BREW='ALL_PROXY=socks5://127.0.0.1:1080 brew'
+BREW install coreutils findutils gnu-tar gnu-sed gawk gnutls gnu-indent gnu-getopt gnu-which wget go neovim/neovim/neovim python python3 privoxy
+SBIN=$(find /usr/local/Cellar/privoxy -name "sbin")
+ln -sf  $SBIN/privoxy /usr/local/bin/privoxy
+pkill privoxy
+BREW tap homebrew/dupes;
+BREW install grep
+

@@ -1,0 +1,30 @@
+#!/bin/bash
+
+db=ROOT/db
+#INPUT
+iptables -nvxLINPUT|grep -v Chain|grep -v pkts| while read record;do
+    traffic=$(echo $record|awk '{print $2}')
+    type=$(echo $record|awk '{print $4}')
+    port=$(echo $record|awk -F: '{print $2}')
+    echo "new traffic:$traffic"
+    echo "type:$type"
+    echo "port:$port"
+    sqlite3 "$db" "update portConfig set inputTraffic = inputTraffic + $traffic where type=\"$type\" and port=$port;" || { echo "update $type:$port input traffic failed!" ;}
+done
+
+#OUTPUT
+#注意output没有动作，所以在第三列
+iptables -nvxLOUTPUT|grep -v Chain|grep -v pkts| while read record;do
+    traffic=$(echo $record|awk '{print $2}')
+    type=$(echo $record|awk '{print $3}')
+    port=$(echo $record|awk -F: '{print $2}')
+    echo "new traffic:$traffic"
+    echo "type:$type"
+    echo "port:$port"
+    sqlite3 "$db" "update portConfig set outputTraffic = outputTraffic + $traffic where type=\"$type\" and port=$port;" || { echo "update $type:$port" output traffic failed! ;}
+done
+
+/sbin/iptables -P INPUT ACCEPT
+/sbin/iptables -P OUTPUT ACCEPT
+/sbin/iptables -P FORWARD ACCEPT
+/sbin/iptables -F

@@ -1,0 +1,13 @@
+#如果有的安装脚本使用的是非root身份,需要一部分当前安装用户的身份,又需要一部分root的身份
+#那么只有在需要root权限的时候加上sudo,其他时候正常身份
+#这时候就需要检测,当使用非root身份的时候,自己是否可以使用sudo命令(使用sudo true)
+if (($EUID!=0));then
+    #非root用户的时候,需要检测是否有sudo命令,如果有还要检测当前用户可以使用sudo命令
+    #因为下面需要把shellrc复制到/etc,这要求root权限
+    if command -v sudo >/dev/null 2>&1;then
+        sudo true || { echo "Error: Current user cannot use sudo cmd!";exit 1; }
+    else
+        echo "Error: Current user is not root,and can not find sudo cmd!"
+        exit 1
+    fi
+fi
