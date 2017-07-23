@@ -546,7 +546,10 @@ fi
 #END others
 
 if [ -d /etc/shellrc.d ];then
-    for rc in $(ls /etc/shellrc.d/*);do
-        source $rc
+    for rc in /etc/shellrc.d/*;do
+        if [ -r $rc ];then
+            source $rc
+        fi
     done
+    unset rc
 fi
