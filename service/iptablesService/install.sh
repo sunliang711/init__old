@@ -17,8 +17,7 @@ fi
 #加入需要重装的话，当前的服务要先关掉
 systemctl stop iptables.service >/dev/null 2>&1
 
-#TODO 根据不同的系统，serviceFileDir的位置不同，这里的是debian8的位置
-serviceFileDir=/lib/systemd/system
+serviceFileDir=/etc/systemd/system
 root=/opt/iptables
 db="$root/db"
 rm -rf "$root" >/dev/null 2>&1
