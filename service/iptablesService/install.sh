@@ -3,6 +3,8 @@ if (( $EUID!=0 ));then
     echo "Need root privilege!"
     exit 1
 fi
+SCRIPTDIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+cd "$SCRIPTDIR"
 
 if ! command -v systemctl >/dev/null 2>&1;then
     echo "Iptables.service need systemctl cmd,but can not find it."
@@ -14,7 +16,7 @@ if ! command -v sqlite3 >/dev/null 2>&1;then
     apt install -y sqlite3 || { echo "install sqlite3 failed!";exit 1; }
 fi
 
-#加入需要重装的话，当前的服务要先关掉
+#假如需要重装的话，当前的服务要先关掉
 systemctl stop iptables.service >/dev/null 2>&1
 
 serviceFileDir=/etc/systemd/system

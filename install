@@ -8,15 +8,15 @@ case $(uname) in
         ;;
     Linux)
         if command -v pacman >/dev/null 2>&1;then
-            OS="Arch"
+            OS="arch"
         elif command -v dnf >/dev/null 2>&1;then
-            OS="Fedora"
+            OS="fedora"
         elif command -v apt-get >/dev/null 2>&1;then
             if lsb_release -a 2>/dev/null |grep Debian >/dev/null 2>&1;then
-                OS="Debian"
+                OS="debian"
             fi
             if lsb_release -a 2>/dev/null |grep Ubuntu >/dev/null 2>&1;then
-                OS="Ubuntu"
+                OS="ubuntu"
             fi
         fi
         ;;
@@ -25,7 +25,8 @@ case $(uname) in
         exit 1
 esac
 
-installDev=y
+user=${SUDO_USER:-$(whoami)}
+#installDev=y
 setDocker=y
 setSupervim=y
 setProxy=y
@@ -40,53 +41,31 @@ setShell=y
 # read -p "Set shell? [Y/n] (install zsh,zsh theme,source .custom-shell) " setShell
 # read -p "Set supervim? [Y/n] " setSupervim
 ##Install dev tools
-if [[ "$installDev" != [nN] ]];then
-    echo "Install dev tools..."
-    cd dev
-    case "$OS" in
-        "Arch")
-            sudo /bin/bash dev-arch
-            ;;
-        "Fedora")
-            sudo /bin/bash dev-fedora
-            ;;
-        "Ubuntu")
-            sudo /bin/bash dev-ubuntu
-            ;;
-        "Debian")
-            /bin/bash dev-debian
-            read -p "set iptables? [Y/n] " setIp
-            if [[ "$setIp" != [nN] ]];then
-                cd service/iptablesService && bash install.sh && cd -
-            fi
-            ;;
-        "Darwin")
-            /bin/bash dev-mac
-            ;;
-    esac
-    cd -
+if (($EUID!=0));then
+    echo "You are not running the script by root privilege"
+    echo "Try to use sudo..."
+    sudo /bin/bash dev/dev-$OS
+else
+    /bin/bash dev/dev-$OS
 fi
 
-echoExec(){
-    echo "$1"
-    eval "$1"
-}
-##Set proxy
-if [[ "$setProxy" != [nN] ]];then
-    if netstat -tan |grep -q 8118;then
-        echoExec "export http_proxy=localhost:8118"
-        echoExec "export HTTP_PROXY=localhost:8118"
-        echoExec "export https_proxy=localhost:8118"
-        echoExec "export HTTPS_PROXY=localhost:8118"
+if (($?!=0));then
+    echo "Run dev-$OS failed!"
+    exit 1
+fi
+read -p "set iptables service (for systemd)? [Y/n] " setIp
+if [[ "$setIp" != [nN] ]];then
+    if (($EUID!=0));then
+        sudo /bin/bash service/iptablesService/install.sh
+    else
+        /bin/bash service/iptablesService/install.sh
     fi
 fi
+
 ##Set git
 if [[ "$setGit" != [nN] ]];then
-    echo "Set git config..."
-    cd git
-    /bin/bash setGit
-    cd -
-    echo "Done."
+    echo "Config git..."
+    /bin/bash git/setGit
 fi
 
 ##Set docker
@@ -138,3 +117,5 @@ if [[ "$setSupervim" != [nN] ]];then
     cd -
     echo "Done."
 fi
+
+# vim: setf sh:

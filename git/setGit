@@ -4,6 +4,8 @@ if ! command -v git>/dev/null 2>&1;then
     echo "git is not installed!">&2
     exit 1
 fi
+SCRIPTDIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+cd "$SCRIPTDIR"
 
 gitconfig(){
     git config --global user.email "$1"
@@ -47,4 +49,4 @@ if [[ -z "$name" ]];then
 fi
 gitconfig "$email" "$name"
 
-#vim setf sh
+# vim: setf sh:
