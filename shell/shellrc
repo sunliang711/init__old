@@ -143,8 +143,8 @@ if command -v git >/dev/null 2>&1;then
 
         git config --global http.proxy $proxy
         git config --global https.proxy $proxy
-        echo "set git http.proxy $proxy"
-        echo "set git https.proxy $proxy"
+        # echo "set git http.proxy $proxy"
+        # echo "set git https.proxy $proxy"
         # git config --global http.proxy "socks5://127.0.0.1:1080"
         # git config --global https.proxy "socks5://127.0.0.1:1080"
         gpstatus
@@ -467,6 +467,47 @@ brew(){
         command brew "$@"
     fi
 }
+#systemd service file
+serviceFile(){
+    if (($#<1));then
+        echo "Usage: $(basename $0) serviceName"
+        return 1
+    fi
+cat>/tmp/$1.service<<EOF
+[Unit]
+Description=
+#After=network.target
+
+[Service]
+Type=forking
+PIDFile=
+ExecStart=
+#ExecStop=
+
+#Type=oneshot
+#RemainAfterExit=yes
+#ExecStart=
+
+#Type=simple
+#ExecStart=
+
+#Environment=
+[Install]
+WantedBy=multi-user.target
+EOF
+vim /tmp/$1.service
+if command -v systemctl >/dev/null 2>&1;then
+    read -p "Copy /tmp/$1.service to /etc/systemd/systemctl ? [y/n] " cpService
+    if [ "$cpService" == "y" ];then
+        if (($EUID==0));then
+            cp "/tmp/$1.service" /etc/systemd/system && chmod 664 /etc/systemd/system/$1.service && systemctl daemon-reload
+        else
+            sudo cp "/tmp/$1.service" /etc/systemd/system && sudo chmod 664 /etc/systemd/system/$1.service && sudo systemctl daemon-reload
+        fi
+    fi
+fi
+rm /tmp/$1.service
+}
 
 #END function
 
@@ -490,3 +531,4 @@ if [ -d "$otherConfigDir" ];then
         unset rc
     fi
 fi
+# vim: set ft=sh:
