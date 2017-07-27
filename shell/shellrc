@@ -499,7 +499,7 @@ WantedBy=multi-user.target
 EOF
 vim /tmp/$1.service
 if command -v systemctl >/dev/null 2>&1;then
-    echo -n "Copy /tmp/$1.service to /etc/systemd/systemctl ? [y/n] "
+    echo -n "Copy /tmp/$1.service to /etc/systemd/system ? [y/n] "
     read cpService
     if [[ "$cpService" == "y" ]];then
         if (($EUID==0));then
