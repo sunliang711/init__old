@@ -479,17 +479,19 @@ Description=
 #After=network.target
 
 [Service]
-Type=forking
-PIDFile=
-ExecStart=
+#Type=forking
+#PIDFile=
+#ExecStart=
 #ExecStop=
 
 #Type=oneshot
 #RemainAfterExit=yes
 #ExecStart=
+#ExecStop=
 
 #Type=simple
 #ExecStart=
+#ExecStop=
 
 #Environment=
 [Install]
@@ -497,8 +499,9 @@ WantedBy=multi-user.target
 EOF
 vim /tmp/$1.service
 if command -v systemctl >/dev/null 2>&1;then
-    read -p "Copy /tmp/$1.service to /etc/systemd/systemctl ? [y/n] " cpService
-    if [ "$cpService" == "y" ];then
+    echo -n "Copy /tmp/$1.service to /etc/systemd/systemctl ? [y/n] "
+    read cpService
+    if [[ "$cpService" == "y" ]];then
         if (($EUID==0));then
             cp "/tmp/$1.service" /etc/systemd/system && chmod 664 /etc/systemd/system/$1.service && systemctl daemon-reload
         else
