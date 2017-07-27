@@ -19,7 +19,6 @@ append_path /usr/bin
 append_path /sbin
 append_path /bin
 
-
 [ -n "$GOPATH" ] && append_path $GOPATH/bin
 
 #export LS_COLORS=$LS_COLORS:"di=0;33:"
@@ -477,11 +476,17 @@ if command -v screenfetch >/dev/null 2>&1;then
 fi
 #END others
 
-if [ -d /etc/shellrc.d ];then
-    for rc in /etc/shellrc.d/*;do
-        if [ -r $rc ];then
-            source $rc
-        fi
-    done
-    unset rc
+otherConfigDir=/etc/shellrc.d
+#exist the dir
+if [ -d "$otherConfigDir" ];then
+    #And the dir is not empty
+    if [ "$(ls -A $otherConfigDir)" ];then
+        for rc in "$otherConfigDir/"*;do
+            if [ -r $rc ];then
+                echo "source $rc"
+                source $rc
+            fi
+        done
+        unset rc
+    fi
 fi
