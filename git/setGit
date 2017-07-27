@@ -14,8 +14,13 @@ gitconfig(){
     git config --global credential.helper cache
     git config --global alias.tree "log --oneline --graph --decorate --all"
     git config --global alias.list "config --global --list"
-    if command -v vim >/dev/null 2>&1;then
+    if command -v nvim >/dev/null 2>&1;then
+        git config --global core.editor nvim
+    elif command -v vim >/dev/null 2>&1;then
         git config --global core.editor vim
+    elif command -v vi >/dev/null 2>&1;then
+        git config --global core.editor vi
+    fi
     fi
     if command -v vimdiff >/dev/null 2>&1;then
         git config --global diff.tool vimdiff
