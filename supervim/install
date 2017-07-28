@@ -5,6 +5,7 @@ cd ${thisScriptDir}
 source functions
 
 user=${SUDO_USER:-$(whoami)}
+HOME=$(eval echo ~$user)
 help=0
 proxy=""
 vimGo=0
@@ -42,11 +43,11 @@ fi
 shift $((OPTIND-1))
 whichVim=$1
 if [[ "$whichVim" == "nvim" ]];then
-    eval root=~$user/.config/nvim
-    eval cfg="$root/init.vim"
+    root=$HOME/.config/nvim
+    cfg="$root/init.vim"
 elif [[ "$whichVim" == "vim" ]];then
-    eval root=~$user/.vim
-    eval cfg=~$user/.vimrc
+    root=$HOME/.vim
+    cfg=~$HOME/.vimrc
 
     #TODO mac 下的grep不支持-P
     # version=$(\vim --version | grep -Po '(?<=Vi IMproved )\d+\.\d+')
