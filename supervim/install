@@ -4,6 +4,7 @@ cd ${thisScriptDir}
 
 source functions
 
+user=${SUDO_USER:-$(whoami)}
 help=0
 proxy=""
 vimGo=0
@@ -41,11 +42,11 @@ fi
 shift $((OPTIND-1))
 whichVim=$1
 if [[ "$whichVim" == "nvim" ]];then
-    root="$HOME/.config/nvim"
-    cfg="$root/init.vim"
+    eval root=~$user/.config/nvim
+    eval cfg="$root/init.vim"
 elif [[ "$whichVim" == "vim" ]];then
-    root="$HOME/.vim"
-    cfg="$HOME/.vimrc"
+    eval root=~$user/.vim
+    eval cfg=~$user/.vimrc
 
     #TODO mac 下的grep不支持-P
     # version=$(\vim --version | grep -Po '(?<=Vi IMproved )\d+\.\d+')
@@ -58,6 +59,7 @@ else
     echo "Unknown vim type: $whichVim! Not vim or nvim."
     exit 1
 fi
+
 
 #在whichVim后面还有个参数,则这个参数作为socks5代理
 #这样用来应对非本地socks5代理的情况,也就是不用socks5://localhost:1080

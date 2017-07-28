@@ -3,7 +3,7 @@ SCRIPTDIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 cd "$SCRIPTDIR"
 
 if (($EUID!=0));then
-    #非root用户的时候,需要检测是否有sudo命令,如果有还要检测当前用户可以使用sudo命令
+    #非root用户的时候,需要检测是否有sudo命令,如果有sudo命令则还要检测当前用户是否可以使用sudo命令
     #因为下面有的指令需要root权限
     if command -v sudo >/dev/null 2>&1;then
         sudo true || { echo "Error: Current user cannot use command 'sudo' !";exit 1; }
@@ -14,7 +14,7 @@ if (($EUID!=0));then
 fi
 case $(uname) in
     Darwin)
-        OS="Darwin"
+        OS="mac"
         ;;
     Linux)
         if command -v pacman >/dev/null 2>&1;then
@@ -36,14 +36,12 @@ case $(uname) in
 esac
 
 user=${SUDO_USER:-$(whoami)}
-#installDev=y
 setSupervim=y
 setGit=y
 setShell=y
 
 setDocker=y
 setGolang=y
-# read -p "Install dev tools? [Y/n] " installDev
 # read -p "Set git? [Y/n] " setGit
 #read -p "Set docker? [y/N] (only support arch)" setDocker
 #read -p "Set golang? [y/N] " setGolang
@@ -80,8 +78,12 @@ fi
 ##Set docker
 if [[ "$setDocker" == [yY] ]];then
     case "$OS" in
-        "Arch")
-            /bin/bash docker/docker-arch install
+        "arch")
+            if (($EUID!=0));then
+                sudo /bin/bash docker/docker-arch install
+            else
+                /bin/bash docker/docker-arch install
+            fi
             ;;
     esac
 fi

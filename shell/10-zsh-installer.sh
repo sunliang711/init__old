@@ -1,11 +1,7 @@
+#!/bin/bash
 if ! command -v zsh >/dev/null 2>&1;then
-	if command -v apt-get >/dev/null 2>&1;then
-		apt-get install -y zsh
-	elif command -v yum >/dev/null 2>&1;then
-		yum install -y zsh
-	elif command -v pacman >/dev/null 2>&1;then
-		pacman -S zsh --no-confirm
-	fi
+    echo "Cannot find zsh"
+    exit 1
 fi
 
 main() {
@@ -123,7 +119,11 @@ main() {
   printf "${NORMAL}"
 }
 
-main
-if command -v pacman >/dev/null 2>&1;then
-    sudo pacman -S zsh-syntax-highlighting --noconfirm --needed > /dev/null 2>&1
+#使用sudo指令执行脚本时,会把ohmyzsh安装到/root下,这并非本意
+#应该切换到SUDO_USER用户下执行安装
+export -f main
+if [[ $EUID -eq 0 ]] && [[ -n $SUDO_USER ]];then
+    su $SUDO_USER -c "/bin/bash -c main"
+else
+    main
 fi

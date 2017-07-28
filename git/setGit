@@ -23,7 +23,6 @@ gitconfig(){
     elif command -v vi >/dev/null 2>&1;then
         git config --global core.editor vi
     fi
-    fi
     if command -v vimdiff >/dev/null 2>&1;then
         git config --global diff.tool vimdiff
     fi
@@ -47,6 +46,19 @@ fi
 if [[ -z "$name" ]];then
     name="sunliang"
 fi
-gitconfig "$email" "$name"
+
+export -f gitconfig
+#如果不是root权限执行的话,则是普通用户,那么就给执行脚本的用户配置git
+if [[ $EUID != 0 ]];then
+    gitconfig "$email" "$name"
+#如果是root权限,而且是通过sudo命令提升权限的,则执行者的用意肯定是
+#给他的非root账号配置git,因此需要切换到那个非root的账号
+elif [[ -n $SUDO_USER ]];then
+    su $SUDO_USER -c "/bin/bash -c gitconfig $email $name"
+else
+#如果是root权限并且不是通过sudo命令执行的,也就是说是在root账号状态下执行的
+#那么给当前用户(root)配置git
+    gitconfig "$email" "$name"
+fi
 
 # vim: set filetype=sh
