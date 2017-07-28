@@ -425,7 +425,7 @@ mailto(){
     subject=$2
     content=$3
     #过滤注释，因为里面可能有老的配置
-    From=$(sed -rn '/^[^#]/p' $cfg | $(GREP) -oP '(?<=root=).+')
+    From=$(sed -rn '/^[^#]/p' $cfg | $GREP -oP '(?<=root=).+')
     mailfile=/tmp/ssmtp-tmpfile
     echo "From : $From"
     echo "mail file : $mailfile"
