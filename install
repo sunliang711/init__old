@@ -2,6 +2,16 @@
 SCRIPTDIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 cd "$SCRIPTDIR"
 
+if (($EUID!=0));then
+    #非root用户的时候,需要检测是否有sudo命令,如果有还要检测当前用户可以使用sudo命令
+    #因为下面有的指令需要root权限
+    if command -v sudo >/dev/null 2>&1;then
+        sudo true || { echo "Error: Current user cannot use sudo cmd!";exit 1; }
+    else
+        echo "Error: Current user is not root,and can not find sudo cmd!"
+        exit 1
+    fi
+fi
 case $(uname) in
     Darwin)
         OS="Darwin"
@@ -70,13 +80,11 @@ fi
 
 ##Set docker
 if [[ "$setDocker" == [yY] ]];then
-    cd docker
     case "$OS" in
         "Arch")
-            /bin/bash docker-arch install
+            /bin/bash docker/docker-arch install
             ;;
     esac
-    cd -
 fi
 
 ##Set golang
@@ -94,11 +102,9 @@ fi
 ##Set shell
 if [[ "$setShell" != [nN] ]];then
     echo "Install zsh and oh-my-zsh..."
-    cd shell
-    /bin/bash 10-zsh-installer.sh
-    /bin/bash 20-set-zsh-theme.sh
-    /bin/bash 30-config-shell.sh install
-    cd -
+    /bin/bash shell/10-zsh-installer.sh
+    /bin/bash shell/20-set-zsh-theme.sh
+    /bin/bash shell/30-config-shell.sh install
     echo "Done."
 fi
 
@@ -118,4 +124,4 @@ if [[ "$setSupervim" != [nN] ]];then
     echo "Done."
 fi
 
-# vim: setf sh:
+# vim: set filetype=sh

@@ -1,4 +1,6 @@
 #!/bin/bash
+SCRIPTDIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+cd "$SCRIPTDIR"
 
 if [ ! -d ~/.oh-my-zsh ];then
     echo -e "Cann't find oh-my-zsh direcotry!$(tput setaf 1)\u2717"
