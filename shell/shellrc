@@ -404,7 +404,7 @@ mailto(){
     #默认安装的时候为了和mac自带的区分，他们的名字前面加个字母g
     #如何安装这些gnu工具参考dev-mac文件
     GREP=grep
-    if [ "$(uname)" == "Darwin" ];then
+    if [ "$(uname)" = "Darwin" ];then
         if ! command -v ggrep >/dev/null 2>&1;then
             echo "ggrep not installed."
             exit 1
