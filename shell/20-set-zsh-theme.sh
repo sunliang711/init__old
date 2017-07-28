@@ -10,7 +10,7 @@ if [ ! -d $HOME/.oh-my-zsh ];then
 fi
 cp *.zsh-theme $HOME/.oh-my-zsh/themes
 sed -ibak 's/\(ZSH_THEME=\).\{1,\}/\1"zeta"/' $HOME/.zshrc
-rm ~$user/.zshrcbak
+rm $HOME/.zshrcbak
 #install zsh-syntax-highlighting
 if [[ ! -d $HOME/.zsh-syntax-highlighting ]];then
     git clone https://github.com/zsh-users/zsh-syntax-highlighting.git $HOME/.zsh-syntax-highlighting
