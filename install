@@ -37,14 +37,13 @@ esac
 
 user=${SUDO_USER:-$(whoami)}
 #installDev=y
-setDocker=y
 setSupervim=y
-setProxy=y
 setGit=y
-setGolang=y
 setShell=y
+
+setDocker=y
+setGolang=y
 # read -p "Install dev tools? [Y/n] " installDev
-#read -p "Set http(s) proxy?[Y/n] " setProxy
 # read -p "Set git? [Y/n] " setGit
 #read -p "Set docker? [y/N] (only support arch)" setDocker
 #read -p "Set golang? [y/N] " setGolang
