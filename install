@@ -6,7 +6,7 @@ if (($EUID!=0));then
     #非root用户的时候,需要检测是否有sudo命令,如果有还要检测当前用户可以使用sudo命令
     #因为下面有的指令需要root权限
     if command -v sudo >/dev/null 2>&1;then
-        sudo true || { echo "Error: Current user cannot use sudo cmd!";exit 1; }
+        sudo true || { echo "Error: Current user cannot use command 'sudo' !";exit 1; }
     else
         echo "Error: Current user is not root,and can not find sudo cmd!"
         exit 1
