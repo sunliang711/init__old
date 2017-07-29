@@ -17,9 +17,17 @@ help(){
 }
 
 installDependence(){
+    if ! command -v go >/dev/null 2>&1;then
+        echo "Install golang manaually..."
+        if (($euid!=0));then
+            sudo /bin/bash ../golang/installGo.sh
+        else
+            /bin/bash ../golang/installGo.sh
+        fi
+    fi
     #arch
     if command -v pacman >/dev/null 2>&1;then
-        archApps="linux-headers clang neovim vim cmake python boost python-pip go go-tools fontconfig ctags "
+        archApps="linux-headers clang neovim vim cmake python boost python-pip fontconfig ctags"#go go-tools 
         echo "pacman update..."
         sudo pacman -Syu --noconfirm >/dev/null 2>&1
         for tool in ${archApps};do
@@ -30,7 +38,7 @@ installDependence(){
 
     #fedora
     if command -v dnf >/dev/null 2>&1;then
-        fedoraApps="kernel-devel vim clang python-devel python-pip python3-devel python3-pip cmake golang golang-godoc boost-devel ncurses-devel "
+        fedoraApps="kernel-devel vim clang python-devel python-pip python3-devel python3-pip cmake boost-devel ncurses-devel"#golang golang-godoc
         echo "dnf update..."
         sudo dnf update -y >/dev/null 2>&1
         echo "dnf install dev tools..."
@@ -41,9 +49,9 @@ installDependence(){
         done
     fi
 
-    #ubuntu
+    #ubuntu debian
     if command -v apt-get >/dev/null 2>&1;then
-        ubuntuApps="build-essential linux-headers-generic vim vim-gtk cmake clang python-apt python-dev python-pip python3-dev python3-pip libboost-all-dev golang golang-golang-x-tools ncurses-dev "
+        ubuntuApps="build-essential linux-headers-generic vim vim-gtk cmake clang python-apt python-dev python-pip python3-dev python3-pip libboost-all-dev ncurses-dev" #golang golang-golang-x-tools
         echo "apt-get update..."
         sudo apt-get update -y >/dev/null 2>&1
         for tool in ${ubuntuApps};do
