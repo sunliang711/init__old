@@ -47,7 +47,7 @@ if [[ "$whichVim" == "nvim" ]];then
     cfg="$root/init.vim"
 elif [[ "$whichVim" == "vim" ]];then
     root=$HOME/.vim
-    cfg=~$HOME/.vimrc
+    cfg=$HOME/.vimrc
 
     #TODO mac 下的grep不支持-P
     # version=$(\vim --version | grep -Po '(?<=Vi IMproved )\d+\.\d+')

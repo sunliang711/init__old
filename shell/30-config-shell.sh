@@ -37,20 +37,21 @@ startLine="##CUSTOM BEGIN"
 endLine="##CUSTOM END"
 
 user=${SUDO_USER:-$(whoami)}
+HOME=$(eval echo ~$user)
 
 install(){
     shell=${1:?"missing shell type"}
     case "$shell" in
         bash)
             if [[ "$OS" == linux ]];then
-                cfgFile=~$user/.bashrc
+                cfgFile=$HOME/.bashrc
             else
                 #mac os
-                cfgFile=~$user/.bash_profile
+                cfgFile=$HOME/.bash_profile
             fi
             ;;
         zsh)
-            cfgFile=~$user/.zshrc
+            cfgFile=$HOME/.zshrc
             ;;
         *)
             echo -e "Only support bash or zsh! ${RED}\u2717${RESET}"

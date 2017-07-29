@@ -49,7 +49,7 @@ setGolang=y
 # read -p "Set supervim? [Y/n] " setSupervim
 ##Install dev tools
 if (($EUID!=0));then
-    echo "You are not running the script by root privilege"
+    echo "You are not running the script by root privilege."
     echo "Try to use sudo..."
     sudo /bin/bash dev/dev-$OS
 else
@@ -91,8 +91,11 @@ fi
 ##Set golang
 if [[ "$setGolang" == [yY] ]];then
     if ! command -v go >/dev/null 2>&1;then
-        read -p "install golang manaually,input socks5 proxy for curl:(empty for not use proxy) " sp
-        bash ./golang/installGo.sh -p "$sp"
+        read -p "Cannot find go,install it manaually? [Y/n] " insGo
+        if [[ $insGo != [nN] ]];then
+            read -p "Install golang manaually,input socks5 proxy for curl:(empty for not use proxy) " sp
+            bash ./golang/installGo.sh -p "$sp"
+        fi
     fi
     GOPATH=$HOME/go
     if [ ! -d $GOPATH ];then
@@ -106,7 +109,6 @@ if [[ "$setShell" != [nN] ]];then
     /bin/bash shell/10-zsh-installer.sh
     /bin/bash shell/20-set-zsh-theme.sh
     /bin/bash shell/30-config-shell.sh install
-    echo "Done."
 fi
 
 ##Set vim
