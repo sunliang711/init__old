@@ -63,7 +63,7 @@ installDependence(){
 
     #ubuntu debian
     if command -v apt-get >/dev/null 2>&1;then
-        ubuntuApps="build-essential linux-headers-generic vim vim-gtk cmake clang python-apt python-dev python-pip python3-dev python3-pip libboost-all-dev ncurses-dev curl" #golang golang-golang-x-tools
+        ubuntuApps="build-essential vim vim-gtk cmake clang python-apt python-dev python-pip python3-dev python3-pip libboost-all-dev ncurses-dev curl" #golang golang-golang-x-tools
         echo "apt-get update..."
         if (($EUID!=0));then
             sudo apt-get update -y >/dev/null
