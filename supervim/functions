@@ -17,47 +17,75 @@ help(){
 }
 
 installDependence(){
-    if ! command -v go >/dev/null 2>&1;then
-        echo "Install golang manaually..."
-        if (($euid!=0));then
-            sudo /bin/bash ../golang/installGo.sh
-        else
-            /bin/bash ../golang/installGo.sh
-        fi
-    fi
     #arch
     if command -v pacman >/dev/null 2>&1;then
-        archApps="linux-headers clang neovim vim cmake python boost python-pip fontconfig ctags"#go go-tools 
+        archApps="linux-headers clang neovim vim cmake python boost python-pip fontconfig ctags curl"#go go-tools 
         echo "pacman update..."
-        sudo pacman -Syu --noconfirm >/dev/null 2>&1
+        if (($EUID!=0));then
+            sudo pacman -Syu --noconfirm >/dev/null #2>&1
+        else
+            pacman -Syu --noconfirm >/dev/null #2>&1
+        fi
         for tool in ${archApps};do
             echo "Install $tool..."
-            sudo pacman -S $tool --noconfirm --needed >/dev/null 2>&1
+            if (($EUID!=0));then
+                sudo pacman -S $tool --noconfirm --needed >/dev/null #2>&1
+            else
+                pacman -S $tool --noconfirm --needed >/dev/null #2>&1
+            fi
         done
     fi
 
     #fedora
     if command -v dnf >/dev/null 2>&1;then
-        fedoraApps="kernel-devel vim clang python-devel python-pip python3-devel python3-pip cmake boost-devel ncurses-devel"#golang golang-godoc
+        fedoraApps="kernel-devel vim clang python-devel python-pip python3-devel python3-pip cmake boost-devel ncurses-devel curl"#golang golang-godoc
         echo "dnf update..."
-        sudo dnf update -y >/dev/null 2>&1
+        if (($EUID!=0));then
+            sudo dnf update -y >/dev/null #2>&1
+        else
+            dnf update -y >/dev/null #2>&1
+        fi
         echo "dnf install dev tools..."
-        sudo dnf groupinstall "development tools" -y >/dev/null 2>&1
+        if (($EUID!=0));then
+            sudo dnf groupinstall "development tools" -y >/dev/null #2>&1
+        else
+            dnf groupinstall "development tools" -y >/dev/null #2>&1
+        fi
         for tool in ${fedoraApps};do
             echo "Install $tool..."
-            sudo dnf install $tool -y >/dev/null 2>&1
+            if (($EUID!=0));then
+                sudo dnf install $tool -y >/dev/null #2>&1
+            else
+                dnf install $tool -y >/dev/null #2>&1
+            fi
         done
     fi
 
     #ubuntu debian
     if command -v apt-get >/dev/null 2>&1;then
-        ubuntuApps="build-essential linux-headers-generic vim vim-gtk cmake clang python-apt python-dev python-pip python3-dev python3-pip libboost-all-dev ncurses-dev" #golang golang-golang-x-tools
+        ubuntuApps="build-essential linux-headers-generic vim vim-gtk cmake clang python-apt python-dev python-pip python3-dev python3-pip libboost-all-dev ncurses-dev curl" #golang golang-golang-x-tools
         echo "apt-get update..."
-        sudo apt-get update -y >/dev/null 2>&1
+        if (($EUID!=0));then
+            sudo apt-get update -y >/dev/null
+        else
+            apt-get update -y >/dev/null
+        fi
         for tool in ${ubuntuApps};do
             echo "Install $tool..."
-            sudo apt-get install $tool -y >/dev/null 2>&1
+            if (($EUID!=0));then
+                sudo apt-get install $tool -y >/dev/null
+            else
+                apt-get install $tool -y >/dev/null
+            fi
         done
+    fi
+    if ! command -v go >/dev/null 2>&1;then
+        echo "Install golang manaually..."
+        if (($EUID!=0));then
+            sudo /bin/bash ../golang/installGo.sh
+        else
+            /bin/bash ../golang/installGo.sh
+        fi
     fi
 }
 
@@ -103,8 +131,8 @@ installFont(){
 }
 
 installBasic(){
-    checkCmd curl
     installDependence
+    checkCmd curl
     installFont
 
     uninstall

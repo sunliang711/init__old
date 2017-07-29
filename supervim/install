@@ -72,8 +72,6 @@ echo "Install supervim for $whichVim"
 echo "Config file is $cfg"
 echo "Root dir is $root"
 
-checkCmd $whichVim
-
 CURL=curl
 if [ -n "$proxy" ];then
     CURL="curl --socks5 $proxy"
@@ -83,6 +81,7 @@ if [ -n "$proxy" ];then
 fi
 
 installBasic
+checkCmd $whichVim
 
 if (($ycm==1));then
     sed -ibak "s|\"[ ]*\(Plug 'Valloric/YouCompleteMe'\)|\1|" $cfg
@@ -129,7 +128,7 @@ fi
 if (($vimGo==1));then
     echo "Install vim-go..."
     $whichVim +GoInstallBinaries +qall
-    templateFile=$(find $HOME -name hello_word.go)
+    templateFile=$(find $HOME -name hello_world.go)
     sed -ibak  's|"fmt"|(\n    &\n)|' "$templateFile"
     rm "$templateFile"bak
 fi
