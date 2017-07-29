@@ -94,7 +94,11 @@ if [[ "$setGolang" == [yY] ]];then
         read -p "Cannot find go,install it manaually? [Y/n] " insGo
         if [[ $insGo != [nN] ]];then
             read -p "Install golang manaually,input socks5 proxy for curl:(empty for not use proxy) " sp
-            bash ./golang/installGo.sh -p "$sp"
+            if (($EUID!=0));then
+                sudo bash ./golang/installGo.sh -p "$sp"
+            else
+                bash ./golang/installGo.sh -p "$sp"
+            fi
         fi
     fi
     GOPATH=$HOME/go

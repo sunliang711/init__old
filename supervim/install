@@ -119,7 +119,7 @@ if (($ycm==1));then
             option+=" --gocode-completer "
         fi
 
-        #./install.py  --gocode-completer --clang-completer --system-libclang 
+        #./install.py  --gocode-completer --clang-completer --system-libclang
         eval ./install.py  "$option"
     else
         echo "Doesn't exist $dest"
@@ -129,4 +129,7 @@ fi
 if (($vimGo==1));then
     echo "Install vim-go..."
     $whichVim +GoInstallBinaries +qall
+    templateFile=$(find $HOME -name hello_word.go)
+    sed -ibak  's|"fmt"|(\n    &\n)|' "$templateFile"
+    rm "$templateFile"bak
 fi
