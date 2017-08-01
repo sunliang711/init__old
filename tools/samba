@@ -18,6 +18,7 @@ groupadd smbuser -f
 
 mkdir -p /home/public
 chown root:smbadmin /home/public
+chmod 775 /home/public
 
 cat>/etc/samba/smb.conf<<EOF
 [global]
