@@ -1,68 +1,77 @@
-#install
+#!/bin/bash
+if [[ $EUID -ne 0 ]];then
+    echo "Need root privilege!"
+    exit 1
+fi
+
+if ! command -v apt >/dev/null 2>&1;then
+    echo "Only run on debian."
+    exit 1
+fi
+
+apt update
 apt install -y samba samba-common
 mv /etc/samba/smb.conf{,.bak}
 
-smbname=debian
+groupadd smbadmin -f
+groupadd smbuser -f
 
-anonymousePath=/home/share/anonymous
-mkdir -p $anonymousePath
-chmod -R 0775 $anonymousePath
-chown -R nobody:nogroup $anonymousePath
+mkdir -p /home/public
+chown root:smbadmin /home/public
 
 cat>/etc/samba/smb.conf<<EOF
 [global]
 workgroup = WORKGROUP
-server string = Samber Server %v
-netbios name = $smbname
+server string = Samba Server %v
+netbios name = debian samba
 security = user
-map to guest = bad user
-dns proxy = no
-EOF
-cat>>/etc/samba/smb.conf<<EOF
-[allusers]
-#只有users组用户可登录
-comment = All Users
-path = /home/shares/allusers
-#force group = users
-create mask = 0660
-directory mask = 0771
-
-#users组用户可读写,其他人只读
-guest ok = yes
-writable = no
-write list = @users
-EOF
-
-[global]
-workgroup = WORKGROUP
-server string = Samber Server %v
-netbios name = debian
-security = user
-map to guest = bad user
+map to guest = never
 dns proxy = no
 
-[allusers]
-#只有users组用户可登录
-comment = All Users
-path = /home/shares/allusers
-#valid users = @users
-#force group = users
-create mask = 0660
-directory mask = 0771
-#writable = yes
-
-#users组用户可读写,其他人只读
-guest ok = yes
-writable = no
-write list = @users
-
-[anonymous]
-#所有人可读写
-path = /home/shares/anonymous
-force group = users
-create mask = 0660
-directory mask = 0771
-browsable = yes
+[homes]
+comment = Home Directories
+browsable = no
+valid users = %S
 writable = yes
-guest ok = yes
-参考 https://www.howtoforge.com/tutorial/debian-samba-server/
+create mask = 0700
+directory mask = 0700
+
+[public]
+comment = All Users can access
+path = /home/public
+valid users = @smbuser, @smbadmin
+force group = smbuser
+create mask = 0744
+directory mask = 0755
+writable = no
+write list = @smbadmin
+EOF
+
+addSmbUser(){
+    if [[ $# -ne 2 ]];then
+        echo "Usage: $(basename $0) user group"
+    fi
+    userlist=$(awk -F: '{print $1}' /etc/passwd)
+    user=$1
+    group=$2
+    if grep -q $user <<< $userlist;then
+        echo "$user already exists,add it to group $group..."
+        usermod -a -G $group $user
+    else
+        echo "$user doesn't exist,create it and add it to group $group.."
+        useradd $user -m -G $group
+        echo "Enter password for user: $user"
+        passwd $user
+    fi
+    echo "Enter smb password for user: $user"
+    smbpasswd -a $user
+}
+systemctl restart smbd.service
+
+#add administrator
+addSmbUser eagle smbadmin
+
+#add user1
+addSmbUser user1 smbuser
+#reference https://www.howtoforge.com/tutorial/debian-samba-server/
+#https://www.samba.org/samba/docs/man/manpages-3/smb.conf.5.html
