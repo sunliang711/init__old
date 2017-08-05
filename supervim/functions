@@ -149,16 +149,24 @@ installBasic(){
     $CURL -fLo $root/autoload/plug.vim --create-dirs \
             https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim || { echo "download vim-plug failed.";uninstall; exit 1; }
 
-    if [[ "$whichVim" == "nvim" ]];then
-        if [ -n "$proxy" ];then
-            echo "Using proxy 127.0.0.1:8118 to install pip and neovim"
-            sudo -H pip --proxy 127.0.0.1:8118 install --upgrade pip || { echo "pip install failed."; uninstall; exit 1; }
-            sudo -H pip --proxy 127.0.0.1:8118 install --upgrade neovim || { echo "pip install neovim failed."; uninstall; exit 1; }
-        else
-            sudo -H -E pip install --upgrade pip
-            sudo -H -E pip install --upgrade neovim
-        fi
-    fi
+    # if [[ "$whichVim" == "nvim" ]];then
+        # if ! command -v nvim;then
+            # if [[ -n "$proxy" ]];then
+                # echo "Using proxy: $proxy to install neovim"
+                # ALL_PROXY="$proxy" brew install neovim
+            # else
+                # brew install neovim
+            # fi
+        # fi
+        # if [ -n "$proxy" ];then
+        #     echo "Using proxy 127.0.0.1:8118 to install pip and neovim"
+        #     sudo -H pip --proxy 127.0.0.1:8118 install --upgrade pip || { echo "pip install failed."; uninstall; exit 1; }
+        #     sudo -H pip --proxy 127.0.0.1:8118 install --upgrade neovim || { echo "pip install neovim failed."; uninstall; exit 1; }
+        # else
+        #     sudo -H -E pip install --upgrade pip
+        #     sudo -H -E pip install --upgrade neovim
+        # fi
+    # fi
 
     cp  init.vim $cfg
     $whichVim +PlugInstall +qall

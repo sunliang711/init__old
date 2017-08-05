@@ -48,7 +48,10 @@ setGolang=y
 # read -p "Set shell? [Y/n] (install zsh,zsh theme,source .custom-shell) " setShell
 # read -p "Set supervim? [Y/n] " setSupervim
 ##Install dev tools
-if (($EUID!=0));then
+if [[ "$OS" == "mac" ]];then
+    #mac os can not use sudo to run 'brew' command
+    /bin/bash dev/dev-$OS
+elif (($EUID!=0));then
     echo "You are not running the script by root privilege."
     echo "Try to use sudo..."
     sudo /bin/bash dev/dev-$OS
@@ -120,7 +123,7 @@ if [[ "$setSupervim" != [nN] ]];then
     echo "Install supervim with vim-go and YouCompleteMe..."
     cd supervim
     case "$OS" in
-        Arch|Darwin)
+        arch|mac)
             /bin/bash install -pgy nvim
             ;;
         *)

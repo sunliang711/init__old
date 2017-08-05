@@ -61,6 +61,7 @@ else
     exit 1
 fi
 
+checkCmd $whichVim
 
 #在whichVim后面还有个参数,则这个参数作为socks5代理
 #这样用来应对非本地socks5代理的情况,也就是不用socks5://localhost:1080
@@ -81,7 +82,6 @@ if [ -n "$proxy" ];then
 fi
 
 installBasic
-checkCmd $whichVim
 
 if (($ycm==1));then
     sed -ibak "s|\"[ ]*\(Plug 'Valloric/YouCompleteMe'\)|\1|" $cfg
