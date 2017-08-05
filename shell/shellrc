@@ -55,7 +55,7 @@ case $(uname) in
         alias l='ls -FG'
         alias ls='ls -FG'
         #brew with local proxy
-        alias brewlp='echo "use socks5 proxy ALL_PROXY=socks5://localhost:1080"&&ALL_PROXY=socks5://localhost:1080 brew'
+        alias brewlp='echo "Using socks5 proxy: ALL_PROXY=socks5://localhost:1080"&&ALL_PROXY=socks5://localhost:1080 brew'
         # export PATH=/usr/local/Cellar/privoxy/3.0.26/sbin:$PATH
         ;;
 esac
