@@ -54,7 +54,8 @@ case $(uname) in
         alias ll='ls -lFG'
         alias l='ls -FG'
         alias ls='ls -FG'
-        # alias brew='echo "use socks5 proxy ALL_PROXY=socks5://localhost:1080"&&ALL_PROXY=socks5://localhost:1080 brew'
+        #brew with local proxy
+        alias brewlp='echo "use socks5 proxy ALL_PROXY=socks5://localhost:1080"&&ALL_PROXY=socks5://localhost:1080 brew'
         # export PATH=/usr/local/Cellar/privoxy/3.0.26/sbin:$PATH
         ;;
 esac
@@ -84,17 +85,17 @@ alias listen='netstat -tan|grep LISTEN'
 alias ulisten='netstat -uan|grep LISTEN'
 alias cdgo="cd $GOPATH/src"
 
-if command -v vim >/dev/null 2>&1;then
-    alias vi='vim'
-fi
-
 if command -v emacs >/dev/null 2>&1;then
     alias emacs='emacs -nw'
 fi
 
-if command -v nvim >/dev/null 2>&1;then
-    alias vim='nvim'
-fi
+# if command -v vim >/dev/null 2>&1;then
+#     alias vi='vim'
+# fi
+
+# if command -v nvim >/dev/null 2>&1;then
+#     alias vim='nvim'
+# fi
 
 if command -v free >/dev/null 2>&1;then
     if command -v pacman >/dev/null 2>&1;then
@@ -439,34 +440,34 @@ EOF
     ssmtp $receiver < $mailfile && echo "Your email has sent successfully!"
 }
 
-brew(){
-    echo "This is a brew wrap function that can use proxy."
-    echo "For example: brew [-p proxyString] cmd..."
-    echo
-    proxy=
-    while getopts "p:h" opt;do
-        case "$opt" in
-            p)
-                proxy=$OPTARG
-                ;;
-            h)
-                echo "Usage: -p proxyString cmd..."
-                ;;
-        esac
-    done
-    shift $(($OPTIND-1))
-    if [ -n "$proxy" ];then
-        echo "Using proxy: $proxy"
-        echo
-        ALL_PROXY="$proxy"
-    fi
-    if (($#<1));then
-        echo "Need cmd (for example: install ,list ,info)"
-    else
-        # /usr/local/bin/brew "$@"
-        command brew "$@"
-    fi
-}
+# brew(){
+#     echo "This is a brew wrap function that can use proxy."
+#     echo "For example: brew [-p proxyString] cmd..."
+#     echo
+#     proxy=
+#     while getopts "p:h" opt;do
+#         case "$opt" in
+#             p)
+#                 proxy=$OPTARG
+#                 ;;
+#             h)
+#                 echo "Usage: -p proxyString cmd..."
+#                 ;;
+#         esac
+#     done
+#     shift $(($OPTIND-1))
+#     if [ -n "$proxy" ];then
+#         echo "Using proxy: $proxy"
+#         echo
+#         ALL_PROXY="$proxy"
+#     fi
+#     if (($#<1));then
+#         echo "Need cmd (for example: install ,list ,info)"
+#     else
+#         # /usr/local/bin/brew "$@"
+#         command brew "$@"
+#     fi
+# }
 #systemd service file
 serviceFile(){
     if (($#<1));then

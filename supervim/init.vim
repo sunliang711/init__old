@@ -87,7 +87,8 @@ if has('nvim')
     " let $NVIM_TUI_ENABLE_CURSOR_SHAPE = 1
     nnoremap <silent> <leader>e :tab e ~/.config/nvim/init.vim<CR>
 else
-    if v:version >= 740
+    " when vim version is 7.4, v:version is 704
+    if v:version >= 704
         nnoremap <silent> <leader>e :tab e ~/.vim/vimrc<CR>
     else
         nnoremap <silent> <leader>e :tab e ~/.vimrc<CR>
@@ -181,7 +182,9 @@ else
     Plug 'Shougo/neocomplete.vim'
 endif
 
-" Plug 'Valloric/YouCompleteMe'
+if v:version > 704
+    " Plug 'Valloric/YouCompleteMe'
+endif
 
 " Plug 'SirVer/ultisnips'
 " Plug 'honza/vim-snippets'

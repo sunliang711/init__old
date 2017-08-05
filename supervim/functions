@@ -1,4 +1,8 @@
 #!/bin/bash
+BREW=brew
+if [[ -n $proxy ]];then
+    BREW="ALL_PROXY=$proxy brew"
+fi
 checkCmd(){
     if (($#>0));then
         if ! command -v $1 >/dev/null 2>&1;then
@@ -79,6 +83,20 @@ installDependence(){
             fi
         done
     fi
+    if command -v brew >/dev/null 2>&1;then
+        apps="cmake boost neovim vim python3 gnu-sed"
+        for app in $apps;do
+            if ! brew list $app>/dev/null 2>&1;then
+                echo "Install $app..."
+                $BREW install $app
+            fi
+        done
+        if ! brew list grep >/dev/null 2>&1;then
+            echo "Install grep"
+            $BREW tap homebrew/dupes;
+            $BREW install grep
+        fi
+    fi
     if ! command -v go >/dev/null 2>&1;then
         echo "Install golang manaually..."
         if (($EUID!=0));then
@@ -112,12 +130,9 @@ installFont(){
             ;;
         "Darwin")
             command -v brew >/dev/null 2>&1 || { echo "Need install homebrew first!"; exit 1; }
-            if [ -n "$proxy" ];then
-                ALL_PROXY=$proxy brew tap caskroom/fonts
-                ALL_PROXY=$proxy brew cask install font-hack-nerd-font
-            else
-                brew tap caskroom/fonts
-                brew cask install font-hack-nerd-font
+            if ! brew cask list font-hack-nerd-font>/dev/null 2>&1;then
+                $BREW tap caskroom/fonts
+                $BREW cask install font-hack-nerd-font
             fi
             echo "set Knack nerd font in iterm"
             ;;
@@ -173,6 +188,7 @@ installBasic(){
 }
 
 uninstall(){
+    echo "uninstall.."
     rm -rf $root
     rm -f $cfg
 }

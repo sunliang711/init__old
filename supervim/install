@@ -4,6 +4,10 @@ cd ${thisScriptDir}
 
 source functions
 
+if [[ "$(uname)" == "Darwin" ]] && [[ $EUID -eq 0 ]];then
+	echo "On MacOS,don't use sudo to install supervim."
+	exit 1
+fi
 user=${SUDO_USER:-$(whoami)}
 HOME=$(eval echo ~$user)
 help=0
@@ -49,15 +53,19 @@ elif [[ "$whichVim" == "vim" ]];then
     root=$HOME/.vim
     cfg=$HOME/.vimrc
 
-    #TODO mac 下的grep不支持-P
-    # version=$(\vim --version | grep -Po '(?<=Vi IMproved )\d+\.\d+')
-    # echo "vim version is ${version}"
-    # if (( $(echo "$version>=7.4" | bc -l) )) ;then
-    #     #vim 7.4以后，vimrc文件可以放到.vim目录中
-    #     cfg="$root/vimrc"
-    # fi
+    GREP=grep
+    if [[ "$(uname)" == "Darwin" ]];then
+        GREP=ggrep
+    fi
+    version=$(\vim --version | $GREP -Po '(?<=Vi IMproved )\d+\.\d+')
+    echo "vim version is ${version}"
+    if (( $(echo "$version>=7.4" | bc -l) )) ;then
+        #vim 7.4以后，vimrc文件可以放到.vim目录中
+        cfg="$root/vimrc"
+    fi
 else
-    echo "Unknown vim type: $whichVim! Not vim or nvim."
+    echo "Unknown vim type:  Not vim or nvim."
+    echo "Usage: install [options] vim|nvim"
     exit 1
 fi
 
@@ -119,16 +127,21 @@ if (($ycm==1));then
         fi
 
         #./install.py  --gocode-completer --clang-completer --system-libclang
-        eval ./install.py  "$option"
+        eval ./install.py  "$option" || { echo "Install YouCompleteMe failed."; exit 1; }
     else
         echo "Doesn't exist $dest"
+        exit 1
     fi
 fi
 
 if (($vimGo==1));then
     echo "Install vim-go..."
     $whichVim +GoInstallBinaries +qall
-    templateFile=$(find $HOME -name hello_world.go)
-    sed -ibak  's|"fmt"|(\n    &\n)|' "$templateFile"
+    templateFile=$(find $root -name hello_world.go)
+    SED=sed
+    if [[ "$(uname)" == "Darwin" ]];then
+        SED=gsed
+    fi
+    $SED -ibak  's|"fmt"|(\n    &\n)|' "$templateFile"
     rm "$templateFile"bak
 fi
