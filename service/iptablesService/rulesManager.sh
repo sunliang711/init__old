@@ -163,19 +163,21 @@ case "$cmd" in
     a|ad|add)
         # add "$@"
         enable "$@"
-        systemctl restart iptables
+        #不能在这里重启iptables,因为在启动iptables的时候就会调用本脚本的enable或者add命令
+        #enable或add之后又重启,这样就无限循环了
+        # systemctl restart iptables
         ;;
     de|del|dele|delete)
         del "$@"
-        systemctl restart iptables
+        # systemctl restart iptables
         ;;
     en|ena|enab|enabl|enable)
         enable "$@"
-        systemctl restart iptables
+        # systemctl restart iptables
         ;;
     di|dis|disa|disab|disabl|disable)
         disable "$@"
-        systemctl restart iptables
+        # systemctl restart iptables
         ;;
     clearI|clearInput)
         clearInputTraffic "$@"
