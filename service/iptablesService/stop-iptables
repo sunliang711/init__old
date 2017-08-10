@@ -2,10 +2,11 @@
 
 db=ROOT/db
 #INPUT
-iptables -nvxLINPUT|grep -v Chain|grep -v pkts| while read record;do
+iptables -nvxLINPUT|grep -P '(tcp|udp)'|grep -v Chain|grep -v pkts| while read record;do
     traffic=$(echo $record|awk '{print $2}')
     type=$(echo $record|awk '{print $4}')
     port=$(echo $record|awk -F: '{print $2}')
+    echo "stop-iptables:"
     echo "new traffic:$traffic"
     echo "type:$type"
     echo "port:$port"
@@ -14,10 +15,11 @@ done
 
 #OUTPUT
 #注意output没有动作，所以在第三列
-iptables -nvxLOUTPUT|grep -v Chain|grep -v pkts| while read record;do
+iptables -nvxLOUTPUT|grep -P '(tcp|udp)'|grep -v Chain|grep -v pkts| while read record;do
     traffic=$(echo $record|awk '{print $2}')
     type=$(echo $record|awk '{print $3}')
     port=$(echo $record|awk -F: '{print $2}')
+    echo "stop-iptables:"
     echo "new traffic:$traffic"
     echo "type:$type"
     echo "port:$port"

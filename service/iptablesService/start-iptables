@@ -26,12 +26,17 @@ if [ -n "$enabledPorts" ];then
         type=$(echo $record | awk -F'|' '{print $1}')
         port=$(echo $record | awk -F'|' '{print $2}')
         #debug
+        echo "start-iptables:"
         echo "type: $type"
         echo "port: $port"
-        cmd="iptables -t filter -A INPUT -p $type -m $type --dport $port -j ACCEPT"
+        if ! iptables -nL INPUT | grep $type | grep ":$port";then
+            cmd="iptables -t filter -A INPUT -p $type -m $type --dport $port -j ACCEPT"
+            bash -c "$outputcmd"
+        fi
         #为了监控从这个端口的输出流量
-        outputcmd="iptables -t filter -A OUTPUT -p $type --sport $port"
-        bash -c "$outputcmd"
-        bash -c "$cmd"
+        if ! iptables -nL OUTPUT | grep $type | grep ":$port";then
+            outputcmd="iptables -t filter -A OUTPUT -p $type --sport $port"
+            bash -c "$cmd"
+        fi
     done
 fi
