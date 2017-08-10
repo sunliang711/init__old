@@ -56,10 +56,10 @@ job=$root/iptables-cron-lastDay.sh
 #delete it ,if existes
 crontab -l 2>/dev/null | grep -v "$job" | crontab -
 #add job
-(crontab -l 2>/dev/null;echo '59 23 28-31 * * [ $(date -d +1day +\%d) -eq 1 ] && $job')|crontab -
+(crontab -l 2>/dev/null;echo "59 23 28-31 * * [ \$(date -d +1day +\\%d) -eq 1 ] && $job")|crontab -
 
 job=$root/iptables-cron-everyDay.sh
 #delete it ,if existes
 crontab -l 2>/dev/null | grep -v "$job" | crontab -
 #add job
-(crontab -l 2>/dev/null;echo '0 17 * * * $job')|crontab -
+(crontab -l 2>/dev/null;echo "0 17 * * * $job")|crontab -
