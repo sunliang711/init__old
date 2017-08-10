@@ -167,7 +167,6 @@ case "$cmd" in
         ;;
     en|ena|enab|enabl|enable)
         enable "$@"
-        add "$@"
         #不能在这里重启iptables,因为在启动iptables的时候就会调用本脚本的enable或者add命令
         #enable或add之后又重启,这样就无限循环了
         # systemctl restart iptables
