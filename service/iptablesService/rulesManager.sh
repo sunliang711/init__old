@@ -23,32 +23,32 @@ checkPort(){
         return 1
     fi
 }
-add(){
-    usage="Usage: add type port [owner]\n\t\tfor example:add tcp 8388 jack\n"
-    if (($#!=2));then
-        echo -e "$usage"
-        exit 1
+addIptablesItem(){
+    #protocol type
+    type=$1
+    port=$2
+
+    if ! iptables -nL INPUT | grep $type | grep ":$port";then
+        iptables -A INPUT -p $type --dport $port -j ACCEPT
     fi
 
-    type=$1
-    checkType $type || exit 1
-    port=$2
-    checkPort $port || exit 1
-    owner=$3
-    sqlite3 "$db" "insert into portConfig(type,port,enabled,owner,inputTraffic,outputTraffic) values(\"$type\",$port,1,\"$owner\",0,0);" || { echo "Add failed"; exit 1; }
+    if ! iptables -nL OUTPUT | grep $type | grep ":$port";then
+        iptables -A OUTPUT -p $type --sport $port
+    fi
 }
 
-del(){
-    usage="Usage: del type port\n\t\tfor example: del tcp 8388\n"
-    if (($#!=2));then
-        echo "$usage"
-        exit 1
-    fi
+delIptablesItem(){
     type=$1
-    checkType $type || exit 1
     port=$2
-    checkPort $port || exit 1
-    sqlite3 "$db" "delete from portConfig where type=\"$type\" and port=$port;" || { echo "Del failed!"; exit 1; }
+    number=$(iptables -nL INPUT --line-numbers | grep $type | grep ":$port"|awk '{print $1}')
+    if [[ -n $number ]];then
+        iptables -D INPUT $number
+    fi
+    number=$(iptables -nL OUTPUT --line-numbers | grep $type | grep ":$port"|awk '{print $1}')
+    if [[ -n $number ]];then
+        iptables -D OUTPUT $number
+    fi
+
 }
 
 updateEnabled(){
@@ -89,6 +89,7 @@ enable(){
     checkPort $port || exit 1
     owner=$3
     updateEnabled $type $port 1 $owner
+    addIptablesItem $type $port
 }
 
 disable(){
@@ -103,6 +104,7 @@ disable(){
     checkPort $port || exit 1
     owner=$3
     updateEnabled $type $port 0 $owner
+    delIptablesItem $type $port
 
 }
 
@@ -151,12 +153,11 @@ getOutputTraffic(){
 
 usage(){
     echo "Usage: $(basename $0) list"
-    echo -e "\t\t\tadd type port [onwer]"
-    echo -e "\t\t\tdelete type port"
     echo -e "\t\t\tenable type port [owner](存在则enable,不存在则插入新的enable)"
     echo -e "\t\t\tdisable type port [onwer](存在则disable,不存在则插入新的disable)"
     echo -e "\t\t\tclearInput type port"
     echo -e "\t\t\tclearOutput type port"
+    echo -e "\t\t\tgetOutputTraffic type port"
 }
 cmd=$1
 shift
@@ -164,19 +165,11 @@ case "$cmd" in
     l|li|lis|list)
         list
         ;;
-    a|ad|add)
-        # add "$@"
-        enable "$@"
-        #不能在这里重启iptables,因为在启动iptables的时候就会调用本脚本的enable或者add命令
-        #enable或add之后又重启,这样就无限循环了
-        # systemctl restart iptables
-        ;;
-    de|del|dele|delete)
-        del "$@"
-        # systemctl restart iptables
-        ;;
     en|ena|enab|enabl|enable)
         enable "$@"
+        add "$@"
+        #不能在这里重启iptables,因为在启动iptables的时候就会调用本脚本的enable或者add命令
+        #enable或add之后又重启,这样就无限循环了
         # systemctl restart iptables
         ;;
     di|dis|disa|disab|disabl|disable)
