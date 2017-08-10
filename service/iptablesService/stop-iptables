@@ -9,7 +9,7 @@ iptables -nvxLINPUT|grep -v Chain|grep -v pkts| while read record;do
     echo "new traffic:$traffic"
     echo "type:$type"
     echo "port:$port"
-    sqlite3 "$db" "update portConfig set inputTraffic = inputTraffic + $traffic where type=\"$type\" and port=$port;" || { echo "update $type:$port input traffic failed!" ;}
+    sqlite3 "$db" "update portConfig set inputTraffic = inputTraffic + $traffic where type=\"$type\" and port=$port;" || { echo "update $type:$port input traffic failed!"; }
 done
 
 #OUTPUT
@@ -21,7 +21,7 @@ iptables -nvxLOUTPUT|grep -v Chain|grep -v pkts| while read record;do
     echo "new traffic:$traffic"
     echo "type:$type"
     echo "port:$port"
-    sqlite3 "$db" "update portConfig set outputTraffic = outputTraffic + $traffic where type=\"$type\" and port=$port;" || { echo "update $type:$port" output traffic failed! ;}
+    sqlite3 "$db" "update portConfig set outputTraffic = outputTraffic + $traffic where type=\"$type\" and port=$port;" || { echo "update $type:$port output traffic failed!"; }
 done
 
 /sbin/iptables -P INPUT ACCEPT

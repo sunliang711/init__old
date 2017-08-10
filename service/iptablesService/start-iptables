@@ -9,21 +9,14 @@ iptables -t filter -F
 
 iptables -t filter -A INPUT -m state --state ESTABLISHED,RELATED -j ACCEPT
 iptables -t filter -A INPUT -i lo -j ACCEPT
-iptables -t filter -A INPUT -p icmp -j ACCEPT
-##不应该删除plugin,而应该把这条禁用,如果删除的话,那么它以前记录的流量也都没了
-#1先删除plugin为1的所有目录
-#sqlite3 "$db" "delete from portConfig where plugin=1;"
-##
-#1把plugin为1的记录disable
-sqlite3 "$db" "update portConfig set enabled=0 where plugin=1;"
-#2执行plugin目录下的所有脚本
+#执行plugin目录下的所有脚本
 for s in $(ls ROOT/plugin/*);do
     echo "plugin: $s"
     if file $s | grep -q 'shell script';then
         bash "$s"
     fi
 done
-#3从portConfig数据表中读取
+#从portConfig数据表中读取
 enabledPorts=$(sqlite3 "$db" "select type,port from portConfig where enabled=1;")
 #debug
 echo "enabledPorts: $enabledPorts"

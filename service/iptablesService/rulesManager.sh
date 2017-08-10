@@ -37,26 +37,6 @@ add(){
     sqlite3 "$db" "insert into portConfig values(\"$type\",$port,1,0,0,0);" || { echo "Add failed"; exit 1; }
 }
 
-#portConfig表的plugin字段表示是否是plugin，如果是plug的话，启动service的时候先把plugin为1的记录删除，然后把eanbled为1
-#的端口加入到规则中，然后执行plugin文件夹下所有的脚本，在这些脚本里面调用addPluginPort来增加端口，然后启用这些端口
-addPluginPort(){
-    usage="Usage: addPluginPort type port\n\t\tfor example:addPluginPort tcp 8388\n"
-    if (($#!=2));then
-        echo -e "$usage"
-        exit 1
-    fi
-    type=$1
-    checkType $type || exit 1
-    port=$2
-    checkPort $port || exit 1
-    #1先搜索是否有该记录(根据type和port),如果有,则将enabled置1,没有才删除
-    exist=$(sqlite3 "$db" "select * from portConfig where type=\"$type\" and port=\"$port\";")
-    if [ -z "$exist" ];then
-        sqlite3 "$db" "insert into portConfig values(\"$type\",$port,1,0,0,1);" || { echo "Add failed"; exit 1; }
-    else
-        sqlite3 "$db" "update portConfig set enabled=1 where type=\"$type\" and port=\"$port\";"
-    fi
-}
 del(){
     usage="Usage: del type port\n\t\tfor example: del tcp 8388\n"
     if (($#!=2));then
@@ -85,7 +65,14 @@ updateEnabled(){
         echo "enabled must 0 or 1!"
         exit 1
     fi
-    sqlite3 "$db" "update portConfig set enabled=$enabled where type=\"$type\" and port=$port;" || { echo "UpdateEnabled failed!"; exit 1; }
+    exist=$(sqlite3 "$db" "select * from portConfig where type=\"$type\" and port=\"$port\";")
+    #不存在则插入
+    if [ -z "$exist" ];then
+        sqlite3 "$db" "insert into portConfig values(\"$type\",$port,$enabled,0,0,1);" || { echo "Add failed"; exit 1; }
+    else
+        #存在则更新
+        sqlite3 "$db" "update portConfig set enabled=$enabled where type=\"$type\" and port=$port;"
+    fi
 }
 
 enable(){
@@ -161,48 +148,46 @@ getOutputTraffic(){
 usage(){
     echo "Usage: $(basename $0) list"
     echo -e "\t\t\tadd type port"
-    echo -e "\t\t\taddPluginPort type port"
     echo -e "\t\t\tdelete type port"
-    echo -e "\t\t\tenable type port"
+    echo -e "\t\t\tenable type port(存在则enable,不存在则插入新的enable)"
     echo -e "\t\t\tdisable type port"
     echo -e "\t\t\tclearInput type port"
     echo -e "\t\t\tclearOutput type port"
 }
-
-case $1 in
+cmd=$1
+shift
+case "$cmd" in
     l|li|lis|list)
         list
         ;;
     a|ad|add)
-        add $2 $3
+        # add "$@"
+        enable "$@"
         systemctl restart iptables
         ;;
-    addPluginPort)
-        addPluginPort $2 $3
-        ;;
     de|del|dele|delete)
-        del $2 $3
+        del "$@"
         systemctl restart iptables
         ;;
     en|ena|enab|enabl|enable)
-        enable $2 $3
+        enable "$@"
         systemctl restart iptables
         ;;
     di|dis|disa|disab|disabl|disable)
-        disable $2 $3
+        disable "$@"
         systemctl restart iptables
         ;;
     clearI|clearInput)
-        clearInputTraffic $2 $3
+        clearInputTraffic "$@"
         ;;
     clearO|clearOutput)
-        clearOutputTraffic $2 $3
+        clearOutputTraffic "$@"
         ;;
     clearAll)
         clearAll
         ;;
     getO|getOutputTraffic)
-        getOutputTraffic $2 $3
+        getOutputTraffic "$@"
         ;;
     *)
         usage

@@ -24,15 +24,15 @@ root=/opt/iptables
 db="$root/db"
 rm -rf "$root" >/dev/null 2>&1
 mkdir -p "$root"
-mkdir -p "$root/plugin"
+cp -r plugin "$root"
 sqlite3 "$db" "CREATE TABLE IF NOT EXISTS portConfig (type text,port int,enabled int,inputTraffic int,outputTraffic int,plugin int,primary key(port,type));"
-sqlite3 "$db" 'insert into portConfig values("tcp",22,1,0,0,0)' || { echo "Add tcp port 22 failed!";exit 1; }
 
 startscript="$root/start-iptables"
 stopscript="$root/stop-iptables"
 
-sed  "s|ROOT|$root|" ./rulesManager.sh > /usr/local/bin/rulesManager.sh
-chmod +x /usr/local/bin/rulesManager.sh
+sed  "s|ROOT|$root|" ./rulesManager.sh > "$root"/rulesManager.sh
+chmod +x "$root"/rulesManager.sh
+ln -sf "$root"/rulesManager.sh /usr/local/bin
 
 sed  "s|ROOT|$root|" ./start-iptables > "$root"/start-iptables
 chmod +x "$root"/start-iptables
