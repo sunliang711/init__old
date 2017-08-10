@@ -1,7 +1,7 @@
 #!/bin/bash
 #对数据库进行操作的api
 
-# sqlite3 "$db" "CREATE TABLE IF NOT EXISTS portConfig (type text,port int,enabled int,inputTraffic int,outputTraffic int,plugin int,primary key(port,type));"
+# sqlite3 "$db" "CREATE TABLE IF NOT EXISTS portConfig (type text,port int,enabled int,inputTraffic int,outputTraffic int,owner text,primary key(port,type));"
 db=ROOT/db
 list(){
     echo -e ".header on\n.mode column\nselect * from portConfig;" | sqlite3 "$db"
@@ -24,7 +24,7 @@ checkPort(){
     fi
 }
 add(){
-    usage="Usage: add type port\n\t\tfor example:add tcp 8388\n"
+    usage="Usage: add type port [owner]\n\t\tfor example:add tcp 8388 jack\n"
     if (($#!=2));then
         echo -e "$usage"
         exit 1
@@ -34,7 +34,8 @@ add(){
     checkType $type || exit 1
     port=$2
     checkPort $port || exit 1
-    sqlite3 "$db" "insert into portConfig values(\"$type\",$port,1,0,0,0);" || { echo "Add failed"; exit 1; }
+    owner=$3
+    sqlite3 "$db" "insert into portConfig(type,port,enabled,owner,inputTraffic,outputTraffic) values(\"$type\",$port,1,\"$owner\",0,0);" || { echo "Add failed"; exit 1; }
 }
 
 del(){
@@ -65,10 +66,11 @@ updateEnabled(){
         echo "enabled must 0 or 1!"
         exit 1
     fi
+    owner=$4
     exist=$(sqlite3 "$db" "select * from portConfig where type=\"$type\" and port=\"$port\";")
     #不存在则插入
     if [ -z "$exist" ];then
-        sqlite3 "$db" "insert into portConfig values(\"$type\",$port,$enabled,0,0,1);" || { echo "Add failed"; exit 1; }
+        sqlite3 "$db" "insert into portConfig(type,port,enabled,owner,inputTraffic,outputTraffic) values(\"$type\",$port,$enabled,\"$owner\",0,0);" || { echo "Add failed"; exit 1; }
     else
         #存在则更新
         sqlite3 "$db" "update portConfig set enabled=$enabled where type=\"$type\" and port=$port;"
@@ -85,11 +87,12 @@ enable(){
     checkType $type || exit 1
     port=$2
     checkPort $port || exit 1
-    updateEnabled $type $port 1
+    owner=$3
+    updateEnabled $type $port 1 $owner
 }
 
 disable(){
-    usage="Usage: disable type port\n\t\tfor example:disable tcp 8388\n"
+    usage="Usage: disable type port [owner]\n\t\tfor example:disable tcp 8388\n"
     if (($#!=2));then
         echo -e "$usage"
         exit 1
@@ -98,7 +101,8 @@ disable(){
     checkType $type || exit 1
     port=$2
     checkPort $port || exit 1
-    updateEnabled $type $port 0
+    owner=$3
+    updateEnabled $type $port 0 $owner
 
 }
 
@@ -147,10 +151,10 @@ getOutputTraffic(){
 
 usage(){
     echo "Usage: $(basename $0) list"
-    echo -e "\t\t\tadd type port"
+    echo -e "\t\t\tadd type port [onwer]"
     echo -e "\t\t\tdelete type port"
-    echo -e "\t\t\tenable type port(存在则enable,不存在则插入新的enable)"
-    echo -e "\t\t\tdisable type port"
+    echo -e "\t\t\tenable type port [owner](存在则enable,不存在则插入新的enable)"
+    echo -e "\t\t\tdisable type port [onwer](存在则disable,不存在则插入新的disable)"
     echo -e "\t\t\tclearInput type port"
     echo -e "\t\t\tclearOutput type port"
 }
