@@ -28,11 +28,11 @@ addIptablesItem(){
     type=$1
     port=$2
 
-    if ! iptables -nL INPUT | grep $type | grep ":$port";then
+    if ! iptables -nL INPUT | grep $type | grep -q ":$port";then
         iptables -A INPUT -p $type --dport $port -j ACCEPT
     fi
 
-    if ! iptables -nL OUTPUT | grep $type | grep ":$port";then
+    if ! iptables -nL OUTPUT | grep $type | grep -q ":$port";then
         iptables -A OUTPUT -p $type --sport $port
     fi
 }
