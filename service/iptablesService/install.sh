@@ -42,9 +42,10 @@ chmod +x "$root"/stop-iptables
 
 sed -e "s|STARTSCRIPT|$startscript|" -e "s|STOPSCRIPT|$stopscript|" ./iptables.service > "$serviceFileDir/iptables.service"
 
-cp ./iptables-cron-lastDay.sh "$root"
+sed -e "s|ROOT|$root|" ./iptables-cron-lastDay.sh >"$root"/iptables-cron-lastDay.sh
 chmod +x "$root"/iptables-cron-lastDay.sh
-cp ./iptables-cron-everyDay.sh "$root"
+
+sed -e "s|ROOT|$root|" ./iptables-cron-everyDay.sh >"$root"/iptables-cron-everyDay.sh
 chmod +x "$root"/iptables-cron-everyDay.sh
 
 systemctl daemon-reload
