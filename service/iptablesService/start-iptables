@@ -30,11 +30,13 @@ if [ -n "$enabledPorts" ];then
         echo "type: $type"
         echo "port: $port"
         if ! iptables -nL INPUT | grep $type | grep -q ":$port";then
+            echo "execute iptables -t filter -A INPUT -p $type -m $type --dport $port -j ACCEPT"
             cmd="iptables -t filter -A INPUT -p $type -m $type --dport $port -j ACCEPT"
             bash -c "$outputcmd"
         fi
         #为了监控从这个端口的输出流量
         if ! iptables -nL OUTPUT | grep $type | grep -q ":$port";then
+            echo "execute iptables -t filter -A OUTPUT -p $type --sport $port"
             outputcmd="iptables -t filter -A OUTPUT -p $type --sport $port"
             bash -c "$cmd"
         fi
