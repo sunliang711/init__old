@@ -22,9 +22,16 @@ systemctl stop iptables.service >/dev/null 2>&1
 serviceFileDir=/etc/systemd/system
 root=/opt/iptables
 db="$root/db"
-rm -rf "$root" >/dev/null 2>&1
-mkdir -p "$root"
-cp -r plugin "$root"
+#delete $root except plugin/ folder
+if [ -d "$root" ];then
+    cd "$root"
+    find . -maxdepth 1 ! -name . -a ! -name plugin | xargs -d '\n' rm -rf
+    cd -
+else
+    mkdir -p "$root"/plugin
+fi
+cp  plugin/* "$root"/plugin
+
 sqlite3 "$db" "CREATE TABLE IF NOT EXISTS portConfig (type text,port int,enabled int,inputTraffic int,outputTraffic int,owner text,primary key(port,type));"
 
 startscript="$root/start-iptables"
