@@ -9,6 +9,6 @@ fi
 source /etc/shellrc
 
 traffic=$(traffic)
-portConfig=$(rulesManager.sh list)
-content="$traffic $portConfig"
+portConfig=$(ssserver.sh list)
+content=$(echo -e "$traffic \n $portConfig")
 mailto sunliang711@163.com "vultr traffic statistics" "$content"
