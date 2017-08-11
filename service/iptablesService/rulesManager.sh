@@ -27,6 +27,8 @@ addIptablesItem(){
     #protocol type
     type=$1
     port=$2
+    checkType $type || exit 1
+    checkPort $port || exit 1
 
     if ! iptables -nL INPUT | grep $type | grep -q ":$port";then
         iptables -A INPUT -p $type --dport $port -j ACCEPT
@@ -40,6 +42,8 @@ addIptablesItem(){
 delIptablesItem(){
     type=$1
     port=$2
+    checkType $type || exit 1
+    checkPort $port || exit 1
     number=$(iptables -nL INPUT --line-numbers | grep $type | grep ":$port"|awk '{print $1}')
     if [[ -n $number ]];then
         iptables -D INPUT $number
@@ -51,34 +55,48 @@ delIptablesItem(){
 
 }
 
-updateEnabled(){
-    usage="Usage: update type port enabled"
-    if (($#!=3));then
-        echo "$usage"
+add(){
+    # sqlite3 "$db" "CREATE TABLE IF NOT EXISTS portConfig (type text,port int,enabled int,inputTraffic int,outputTraffic int,owner text,primary key(port,type));"
+    usage="Usage: add type port [owner]\n\t\tfor example:add tcp 8388 [eagle]"
+    if (($#<2));then
+        echo -e "$usage"
         exit 1
     fi
     type=$1
-    checkType $type || exit 1
     port=$2
+    owner=${3:-nobody}
+    checkType $type || exit 1
     checkPort $port || exit 1
-    enabled=$3
-    if ! echo $enabled | grep -qP '^[01]$';then
-        echo "enabled must 0 or 1!"
+    exist=$(sqlite3 "$db" "select * from portConfig where type=\"$type\" and port=$port;")
+    if [[ -n "$exist" ]];then
+        echo "Alread exist record for type:$type port:$port"
+    else
+        sqlite3 "$db" "insert into portConfig(type,port,enabled,owner,inputTraffic,outputTraffic) values(\"$type\",$port,1,\"$owner\",0,0);"
+        addIptablesItem $type $port
+    fi
+}
+
+del(){
+    usage="Usage: del type port\n\t\tfor example: del tcp 8388"
+    if (( $#!=2 ));then
+        echo -e "$usage"
         exit 1
     fi
-    owner=$4
-    exist=$(sqlite3 "$db" "select * from portConfig where type=\"$type\" and port=\"$port\";")
-    #不存在则插入
-    if [ -z "$exist" ];then
-        sqlite3 "$db" "insert into portConfig(type,port,enabled,owner,inputTraffic,outputTraffic) values(\"$type\",$port,$enabled,\"$owner\",0,0);" || { echo "Add failed"; exit 1; }
+    type=$1
+    port=$2
+    checkType $type || exit 1
+    checkPort $port || exit 1
+    exist=$(sqlite3 "$db" "select * from portConfig where type=\"$type\" and port=$port;")
+    if [[ -n "$exist" ]];then
+        sqlite3 "$db" "delete from portConfig where type=\"$type\" and port=$port;"
+        delIptablesItem $type $port
     else
-        #存在则更新
-        sqlite3 "$db" "update portConfig set enabled=$enabled where type=\"$type\" and port=$port;"
+        echo "Doesn't exist record for type:$type port:$port"
     fi
 }
 
 enable(){
-    usage="Usage: enable type port\n\t\tfor example:enable tcp 8388\n"
+    usage="Usage: enable type port \n\t\tfor example:enable tcp 8388 \n"
     if (($#!=2));then
         echo -e "$usage"
         exit 1
@@ -87,13 +105,18 @@ enable(){
     checkType $type || exit 1
     port=$2
     checkPort $port || exit 1
-    owner=$3
-    updateEnabled $type $port 1 $owner
-    addIptablesItem $type $port
+    exist=$(sqlite3 "$db" "select * from portConfig where type=\"$type\" and port=$port;")
+    if [[ -n "$exist" ]];then
+        #存在则更新
+        sqlite3 "$db" "update portConfig set enabled=1 where type=\"$type\" and port=$port;"
+        addIptablesItem $type $port
+    else
+        echo "Doesn't exist record for type:$type port:$port"
+    fi
 }
 
 disable(){
-    usage="Usage: disable type port [owner]\n\t\tfor example:disable tcp 8388\n"
+    usage="Usage: disable type port\n\t\tfor example:disable tcp 8388\n"
     if (($#!=2));then
         echo -e "$usage"
         exit 1
@@ -102,9 +125,14 @@ disable(){
     checkType $type || exit 1
     port=$2
     checkPort $port || exit 1
-    owner=$3
-    updateEnabled $type $port 0 $owner
-    delIptablesItem $type $port
+    exist=$(sqlite3 "$db" "select * from portConfig where type=\"$type\" and port=$port;")
+    if [[ -n "$exist" ]];then
+        #存在则更新
+        sqlite3 "$db" "update portConfig set enabled=0 where type=\"$type\" and port=$port;"
+        delIptablesItem $type $port
+    else
+        echo "Doesn't exist record for type:$type port:$port"
+    fi
 
 }
 
@@ -148,15 +176,18 @@ getOutputTraffic(){
     checkType $type || exit 1
     port=$2
     checkPort $port || exit 1
-    sqlite3 "$db" "select outputTraffic from portConfig where type=\"$type\" and port=$port;"
+    sqlite3 "$db" "select type,port,outputTraffic from portConfig where type=\"$type\" and port=$port;"
 }
 
 usage(){
     echo "Usage: $(basename $0) list"
-    echo -e "\t\t\tenable type port [owner](存在则enable,不存在则插入新的enable)"
-    echo -e "\t\t\tdisable type port [onwer](存在则disable,不存在则插入新的disable)"
+    echo -e "\t\t\tadd type port [owner]"
+    echo -e "\t\t\tdel type port"
+    echo -e "\t\t\tenable type port"
+    echo -e "\t\t\tdisable type port"
     echo -e "\t\t\tclearInput type port"
     echo -e "\t\t\tclearOutput type port"
+    echo -e "\t\t\tclearAll"
     echo -e "\t\t\tgetOutputTraffic type port"
 }
 cmd=$1
@@ -164,6 +195,12 @@ shift
 case "$cmd" in
     l|li|lis|list)
         list
+        ;;
+    add)
+        add "$@"
+        ;;
+    del)
+        del "$@"
         ;;
     en|ena|enab|enabl|enable)
         enable "$@"
