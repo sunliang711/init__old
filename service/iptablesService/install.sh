@@ -49,18 +49,27 @@ sed -e "s|ROOT|$root|" ./iptables-cron-everyDay.sh >"$root"/iptables-cron-everyD
 chmod +x "$root"/iptables-cron-everyDay.sh
 
 systemctl daemon-reload
-systemctl start iptables.service
-systemctl enable iptables.service
+read -p "Start iptables.service? [y/n] " s
+if [[ $s == y* ]];then
+    systemctl start iptables.service
+fi
+read -p "Auto start iptables.service when boot? [y/n] " s
+if [[ $s == y* ]];then
+    systemctl enable iptables.service
+fi
 
-#set cron job
-job=$root/iptables-cron-lastDay.sh
-#delete it ,if existes
-crontab -l 2>/dev/null | grep -v "$job" | crontab -
-#add job
-(crontab -l 2>/dev/null;echo "59 23 28-31 * * [ \$(date -d +1day +\\%d) -eq 1 ] && $job")|crontab -
+read -p "Install cron job [y/n] " s
+if [[ $s == y* ]];then
+    #set cron job
+    job=$root/iptables-cron-lastDay.sh
+    #delete it ,if existes
+    crontab -l 2>/dev/null | grep -v "$job" | crontab -
+    #add job
+    (crontab -l 2>/dev/null;echo "59 23 28-31 * * [ \$(date -d +1day +\\%d) -eq 1 ] && $job")|crontab -
 
-job=$root/iptables-cron-everyDay.sh
-#delete it ,if existes
-crontab -l 2>/dev/null | grep -v "$job" | crontab -
-#add job
-(crontab -l 2>/dev/null;echo "0 17 * * * $job")|crontab -
+    job=$root/iptables-cron-everyDay.sh
+    #delete it ,if existes
+    crontab -l 2>/dev/null | grep -v "$job" | crontab -
+    #add job
+    (crontab -l 2>/dev/null;echo "0 17 * * * $job")|crontab -
+fi
