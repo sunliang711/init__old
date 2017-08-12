@@ -124,10 +124,10 @@ if [[ "$setSupervim" != [nN] ]];then
     cd supervim
     case "$OS" in
         arch|mac)
-            /bin/bash install -pgy nvim
+            /bin/bash install -lgfdy3 nvim
             ;;
         *)
-            /bin/bash install -pgy vim
+            /bin/bash install -lgfdy3 vim
             ;;
     esac
     cd -
