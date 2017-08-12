@@ -163,7 +163,6 @@ installBasic(){
     $CURL -fLo $root/autoload/plug.vim --create-dirs \
             https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim || { echo "download vim-plug failed.";uninstall; exit 1; }
     cp  init.vim $cfg
-    $whichVim +PlugInstall +qall
 }
 
 uninstall(){

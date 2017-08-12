@@ -120,6 +120,14 @@ elif [[ "$whichVim" == "vim" ]];then
         #vim 7.4以后，vimrc文件可以放到.vim目录中
         cfg="$root/vimrc"
     fi
+    if [[ $ycm -ne 0 ]];then
+        if (( $(echo "$version<=7.4" | bc -l) )) ;then
+            #vim 7.4以后，YouCompleteMe才支持
+            echo "YouCompleteMe need vim version greater 7.4"
+            echo "So,not install YouCompleteMe."
+            ycm=0
+        fi
+    fi
 else
     echo "Unknown vim type:  Not vim or nvim."
     echo "Usage: $(basename $0) [options] vim|nvim"
@@ -247,6 +255,11 @@ fi
 
 if (($vimGo==1));then
     echo "Install vim-go..."
+    if [[ "$downloadFromNAS" -eq 1 ]];then
+        curl -L -o vimgosrc.tar.gz http://home.eagle711.win:5000/fbsharing/OHdvYwf9
+        tar -C $GOPATH -xf vimgosrc.tar.gz
+        rm -rf vimgosrc.tar.gz
+    fi
     $whichVim +GoInstallBinaries +qall
     templateFile=$(find $root -name hello_world.go)
     SED=sed
