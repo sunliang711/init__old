@@ -18,7 +18,7 @@ ycm=0
 whichVim=""
 cfg=""
 root=""
-while getopts "hgpy" opt;do
+while getopts "hglp:y" opt;do
     case "$opt" in
         h)
             help=1
@@ -26,8 +26,12 @@ while getopts "hgpy" opt;do
         g)
             vimGo=1
             ;;
-        p)
+        l)
             proxy="socks5://localhost:1080"
+            echo "Proxy is :$proxy"
+            ;;
+        p)
+            proxy=$OPTARG
             echo "Proxy is :$proxy"
             ;;
         y)
@@ -70,12 +74,6 @@ else
 fi
 
 checkCmd $whichVim
-
-#在whichVim后面还有个参数,则这个参数作为socks5代理
-#这样用来应对非本地socks5代理的情况,也就是不用socks5://localhost:1080
-if [ -n "$2" ];then
-    proxy=$2
-fi
 
 echo "Install supervim for $whichVim"
 echo "Config file is $cfg"
