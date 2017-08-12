@@ -15,9 +15,12 @@ checkCmd(){
 help(){
     echo "Usage: $(basename $0) OPTIONS vim/nvim"
     echo "OPTIONS:"
-    echo -e "\t\t-p Using socks5://localhost:1080 proxy"
-    echo -e "\t\t-g for vim-go"
-    echo -e "\t\t-y for YouCompleteMe"
+    echo -e "\t\t-l \"Using socks5://localhost:1080 proxy\""
+    echo -e "\t\t-p socks5proxy  \"Using socks5 proxy\""
+    echo -e "\t\t-g \"for vim-go\""
+    echo -e "\t\t-y 1|2|3 \"for YouCompleteMe 1:clang 2:golang 3:both\""
+    echo -e "\t\t-f \"installFont\""
+    echo -e "\t\t-d \"downloadFromNAS\""
 }
 
 installDependence(){
