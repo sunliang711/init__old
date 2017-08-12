@@ -2,6 +2,25 @@
 thisScriptDir=$(cd $(dirname ${BASH_SOURCE}) && pwd)
 cd ${thisScriptDir}
 
+
+if [[ $EUID -ne 0 ]];then
+    if command -v sudo >/dev/null 2>&1;then
+        echo "Not run as root,try sudo cmd..."
+        sudo true || { echo "cannot use sudo cmd.";exit 1; }
+    else
+        echo "Not run as root ,and no sudo command."
+        exit 1
+    fi
+fi
+
+#能够走到这里,说明要么是root,要么有sudo权限
+if [[ $UEID -ne 0 ]];then
+    APT="sudo apt"
+else
+    APT="apt"
+fi
+"$APT" update
+
 source functions
 
 if [[ "$(uname)" == "Darwin" ]] && [[ $EUID -eq 0 ]];then
@@ -12,13 +31,23 @@ user=${SUDO_USER:-$(whoami)}
 HOME=$(eval echo ~$user)
 help=0
 proxy=""
+localProxy=""
 vimGo=0
 ycm=0
+font=0
+downloadFromNAS=0
 
 whichVim=""
 cfg=""
 root=""
-while getopts "hglp:y" opt;do
+#options:
+#h  help
+#g  vimgo
+#l  local socks5 proxy
+#p  "socks5://ip:port" external socks5 proxy
+#y  1:clang 2:golang 3:both  ycm
+#f  install font
+while getopts "hglp:y:fd" opt;do
     case "$opt" in
         h)
             help=1
@@ -26,16 +55,20 @@ while getopts "hglp:y" opt;do
         g)
             vimGo=1
             ;;
+        d)
+        downloadFromNAS=1
+            ;;
         l)
-            proxy="socks5://localhost:1080"
-            echo "Proxy is :$proxy"
+            localProxy="socks5://localhost:1080"
             ;;
         p)
             proxy=$OPTARG
-            echo "Proxy is :$proxy"
             ;;
         y)
-            ycm=1
+            ycm=$OPTARG
+            ;;
+        f)
+            font=1
             ;;
         *)
             help
@@ -47,8 +80,28 @@ if (($help==1));then
     help
     exit 0
 fi
+if [[ $ycm -ne 0 ]] && [[ $ycm -ne 1 ]] && [[ $ycm -ne 2 ]] && [[ $ycm -ne 3 ]];then
+    echo  "-y valid argument is: 0 (not install ) 1 (for clang) 2 (for golang) 3 (for both)"
+    exit 1
+fi
+#-l override -p flag
+if [[ -n $localProxy ]];then
+    proxy=$localProxy
+fi
 
 shift $((OPTIND-1))
+#install bc command
+if ! command -v bc >/dev/null 2>&1;then
+    echo "Install bc..."
+    #debian
+    "$APT" install -y bc >/dev/null 2>&1
+fi
+
+if ! command -v bc >/dev/null 2>&1;then
+    echo "Install bc failed,install it manually."
+    exit 1
+fi
+
 whichVim=$1
 if [[ "$whichVim" == "nvim" ]];then
     root=$HOME/.config/nvim
@@ -69,15 +122,24 @@ elif [[ "$whichVim" == "vim" ]];then
     fi
 else
     echo "Unknown vim type:  Not vim or nvim."
-    echo "Usage: install [options] vim|nvim"
+    echo "Usage: $(basename $0) [options] vim|nvim"
     exit 1
 fi
 
+if ! command -v $whichVim >/dev/null 2>&1;then
+    "$APT" install -y $whichVim >/dev/null 2>&1
+fi
 checkCmd $whichVim
 
 echo "Install supervim for $whichVim"
 echo "Config file is $cfg"
 echo "Root dir is $root"
+
+if ! command -v curl >/dev/null 2>&1;then
+    "$APT" install -y curl >/dev/null 2>&1
+fi
+
+checkCmd curl
 
 CURL=curl
 if [ -n "$proxy" ];then
@@ -87,9 +149,15 @@ if [ -n "$proxy" ];then
     git config --global https.proxy "$proxy"
 fi
 
+if [[ "$font" -eq 1]];then
+    installFont
+fi
+
 installBasic
 
-if (($ycm==1));then
+#ycm和vimgo是可选的,如果安装的话,则先把vimrc中的他们的注释去掉
+if (($ycm!=0));then
+    #1 去掉注释
     sed -ibak "s|\"[ ]*\(Plug 'Valloric/YouCompleteMe'\)|\1|" $cfg
     rm -f "${cfg}bak"
 
@@ -98,34 +166,79 @@ if (($ycm==1));then
     elif [[ "$whichVim" == "nvim" ]];then
         dest="$HOME/.config/nvim/plugins/YouCompleteMe"
     fi
+    #2 根据ycm的值,安装不同的依赖
+    #common: need CMake clang python or python3
+    #golang: need go
+
+    #ycm不是0,就一定是1或2或3,因为上面有检查
+    if [[ $ycm -ne 0 ]];then
+        if ! command -v cmake >/dev/null 2>&1;then
+            "$APT" install -y cmake
+        fi
+        if ! command -v clang >/dev/null 2>&1;then
+            "$APT" install -y clang
+        fi
+        if ! command -v python3 >/dev/null 2>&1;then
+            "$APT" install -y python3
+        fi
+    fi
+    if [[ $ycm -eq 2 ]];then
+        if ! command -v go >/dev/null 2>&1;then
+            "$APT" install -y golang
+        fi
+    fi
+    if [[ "$downloadFromNAS" -eq 1 ]];then
+        #3 从我的nas下载YouCompleteMe
+        echo "Download YouCompleteMe from NAS..."
+        curl -L -o YouCompleteMe.tar.gz http://home.eagle711.win:5000/fbsharing/I0CloRro
+        echo "Extract YouCompleteMe..."
+        tar -C $root/plugins -xf YouCompleteMe.tar.gz
+        rm -rf YouCompleteMe.tar.gz
+    fi
 fi
+
 if (($vimGo==1));then
     sed -ibak "s|\"[ ]*\(Plug 'fatih/vim-go'\)|\1|" $cfg
     rm -f "${cfg}bak"
     export GOPATH=~/go
-
+    #install go if needed
+    if ! command -v go >/dev/null 2>&1;then
+        if [[ "$downloadFromNAS" -eq 1 ]];then
+            curl -L -o go1.8.3.linux-amd64.tar.gz http://home.eagle711.win:5000/fbsharing/YHzaDviP
+            tar -C /usr/local -xf go1.8.3.linux-amd64.tar.gz
+            rm -rf go1.8.3.linux-amd64.tar.gz
+            cd /usr/local/bin
+            for i in $(ls ../go/bin/*);do
+                ln -sf $i .
+            done
+            cd -
+        else
+            "$APT" install -y golang
+        fi
+    fi
 fi
 
 echo "Install plugins..."
 $whichVim +PlugInstall +qall
 
-if (($ycm==1));then
+if (($ycm!=0));then
     echo "Install YouCompleteMe..."
     if [ -d "$dest" ];then
         cd "$dest"
         option=
-        read -p "Ycm for clang(cpp)? [Y/n]" clang
-        if [[ "$clang" != [nN] ]];then
+        #ycm 1:clang 2:golang 3:both
+        if [[ $ycm -eq 1 ]];then
             option+=" --clang-completer "
             option+=" --system-libclang "
-        fi
-        read -p "Ycm for golang? [Y/n]"  golang
-        if [[ "$golang" != [nN] ]];then
+        elif [[ $ycm -eq 2 ]];then
+            option+=" --gocode-completer "
+        elif [[ $ycm -eq 3 ]];then
+            option+=" --clang-completer "
+            option+=" --system-libclang "
             option+=" --gocode-completer "
         fi
-
         #./install.py  --gocode-completer --clang-completer --system-libclang
-        eval ./install.py  "$option" || { echo "Install YouCompleteMe failed."; exit 1; }
+        eval python3 ./install.py  "$option" || { echo "Install YouCompleteMe failed."; exit 1; }
     else
         echo "Doesn't exist $dest"
         exit 1
