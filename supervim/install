@@ -241,7 +241,8 @@ if (($vimGo==1));then
 fi
 
 echo "Install plugins..."
-$whichVim +PlugInstall +qall
+#$whichVim +PlugInstall +qall
+$whichVim -c PlugInstall -c qall
 
 if (($ycm!=0));then
     echo "Install YouCompleteMe..."
@@ -269,7 +270,8 @@ fi
 
 if (($vimGo==1));then
     echo "Install vim-go..."
-    $whichVim +GoInstallBinaries +qall
+    #$whichVim +GoInstallBinaries +qall
+    $whichVim -c GoInstallBinaries -c qall
     templateFile=$(find $root -name hello_world.go)
     SED=sed
     if [[ "$(uname)" == "Darwin" ]];then
