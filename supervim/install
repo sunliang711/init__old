@@ -19,7 +19,6 @@ if [[ $UEID -ne 0 ]];then
 else
     APT="apt"
 fi
-"$APT" update
 
 source functions
 
@@ -90,6 +89,7 @@ if [[ -n $localProxy ]];then
 fi
 
 shift $((OPTIND-1))
+"$APT" update
 #install bc command
 if ! command -v bc >/dev/null 2>&1;then
     echo "Install bc..."
@@ -149,7 +149,7 @@ if [ -n "$proxy" ];then
     git config --global https.proxy "$proxy"
 fi
 
-if [[ "$font" -eq 1]];then
+if [[ "$font" -eq 1 ]];then
     installFont
 fi
 
