@@ -212,6 +212,13 @@ if (($vimGo==1));then
     if [[ ! -d $GOPATH ]];then
         mkdir -pv $GOPATH
     fi
+    if [[ "$downloadFromNAS" -eq 1 ]];then
+        echo "Download vim-go source from NAS..."
+        curl -L -o vimgosrc.tar.gz http://home.eagle711.win:5000/fbsharing/OHdvYwf9
+        echo "Extract..."
+        tar -C $GOPATH -xf vimgosrc.tar.gz
+        rm -rf vimgosrc.tar.gz
+    fi
     #install go if needed
     if ! command -v go >/dev/null 2>&1;then
         if [[ "$downloadFromNAS" -eq 1 ]];then
@@ -258,11 +265,6 @@ fi
 
 if (($vimGo==1));then
     echo "Install vim-go..."
-    if [[ "$downloadFromNAS" -eq 1 ]];then
-        curl -L -o vimgosrc.tar.gz http://home.eagle711.win:5000/fbsharing/OHdvYwf9
-        tar -C $GOPATH -xf vimgosrc.tar.gz
-        rm -rf vimgosrc.tar.gz
-    fi
     $whichVim +GoInstallBinaries +qall
     templateFile=$(find $root -name hello_world.go)
     SED=sed
