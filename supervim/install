@@ -209,6 +209,9 @@ if (($vimGo==1));then
     sed -ibak "s|\"[ ]*\(Plug 'fatih/vim-go'\)|\1|" $cfg
     rm -f "${cfg}bak"
     export GOPATH=~/go
+    if [[ ! -d $GOPATH ]];then
+        mkdir -p $GOPATH
+    fi
     #install go if needed
     if ! command -v go >/dev/null 2>&1;then
         if [[ "$downloadFromNAS" -eq 1 ]];then
