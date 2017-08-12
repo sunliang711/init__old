@@ -206,12 +206,16 @@ if (($ycm!=0));then
 fi
 
 if (($vimGo==1));then
+    echo "modify $cfg for vim-go"
     sed -ibak "s|\"[ ]*\(Plug 'fatih/vim-go'\)|\1|" $cfg
     rm -f "${cfg}bak"
+    echo "Set GOPATH to ~/go"
     export GOPATH=~/go
     if [[ ! -d $GOPATH ]];then
         mkdir -pv $GOPATH
     fi
+    echo "ls GOPATH"
+    ls $GOPATH
     if [[ "$downloadFromNAS" -eq 1 ]];then
         echo "Download vim-go source from NAS..."
         curl -L -o vimgosrc.tar.gz http://home.eagle711.win:5000/fbsharing/OHdvYwf9
