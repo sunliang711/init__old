@@ -102,8 +102,8 @@ noremap <silent> <C-l> <C-W>l
 inoremap <silent> <C-l> <esc><C-W>l
 noremap <silent> <C-j> <C-W>j
 inoremap <silent> <C-j> <esc><C-W>j
-noremap <silent> <C-k> <C-W>k
-inoremap <silent> <C-k> <esc><C-W>k
+" noremap <silent> <C-k> <C-W>k
+" inoremap <silent> <C-k> <esc><C-W>k
 
 "设置gf指令的寻找路径
 set path =.,~/.local/include,/usr/local/include,/usr/include,,
@@ -186,8 +186,8 @@ if v:version > 704
     " Plug 'Valloric/YouCompleteMe'
 endif
 
-" Plug 'SirVer/ultisnips'
-" Plug 'honza/vim-snippets'
+Plug 'SirVer/ultisnips'
+Plug 'honza/vim-snippets'
 
 "给其他插件比如ctrlp nerdtree startify增加图标
 Plug 'ryanoasis/vim-devicons'
@@ -341,9 +341,9 @@ let g:ycm_complete_in_strings = 1
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
 " UltiSnips setting
-" let g:UltiSnipsExpandTrigger="<c-k>"
-" let g:UltiSnipsJumpForwardTrigger="<c-b>"
-" let g:UltiSnipsJumpBackwardTrigger="<c-z>"
+let g:UltiSnipsExpandTrigger="<c-k>"
+let g:UltiSnipsJumpForwardTrigger="<c-b>"
+let g:UltiSnipsJumpBackwardTrigger="<c-z>"
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 "
 "      Nerdtree Config
@@ -392,3 +392,11 @@ nnoremap <silent> <F10> :NextColorScheme<CR>
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 ":%!python -m json.tool
 command! JsonFormat :%!python -m json.tool
+
+
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+"
+"      write with root privilege
+"
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+command! W :execute ':silent w !sudo tee % > /dev/null' | :edit!
