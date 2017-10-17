@@ -140,6 +140,7 @@ if command -v git >/dev/null 2>&1;then
     }
     gpon(){
         #add default parameter
+        # local proxy=${1:-http://localhost:8118}
         local proxy=${1:-socks5://localhost:1080}
 
         git config --global http.proxy $proxy
@@ -513,6 +514,12 @@ fi
 rm /tmp/$1.service
 }
 
+function enc(){
+    /usr/bin/openssl aes-128-cbc -salt -in $1 -out $1.aes && rm -rf $1
+}
+function dec(){
+    /usr/bin/openssl aes-128-cbc -d -in $1.aes -out $1 && rm -rf $1.aes
+}
 #END function
 
 #BEGIN others
