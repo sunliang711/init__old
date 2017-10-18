@@ -27,7 +27,7 @@ gitconfig(){
         git config --global diff.tool vimdiff
     fi
 
-    read -p "Set git proxy ?[Y/n] " gitp
+    read -p "Set git proxy(http[s].proxy to socks5://localhost:1080) ?[Y/n] " gitp
     if [[ "$gitp" != [nN] ]];then
         # git config --global http.proxy "http://127.0.0.1:8118"
         # git config --global https.proxy "http://127.0.0.1:8118"

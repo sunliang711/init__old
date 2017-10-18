@@ -46,6 +46,7 @@ root=""
 #p  "socks5://ip:port" external socks5 proxy
 #y  1:clang 2:golang 3:both  ycm
 #f  install font
+#d download from NAS
 while getopts "hglp:y:fd" opt;do
     case "$opt" in
         h)
