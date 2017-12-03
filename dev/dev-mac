@@ -5,15 +5,40 @@ if [[ "$(uname)" != "Darwin" ]];then
     exit 1
 fi
 
+function usage(){
+    echo "dev-mac [options]"
+    echo "options:"
+    echo "-l	local proxy,ie socks5://localhost:1080"
+    echo "-p	socks5 proxy,used for brew cmd ALL_PROXY environment variable"
+}
+
+proxy=
+while getopts "hlp:" opt;do
+    case "$opt" in
+        h)
+            usage
+            exit 0
+            ;;
+        l)
+            proxy=socks5://localhost:1080
+            ;;
+        p)
+            proxy=$OPTARG
+            ;;
+    esac
+done
+
 #install homebrew
 if ! command -v brew >/dev/null;then
-    echo "install homebrew"
+    echo "install homebrew..."
     /usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
 fi
 
 shopt -s expand_aliases
-alias brew='ALL_PROXY=socks5://localhost:1080 brew'
-apps="coreutils findutils gnu-tar gnu-sed gawk gnutls gnu-indent gnu-getopt gnu-which wget go neovim vim python python3 privoxy aria2"
+alias brew='ALL_PROXY=$proxy brew'
+echo "brew using proxy: $proxy"
+#apps="coreutils findutils gnu-tar gnu-sed gawk gnutls gnu-indent gnu-getopt gnu-which wget go neovim vim python python3 privoxy aria2"
+apps="coreutils findutils gnu-tar gnu-sed gawk gnutls gnu-indent gnu-getopt gnu-which wget go neovim vim python python3 privoxy"
 for app in $apps;do
     if ! brew list $app >/dev/null 2>&1;then
         echo "Install $app..."
@@ -22,8 +47,8 @@ for app in $apps;do
 done
 #BREW install coreutils findutils gnu-tar gnu-sed gawk gnutls gnu-indent gnu-getopt gnu-which wget go neovim vim python python3 privoxy aria2
 SBIN=$(find /usr/local/Cellar/privoxy -name "sbin")
-ln -sf  $SBIN/privoxy /usr/local/bin/privoxy
+ln -svf  $SBIN/privoxy /usr/local/bin/privoxy
 pkill privoxy
-brew tap homebrew/dupes;
+#brew tap homebrew/dupes;
 brew install grep
 

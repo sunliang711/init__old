@@ -96,7 +96,7 @@ installDependence(){
         done
         if ! brew list grep >/dev/null 2>&1;then
             echo "Install grep"
-            $BREW tap homebrew/dupes;
+            #$BREW tap homebrew/dupes;
             $BREW install grep
         fi
     fi

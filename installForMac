@@ -1,0 +1,52 @@
+#!/bin/bash
+
+if [[ $(uname) != "Darwin" ]];then
+    echo "Only run on macOS"
+    exit 1
+fi
+
+SCRIPTDIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+cd "$SCRIPTDIR"
+
+if (($EUID!=0));then
+    #非root用户的时候,需要检测是否有sudo命令,如果有sudo命令则还要检测当前用户是否可以使用sudo命令
+    #因为下面有的指令需要root权限
+    if command -v sudo >/dev/null 2>&1;then
+        sudo true || { echo "Error: Current user cannot use command 'sudo' !";exit 1; }
+    else
+        echo "Error: Current user is not root,and can not find sudo cmd!"
+        exit 1
+    fi
+fi
+user=${SUDO_USER:-$(whoami)}
+proxy=
+while getopts ":lp:" opt;do
+    case $opt in
+        l)
+            proxy="socks5://localhost:1080"
+            ;;
+        p)
+            proxy=$OPTARG
+            ;;
+        :)
+            echo "option:$OPTARG need argument"
+            exit 1
+            ;;
+    esac
+done
+
+/bin/bash dev/dev-mac -p $proxy
+
+echo "Config git..."
+/bin/bash git/setGit
+
+echo "Install zsh and oh-my-zsh..."
+/bin/bash shell/10-zsh-installer.sh
+/bin/bash shell/20-set-zsh-theme.sh
+/bin/bash shell/30-config-shell.sh install
+
+echo "Install supervim for nvim..."
+/bin/bash supervim/install -f -p $proxy nvim
+
+echo "Install supervim for vim..."
+/bin/bash supervim/install -f -p $proxy  vim

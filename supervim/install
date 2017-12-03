@@ -90,19 +90,23 @@ if [[ -n $localProxy ]];then
 fi
 
 shift $((OPTIND-1))
-if [[ $EUID -ne 0 ]];then
-    sudo "$APT" update
-else
-    "$APT" update
+if command -v $APT >/dev/null 2>&1;then
+    if [[ $EUID -ne 0 ]];then
+        sudo "$APT" update
+    else
+        "$APT" update
+    fi
 fi
 #install bc command
 if ! command -v bc >/dev/null 2>&1;then
     echo "Install bc..."
     #debian
-    if [[ $EUID -ne 0 ]];then
-        sudo "$APT" install -y bc >/dev/null 2>&1
-    else
-        "$APT" install -y bc >/dev/null 2>&1
+    if command -v $APT >/dev/null 2>&1;then
+        if [[ $EUID -ne 0 ]];then
+            sudo "$APT" install -y bc >/dev/null 2>&1
+        else
+            "$APT" install -y bc >/dev/null 2>&1
+        fi
     fi
 fi
 
