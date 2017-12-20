@@ -14,7 +14,7 @@ if [[ $EUID -ne 0 ]];then
 fi
 
 #能够走到这里,说明要么是root,要么有sudo权限
-if [[ $UEID -ne 0 ]];then
+if [[ $EUID -ne 0 ]];then
     APT="sudo apt"
 else
     APT="apt"
@@ -90,13 +90,13 @@ if [[ -n $localProxy ]];then
 fi
 
 shift $((OPTIND-1))
-if command -v $APT >/dev/null 2>&1;then
-    if [[ $EUID -ne 0 ]];then
-        sudo "$APT" update
-    else
-        "$APT" update
-    fi
-fi
+case $(uname) in
+    Linux)
+        if command -v apt >/dev/null 2>&1;then
+            "$APT" update
+        fi
+        ;;
+esac
 #install bc command
 if ! command -v bc >/dev/null 2>&1;then
     echo "Install bc..."
