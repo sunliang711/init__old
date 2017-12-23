@@ -13,7 +13,7 @@ function usage(){
 }
 
 proxy=
-while getopts "hlp:" opt;do
+while getopts ":hlp:" opt;do
     case "$opt" in
         h)
             usage
@@ -24,6 +24,14 @@ while getopts "hlp:" opt;do
         p)
             proxy=$OPTARG
             ;;
+        :)
+            echo "option: '$OPTARG' need argument!!"
+            exit 1
+            ;;
+        \?)
+            echo "option: '$OPTARG' not supported!!"
+            exit 1
+            ;;
     esac
 done
 
@@ -31,19 +39,28 @@ if [[ -n "$proxy" ]];then
     echo "using proxy: $proxy"
     shopt -s expand_aliases
 
+    #set brew proxy
     alias brew="ALL_PROXY=$proxy brew"
+    #set curl proxy
+    #curl -x or curl --proxy or http_proxy environment variable
+    #support http or socks5 proxy
     alias curl="curl -x $proxy"
+    #set git proxy
     git config --global http.proxy "$proxy"
 
+    #set wget proxy
     export http_proxy="$proxy"
     export https_proxy="$proxy"
+    export ftp_proxy="$proxy"
+
     export HTTP_PROXY="$proxy"
     export HTTPS_PROXY="$proxy"
+    export FTP_PROXY="$proxy"
 fi
 #install homebrew
 if ! command -v brew >/dev/null;then
     echo "install homebrew..."
-    /usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
+    /usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)" || { echo "Install homebrew failed!"; exit 1; }
 fi
 
 #apps="coreutils findutils gnu-tar gnu-sed gawk gnutls gnu-indent gnu-getopt gnu-which wget go neovim vim python python3 privoxy aria2"
