@@ -70,7 +70,11 @@ apps="coreutils findutils gnu-tar gnu-sed gawk gnutls gnu-indent gnu-getopt gnu-
 for app in $apps;do
     if ! brew list $app >/dev/null 2>&1;then
         echo "Install $app..."
-        su $USER -c "brew install $app"
+        if [[ -n ${SUDO_USER} ]];then
+            su $USER -c "brew install $app"
+        else
+            brew install $app
+        fi
     fi
 done
 #BREW install coreutils findutils gnu-tar gnu-sed gawk gnutls gnu-indent gnu-getopt gnu-which wget go neovim vim python python3 privoxy aria2
@@ -78,4 +82,8 @@ SBIN=$(find /usr/local/Cellar/privoxy -name "sbin")
 ln -svf  $SBIN/privoxy /usr/local/bin/privoxy
 pkill privoxy
 #brew tap homebrew/dupes;
-su $USER -c "brew install grep"
+if [[ -n ${SUDO_USER} ]];then
+    su $USER -c "brew install grep"
+else
+    brew install grep
+fi
