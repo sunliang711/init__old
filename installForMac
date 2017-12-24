@@ -46,7 +46,15 @@ echo "Install zsh and oh-my-zsh..."
 /bin/bash shell/30-config-shell.sh install
 
 echo "Install supervim for nvim..."
-/bin/bash supervim/install -f -p $proxy nvim
+if [[ -n "$proxy" ]];then
+    /bin/bash supervim/install -f -p $proxy nvim
+else
+    /bin/bash supervim/install -f nvim
+fi
 
 echo "Install supervim for vim..."
-/bin/bash supervim/install -f -p $proxy  vim
+if [[ -n "$proxy" ]];then
+    /bin/bash supervim/install -f -p $proxy  vim
+else
+    /bin/bash supervim/install -f vim
+fi

@@ -193,8 +193,18 @@ proxyon(){
     echoExec "export HTTPS_PROXY=$proxy"
     echoExec "export FTP_PROXY=$proxy"
 
-    git config --global http.proxy $proxy
-    git config --global https.proxy $proxy
+    #set git proxy
+    if command -v git >/dev/null 2>&1;then
+        echoExec "git config --global http.proxy $proxy"
+        echoExec "git config --global https.proxy $proxy"
+    fi
+
+    #set curl proxy
+    echoExec "alias curl=curl -x $proxy"
+
+    #set brew proxy
+    echo "alias brew=ALL_PROXY=$proxy brew ..."
+    alias brew="ALL_PROXY=$proxy brew"
 }
 
 proxyoff(){
@@ -205,15 +215,20 @@ proxyoff(){
     echoExec "unset HTTPS_PROXY"
     echoExec "unset FTP_PROXY"
 
-    git config --global --unset-all http.proxy
-    git config --global --unset-all https.proxy
+    if command -v git >/dev/null 2>&1;then
+        echoExec "git config --global --unset-all http.proxy"
+        echoExec "git config --global --unset-all https.proxy"
+    fi
+    echoExec "unalias curl"
+    echoExec "unalias brew"
 }
 
 proxystatus(){
     # if declare -x | grep 'http_proxy="\{,1\}127.0.0.1:8118' >/dev/null 2>&1;then
-    if declare -x | grep 'http_proxy=' >/dev/null 2>&1;then
+    if declare -x | grep '_proxy=' >/dev/null 2>&1;then
         echo "http proxy is set:"
-        declare -x |grep 8118
+        #declare -x |grep 8118
+        declare -x |grep -i '_proxy'
     else
         echo "[http] proxy is off"
     fi
@@ -221,10 +236,13 @@ proxystatus(){
     if [[ -n "$out" ]];then
         echo
         echo "git proxy setting:"
-        echo "$out"
+        git config --global -l | grep 'https\?\.proxy'
+        # echo "$out"
     else
         echo "[git] proxy is off."
     fi
+    alias | grep curl
+    alias | grep brew
 }
 
 #创建目录并进入该目录
