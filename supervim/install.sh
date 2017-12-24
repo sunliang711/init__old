@@ -50,8 +50,8 @@ installFont(){
         "Darwin")
             command -v brew >/dev/null 2>&1 || { echo "Need install homebrew first!"; exit 1; }
             if ! brew cask list font-hack-nerd-font>/dev/null 2>&1;then
-                $BREW tap caskroom/fonts
-                $BREW cask install font-hack-nerd-font
+                brew tap caskroom/fonts
+                brew cask install font-hack-nerd-font
             fi
             echo "set Knack nerd font in iterm"
             ;;
