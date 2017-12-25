@@ -1,27 +1,25 @@
 #!/bin/bash
 
+usage(){
+    echo "Usage: $(basename $0) OPTIONS"
+    echo "OPTIONS:"
+    echo -e "\t-l                local proxy http://localhost:8118"
+    echo -e "\t-p [URL of proxy] URL as proxy"
+    echo -e "\t-h                Print This Message"
+    exit 1
+}
 if [[ $(uname) != "Darwin" ]];then
     echo "Only run on macOS"
     exit 1
 fi
 
-SCRIPTDIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-cd "$SCRIPTDIR"
-
-if (($EUID!=0));then
-    #非root用户的时候,需要检测是否有sudo命令,如果有sudo命令则还要检测当前用户是否可以使用sudo命令
-    #因为下面有的指令需要root权限
-    if command -v sudo >/dev/null 2>&1;then
-        sudo true || { echo "Error: Current user cannot use command 'sudo' !";exit 1; }
-    else
-        echo "Error: Current user is not root,and can not find sudo cmd!"
-        exit 1
-    fi
-fi
 user=${SUDO_USER:-$(whoami)}
 proxy=
-while getopts ":lp:" opt;do
+while getopts ":lp:h" opt;do
     case $opt in
+        h)
+            usage
+            ;;
         l)
             proxy="socks5://localhost:1080"
             ;;
@@ -38,6 +36,19 @@ while getopts ":lp:" opt;do
             ;;
     esac
 done
+SCRIPTDIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+cd "$SCRIPTDIR"
+
+if (($EUID!=0));then
+    #非root用户的时候,需要检测是否有sudo命令,如果有sudo命令则还要检测当前用户是否可以使用sudo命令
+    #因为下面有的指令需要root权限
+    if command -v sudo >/dev/null 2>&1;then
+        sudo true || { echo "Error: Current user cannot use command 'sudo' !";exit 1; }
+    else
+        echo "Error: Current user is not root,and can not find sudo cmd!"
+        exit 1
+    fi
+fi
 
 if [[ -n "$proxy" ]];then
     echo "using proxy: $proxy"
