@@ -62,7 +62,11 @@ fi
 #if ! command -v brew >/dev/null;then
 if [[ ! -e /usr/local/bin/brew ]];then
     echo "install homebrew..."
-    su $USER -c "curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install|/usr/bin/ruby"
+    if [[ -n ${SUDO_USER} ]];then
+        su ${SUDO_USER} -c "curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install|/usr/bin/ruby"
+    else
+        curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install|/usr/bin/ruby
+    fi
     #/usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)" || { echo "Install homebrew failed!"; exit 1; }
 fi
 
