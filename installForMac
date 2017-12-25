@@ -29,13 +29,43 @@ while getopts ":lp:" opt;do
             proxy=$OPTARG
             ;;
         :)
-            echo "option:$OPTARG need argument"
+            echo "option:\"$OPTARG\" need argument!!"
+            exit 1
+            ;;
+        \?)
+            echo "Option: \"$OPTARG\" not support!!"
             exit 1
             ;;
     esac
 done
 
-/bin/bash dev/dev-mac -p $proxy
+if [[ -n "$proxy" ]];then
+    echo "using proxy: $proxy"
+    shopt -s expand_aliases
+
+    #set brew proxy
+    alias brew="ALL_PROXY=$proxy brew"
+    #set curl proxy
+    #curl -x or curl --proxy or http_proxy environment variable
+    #support http or socks5 proxy
+    alias curl="curl -x $proxy"
+    #set git proxy
+    git config --global http.proxy "$proxy"
+
+    #set wget proxy
+    export http_proxy="$proxy"
+    export https_proxy="$proxy"
+    export ftp_proxy="$proxy"
+
+    export HTTP_PROXY="$proxy"
+    export HTTPS_PROXY="$proxy"
+    export FTP_PROXY="$proxy"
+fi
+if [[ -n "$proxy" ]];then
+    /bin/bash dev/dev-mac -p $proxy
+else
+    /bin/bash dev/dev-mac
+fi
 
 echo "Config git..."
 /bin/bash git/setGit
@@ -47,14 +77,14 @@ echo "Install zsh and oh-my-zsh..."
 
 echo "Install supervim for nvim..."
 if [[ -n "$proxy" ]];then
-    /bin/bash supervim/install -f -p $proxy nvim
+    /bin/bash supervim/install.sh -f -p $proxy nvim
 else
-    /bin/bash supervim/install -f nvim
+    /bin/bash supervim/install.sh -f nvim
 fi
 
 echo "Install supervim for vim..."
 if [[ -n "$proxy" ]];then
-    /bin/bash supervim/install -f -p $proxy  vim
+    /bin/bash supervim/install.sh -f -p $proxy  vim
 else
-    /bin/bash supervim/install -f vim
+    /bin/bash supervim/install.sh -f vim
 fi
