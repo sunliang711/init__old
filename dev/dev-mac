@@ -71,7 +71,7 @@ if [[ ! -e /usr/local/bin/brew ]];then
 fi
 
 #apps="coreutils findutils gnu-tar gnu-sed gawk gnutls gnu-indent gnu-getopt gnu-which wget go neovim vim python python3 privoxy aria2"
-apps="coreutils findutils gnu-tar gnu-sed gawk gnutls gnu-indent gnu-getopt gnu-which wget go neovim vim python python3 privoxy"
+apps="coreutils findutils gnu-tar gnu-sed gawk gnutls gnu-indent gnu-getopt gnu-which wget go neovim python python3 privoxy"
 for app in $apps;do
     if ! brew list $app >/dev/null 2>&1;then
         echo "Install $app..."
@@ -82,6 +82,14 @@ for app in $apps;do
         fi
     fi
 done
+#install vim with python3 support
+echo "Install vim with python3 support"
+if [[ -n ${SUDO_USER} ]];then
+    su $USER -c "brew install vim --with-python3"
+else
+    brew install vim --with-python3
+fi
+
 #BREW install coreutils findutils gnu-tar gnu-sed gawk gnutls gnu-indent gnu-getopt gnu-which wget go neovim vim python python3 privoxy aria2
 SBIN=$(find /usr/local/Cellar/privoxy -name "sbin")
 ln -svf  $SBIN/privoxy /usr/local/bin/privoxy
