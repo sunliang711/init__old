@@ -67,6 +67,11 @@ while getopts ":diglsv:hp:" opt;do
     esac
 done
 
+if [[ -z $supervim ]];then
+    echo "Option: \"-v\" is necessary!!"
+    echo
+    usage
+fi
 case $supervim in
     vim|nvim|neovim|both)
         ;;
