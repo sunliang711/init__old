@@ -174,10 +174,17 @@ case $whichVim in
         ;;
     vim)
         needCmd vim
-        needCmd bc
+        # needCmd bc
         vimVersion=$(vim --version | head -1 | awk '{print $5}')
         root="$HOME/.vim"
-        if (( $(echo "$vimVersion>=7.4" | bc -l) ));then
+        major=$(echo $vimVersion | awk -F. '{print $1}')
+        minor=$(echo $vimVersion | awk -F. '{print $2}')
+        if [[ -z $major ]] || [[ -z $minor ]];then
+            echo "vim version is wrong!!"
+            exit 1
+        fi
+        # if (( $(echo "$vimVersion>=7.4" | bc -l) ));then
+        if (( $major >= 7 && $minor >= 4) ));then
             cfg="$root/vimrc"
         else
             cfg="$HOME/.vimrc"
