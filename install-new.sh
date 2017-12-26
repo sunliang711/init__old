@@ -111,14 +111,21 @@ if (($EUID != 0));then
     fi
     #not root privilege
     #1. this user can use sudo cmd
-    #the 4th field of file /etc/group is members of a group
+    #the 4th field of file /etc/group is members of a group only on Linux not MacOS
     issudoer=0
-    members=$(awk -F ':' '/^sudo/ {print $4}' /etc/group)
-    for u in $(echo $members | tr "," "\n");do
-        if [[ "$u" == "$USER" ]];then
-            issudoer=1
-        fi
-    done
+    case $(uname) in
+        Darwin)
+            sudo true && issudoer=1
+            ;;
+        Linux)
+            members=$(awk -F ':' '/^sudo/ {print $4}' /etc/group)
+            for u in $(echo $members | tr "," "\n");do
+                if [[ "$u" == "$USER" ]];then
+                    issudoer=1
+                fi
+            done
+            ;;
+    esac
     #2. this user cannot use sudo cmd
     if (($issudoer==0));then
         echo "You are not root,and you can not use sudo cmd!!"

@@ -1,4 +1,5 @@
 #!/bin/bash
+#RUN THIS using the command: bash -c "$(curl -fsSL https://raw.githubusercontent.com/sunliang711/init/master/tools/installArch)"
 if [ -e /dev/sda ];then
     disk=sda
 elif [ -e /dev/vda ];then
