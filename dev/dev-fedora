@@ -15,7 +15,7 @@ sed -i 's/\(^GRUB_TIMEOUT=\)[0-9]\+/\11/' /etc/default/grub && grub2-mkconfig -o
 #TODO
 #设置fedora国内源
 
-basicApps="vim tree screenfetch"
+basicApps="vim neovim tree screenfetch"
 #install development tools
 devApps="kernel-devel clang python-devel python-pip python3-devel python3-pip cmake golang golang-godoc boost-devel ncurses-devel"
 read -p "Install development apps (ie: clang python golang boost)? [Y/n] "  installDev

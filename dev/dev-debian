@@ -15,7 +15,7 @@ if command -v apt > /dev/null 2>&1;then
     installer=apt
 fi
 
-basicApps="sudo vim vim-gtk tree curl screenfetch zsh openssh-server nload nethogs"
+basicApps="sudo bc vim vim-gtk tree curl screenfetch zsh openssh-server nload nethogs"
 devApps="build-essential cmake clang  python-apt python-dev python-pip python3-dev python3-pip libboost-all-dev golang golang-golang-x-tools ncurses-dev"
 
 #delete cdrom source
