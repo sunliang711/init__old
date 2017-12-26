@@ -168,26 +168,26 @@ fi
 case $supervim in
     vim)
         if [[ -n "$proxy" ]];then
-            bash supervim/install.sh -p $proxy vim
+            bash supervim/install.sh -f -p $proxy vim
         else
-            bash supervim/install.sh vim
+            bash supervim/install.sh -f vim
         fi
         ;;
     nvim|neovim)
         if [[ -n "$proxy" ]];then
-            bash supervim/install.sh -p $proxy nvim
+            bash supervim/install.sh -f -p $proxy nvim
         else
-            bash supervim/install.sh nvim
+            bash supervim/install.sh -f nvim
         fi
 
         ;;
     both)
         if [[ -n "$proxy" ]];then
-            bash supervim/install.sh -p $proxy vim
-            bash supervim/install.sh -p $proxy nvim
+            bash supervim/install.sh -f -p $proxy vim
+            bash supervim/install.sh -f -p $proxy nvim
         else
-            bash supervim/install.sh vim
-            bash supervim/install.sh nvim
+            bash supervim/install.sh -f vim
+            bash supervim/install.sh -f nvim
         fi
         ;;
 esac

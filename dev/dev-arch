@@ -7,7 +7,8 @@ if [[ $EUID != 0 ]];then
     echo "Error:need root priviledge!"
     exit 1
 fi
-basicApps="neovim vim git openssh net-tools tree screenfetch wget cronie unzip zsh zsh-syntax-highlighting ctags fontconfig"
+# basicApps="neovim vim git openssh net-tools tree screenfetch wget cronie unzip zsh zsh-syntax-highlighting ctags fontconfig"
+basicApps="neovim vim git openssh net-tools tree screenfetch wget cronie unzip zsh ctags fontconfig"
 devApps="base-devel linux-headers clang cmake python boost python-pip go go-tools"
 
 read -p "Install development apps (ie:clang python boost go) [Y/n] "  installDev
