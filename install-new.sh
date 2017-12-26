@@ -113,19 +113,21 @@ if (($EUID != 0));then
     #1. this user can use sudo cmd
     #the 4th field of file /etc/group is members of a group only on Linux not MacOS
     issudoer=0
-    case $(uname) in
-        Darwin)
-            sudo true && issudoer=1
-            ;;
-        Linux)
-            members=$(awk -F ':' '/^sudo/ {print $4}' /etc/group)
-            for u in $(echo $members | tr "," "\n");do
-                if [[ "$u" == "$USER" ]];then
-                    issudoer=1
-                fi
-            done
-            ;;
-    esac
+    sudo true && issudoer=1
+    # case $(uname) in
+    #     Darwin)
+    #         sudo true && issudoer=1
+    #         ;;
+    #     Linux)
+    ###并不是所有的linux发行版sudo权限都在sudo组里的,有的默认是在wheel组,比如fedora,所以最稳妥的方式还是sudo true命令是否成功执行来判断
+    #         members=$(awk -F ':' '/^sudo/ {print $4}' /etc/group)
+    #         for u in $(echo $members | tr "," "\n");do
+    #             if [[ "$u" == "$USER" ]];then
+    #                 issudoer=1
+    #             fi
+    #         done
+    #         ;;
+    # esac
     #2. this user cannot use sudo cmd
     if (($issudoer==0));then
         echo "You are not root,and you can not use sudo cmd!!"
