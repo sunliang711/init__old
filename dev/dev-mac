@@ -71,7 +71,7 @@ if [[ ! -e /usr/local/bin/brew ]];then
 fi
 
 #apps="coreutils findutils gnu-tar gnu-sed gawk gnutls gnu-indent gnu-getopt gnu-which wget go neovim vim python python3 privoxy aria2"
-apps="coreutils findutils gnu-tar gnu-sed gawk gnutls gnu-indent gnu-getopt gnu-which wget go neovim python python3 privoxy"
+apps="coreutils findutils gnu-tar gnu-sed gawk gnutls gnu-indent gnu-getopt gnu-which wget go neovim python python3 privoxy tree"
 for app in $apps;do
     if ! brew list $app >/dev/null 2>&1;then
         echo "Install $app..."
