@@ -202,6 +202,7 @@ proxyon(){
     #set curl proxy
     echo "alias curl=curl -x $proxy"
     alias curl="curl -x $proxy"
+    #or echo "proxy=$proxy" >$HOME/.curlrc
 
     #set brew proxy
     echo "alias brew=ALL_PROXY=$proxy brew ..."

@@ -90,7 +90,8 @@ if [[ -n "$proxy" ]];then
     export FTP_PROXY=$proxy
     git config --global http.proxy "$proxy"
     git config --global https.proxy "$proxy"
-    alias curl="curl -x $proxy"
+    #alias curl="curl -x $proxy"
+    echo "proxy=$proxy" >$HOME/.curlrc
 fi
 #check OS type
 version=$(bash linux-version.sh)
@@ -195,3 +196,9 @@ case $supervim in
         fi
         ;;
 esac
+
+
+#cleanup
+git config --global --unset-all http.proxy
+git config --global --unset-all https.proxy
+rm $HOME/.curlrc
