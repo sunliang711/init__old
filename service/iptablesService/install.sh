@@ -12,8 +12,9 @@ if ! command -v systemctl >/dev/null 2>&1;then
 fi
 
 #run on debian
-if ! command -v sqlite3 >/dev/null 2>&1;then
-    apt install -y sqlite3 || { echo "install sqlite3 failed!";exit 1; }
+if ! command -v sqlite3 >/dev/null 2>&1 && ! command -v sqlite;then
+    echo "need sqlite or sqlite3"
+    exit 1
 fi
 
 #假如需要重装的话，当前的服务要先关掉

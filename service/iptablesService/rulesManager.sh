@@ -1,10 +1,21 @@
 #!/bin/bash
 #对数据库进行操作的api
+shopt -s expand_aliases
 
-# sqlite3 "$db" "CREATE TABLE IF NOT EXISTS portConfig (type text,port int,enabled int,inputTraffic int,outputTraffic int,owner text,primary key(port,type));"
+if command -v sqlite3 >/dev/null 2>&1;then
+    alias SQLITE=sqlite3
+elif command -v sqlite >/dev/null 2>&1;then
+    alias SQLITE=sqlite
+else
+    echo "No sqlite or sqlite3 cmd"
+    exit 1
+fi
+fi
+
+# SQLITE "$db" "CREATE TABLE IF NOT EXISTS portConfig (type text,port int,enabled int,inputTraffic int,outputTraffic int,owner text,primary key(port,type));"
 db=ROOT/db
 list(){
-    echo -e ".header on\n.mode column\nselect * from portConfig;" | sqlite3 "$db"
+    echo -e ".header on\n.mode column\nselect * from portConfig;" | SQLITE "$db"
 }
 
 checkType(){
@@ -56,7 +67,7 @@ delIptablesItem(){
 }
 
 add(){
-    # sqlite3 "$db" "CREATE TABLE IF NOT EXISTS portConfig (type text,port int,enabled int,inputTraffic int,outputTraffic int,owner text,primary key(port,type));"
+    # SQLITE "$db" "CREATE TABLE IF NOT EXISTS portConfig (type text,port int,enabled int,inputTraffic int,outputTraffic int,owner text,primary key(port,type));"
     usage="Usage: add type port [owner]\n\t\tfor example:add tcp 8388 [eagle]"
     if (($#<2));then
         echo -e "$usage"
@@ -67,11 +78,11 @@ add(){
     owner=${3:-nobody}
     checkType $type || exit 1
     checkPort $port || exit 1
-    exist=$(sqlite3 "$db" "select * from portConfig where type=\"$type\" and port=$port;")
+    exist=$(SQLITE "$db" "select * from portConfig where type=\"$type\" and port=$port;")
     if [[ -n "$exist" ]];then
         echo "Alread exist record for type:$type port:$port"
     else
-        sqlite3 "$db" "insert into portConfig(type,port,enabled,owner,inputTraffic,outputTraffic) values(\"$type\",$port,1,\"$owner\",0,0);"
+        SQLITE "$db" "insert into portConfig(type,port,enabled,owner,inputTraffic,outputTraffic) values(\"$type\",$port,1,\"$owner\",0,0);"
         addIptablesItem $type $port
     fi
 }
@@ -86,9 +97,9 @@ del(){
     port=$2
     checkType $type || exit 1
     checkPort $port || exit 1
-    exist=$(sqlite3 "$db" "select * from portConfig where type=\"$type\" and port=$port;")
+    exist=$(SQLITE "$db" "select * from portConfig where type=\"$type\" and port=$port;")
     if [[ -n "$exist" ]];then
-        sqlite3 "$db" "delete from portConfig where type=\"$type\" and port=$port;"
+        SQLITE "$db" "delete from portConfig where type=\"$type\" and port=$port;"
         delIptablesItem $type $port
     else
         echo "Doesn't exist record for type:$type port:$port"
@@ -105,10 +116,10 @@ enable(){
     checkType $type || exit 1
     port=$2
     checkPort $port || exit 1
-    exist=$(sqlite3 "$db" "select * from portConfig where type=\"$type\" and port=$port;")
+    exist=$(SQLITE "$db" "select * from portConfig where type=\"$type\" and port=$port;")
     if [[ -n "$exist" ]];then
         #存在则更新
-        sqlite3 "$db" "update portConfig set enabled=1 where type=\"$type\" and port=$port;"
+        SQLITE "$db" "update portConfig set enabled=1 where type=\"$type\" and port=$port;"
         addIptablesItem $type $port
     else
         echo "Doesn't exist record for type:$type port:$port"
@@ -125,10 +136,10 @@ disable(){
     checkType $type || exit 1
     port=$2
     checkPort $port || exit 1
-    exist=$(sqlite3 "$db" "select * from portConfig where type=\"$type\" and port=$port;")
+    exist=$(SQLITE "$db" "select * from portConfig where type=\"$type\" and port=$port;")
     if [[ -n "$exist" ]];then
         #存在则更新
-        sqlite3 "$db" "update portConfig set enabled=0 where type=\"$type\" and port=$port;"
+        SQLITE "$db" "update portConfig set enabled=0 where type=\"$type\" and port=$port;"
         delIptablesItem $type $port
     else
         echo "Doesn't exist record for type:$type port:$port"
@@ -146,7 +157,7 @@ clearInputTraffic(){
     checkType $type || exit 1
     port=$2
     checkPort $port || exit 1
-    sqlite3 "$db" "update portConfig set inputTraffic=0 where type=\"$type\" and port=$port;" || { echo "clearInputTraffic failed!"; exit 1; }
+    SQLITE "$db" "update portConfig set inputTraffic=0 where type=\"$type\" and port=$port;" || { echo "clearInputTraffic failed!"; exit 1; }
 }
 
 clearOutputTraffic(){
@@ -159,11 +170,11 @@ clearOutputTraffic(){
     checkType $type || exit 1
     port=$2
     checkPort $port || exit 1
-    sqlite3 "$db" "update portConfig set outputTraffic=0 where type=\"$type\" and port=$port;" || { echo "clearInputTraffic failed!"; exit 1; }
+    SQLITE "$db" "update portConfig set outputTraffic=0 where type=\"$type\" and port=$port;" || { echo "clearInputTraffic failed!"; exit 1; }
 }
 
 clearAll(){
-    sqlite3 "$db" "update portConfig set outputTraffic=0,inputTraffic=0;"
+    SQLITE "$db" "update portConfig set outputTraffic=0,inputTraffic=0;"
 }
 
 getOutputTraffic(){
@@ -176,7 +187,7 @@ getOutputTraffic(){
     checkType $type || exit 1
     port=$2
     checkPort $port || exit 1
-    sqlite3 "$db" "select type,port,outputTraffic from portConfig where type=\"$type\" and port=$port;"
+    SQLITE "$db" "select type,port,outputTraffic from portConfig where type=\"$type\" and port=$port;"
 }
 
 usage(){
