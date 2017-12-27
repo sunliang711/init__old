@@ -67,15 +67,17 @@ while getopts ":diglsv:hp:" opt;do
     esac
 done
 
-case $supervim in
-    vim|nvim|neovim|both)
-        ;;
-    *)
-        echo "Option: \"-v\" need valid argument!!"
-        echo
-        usage
-        ;;
+if [[ -n $supervim ]];then
+    case $supervim in
+        vim|nvim|neovim|both)
+            ;;
+        *)
+            echo "Option: \"-v\" need valid argument!!"
+            echo
+            usage
+            ;;
 esac
+fi
 
 if [[ -n "$proxy" ]];then
     echo "Using proxy: $proxy"
