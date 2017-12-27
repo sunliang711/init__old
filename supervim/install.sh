@@ -184,7 +184,7 @@ case $whichVim in
             exit 1
         fi
         # if (( $(echo "$vimVersion>=7.4" | bc -l) ));then
-        if (( $major >= 7 && $minor >= 4) ));then
+        if (( $major >= 7 && $minor >= 4 ));then
             cfg="$root/vimrc"
         else
             cfg="$HOME/.vimrc"
