@@ -430,11 +430,35 @@ whouseport(){
     port=$2
     case $(uname) in
         Linux)
-            pid=$(fuser $port/$protocol 2>/dev/null| awk '{print $1}'| grep -oP '\d+')
-            if [ -z "$pid" ];then
-                echo "The port $protocol/$port is not in use."
+            if [[ $EUID -ne 0 ]];then
+                issudoer=0
+                sudo true && issudoer=1
+                if [[ $issudoer -eq 1 ]];then
+                    listener=$(sudo netstat -tulpn | grep ":$port" | grep "\<$protocol\>" | awk '{print $7}')
+                else
+                    echo "Need root privilege!!"
+                    return 1
+                fi
             else
-                echo "The port $protocol/$port is used by $(readlink /proc/$pid/exe) with pid: $pid."
+                listener=$(netstat -tulpn | grep ":$port" | grep "\<$protocol\>" | awk '{print $7}')
+            fi
+
+            if [ -z "$listener" ];then
+                echo "The port $protocol:$port is not in use."
+            else
+                process=$(echo $listener | awk -F'/' '{print $2}')
+                pid=$(echo $listener | awk -F'/' '{print $1}')
+                echo "The port $protocol:$port is used by $process with pid: $pid."
+            fi
+            ;;
+        Darwin)
+            listener=$(lsof -i $protocol:$port | grep 'LISTEN')
+            if [[ -n "$listener" ]];then
+                process=$(echo "$listener" | awk '{print $1}')
+                pid=$(echo "$listener" | awk '{print $2}')
+                echo "The port $protocol:$port is used by $process with pid: $pid."
+            else
+                echo "The port $protocol:$port is not in use."
             fi
             ;;
         *)
