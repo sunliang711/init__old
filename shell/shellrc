@@ -211,7 +211,8 @@ proxyon(){
     #2. set permission
     chmod 666 "$configFile"
     #3. create alias
-    echoExec "alias curl=curl --config $configFile"
+    echo "alias curl=curl --config $configFile"
+    alias curl="curl --config $configFile"
 
     #set brew proxy
     echo "alias brew=ALL_PROXY=$proxy brew ..."
