@@ -1,5 +1,26 @@
 #!/bin/bash
 if ! command -v zsh >/dev/null 2>&1;then
+    if command -v apt-get >/dev/null 2>&1;then
+        if [[ $EUID -eq 0 ]];then
+            apt-get install zsh -y
+        else
+            sudo apt-get install zsh -y
+        fi
+    elif command -v yum >/dev/null 2>&1;then
+        if [[ $EUID -eq 0 ]];then
+            yum install zsh -y
+        else
+            sudo yum install zsh -y
+        fi
+    elif command -v pacman >/dev/null 2>&1;then
+        if [[ $EUID -eq 0 ]];then
+            pacman -S zsh --no-confirm
+        else
+            sudo pacman -S zsh --no-confirm
+        fi
+    fi
+fi
+if ! command -v zsh >/dev/null 2>&1;then
     echo "Cannot find zsh"
     exit 1
 fi

@@ -64,8 +64,14 @@ while getopts ":diglsv:hp:" opt;do
             echo
             usage
             ;;
+        *)
+            usage
+            ;;
     esac
 done
+if (($#==0));then
+    usage
+fi
 
 if [[ -n $supervim ]];then
     case $supervim in
@@ -76,7 +82,7 @@ if [[ -n $supervim ]];then
             echo
             usage
             ;;
-esac
+    esac
 fi
 
 if [[ -n "$proxy" ]];then
@@ -196,7 +202,10 @@ case $supervim in
 esac
 
 
+##TODO 1.save old config 2.restore old config
 #cleanup
 git config --global --unset-all http.proxy
 git config --global --unset-all https.proxy
-rm $HOME/.curlrc
+if [ -e $HOME/.curlrc ];then
+    rm $HOME/.curlrc
+fi
