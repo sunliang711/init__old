@@ -10,7 +10,6 @@ else
     echo "No sqlite or sqlite3 cmd"
     exit 1
 fi
-fi
 
 # SQLITE "$db" "CREATE TABLE IF NOT EXISTS portConfig (type text,port int,enabled int,inputTraffic int,outputTraffic int,owner text,primary key(port,type));"
 db=ROOT/db
