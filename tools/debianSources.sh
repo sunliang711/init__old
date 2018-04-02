@@ -30,3 +30,4 @@ make(){
 	EOF
 }
 make
+echo "Run \"apt-get update\" to update source list"
