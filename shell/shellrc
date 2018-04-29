@@ -231,10 +231,10 @@ proxyoff(){
         echoExec "git config --global --unset-all http.proxy"
         echoExec "git config --global --unset-all https.proxy"
     fi
-    echoExec "unalias brew"
-    echoExec "unalias curl"
+    echoExec "unalias brew" 2>/dev/null
+    echoExec "unalias curl" 2>/dev/null
     local configFile="/tmp/curlrc"
-    rm -rf "$configFile" >/dev/null 2>&1
+    rm -rf "$configFile" 2>/dev/null
 }
 
 proxystatus(){
