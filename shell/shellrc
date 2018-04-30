@@ -52,8 +52,10 @@ case $(uname) in
         alias lA='ls -aFG'
         alias la='ls -AFG'
         alias ll='ls -lFG'
-        alias l='ls -FG'
-        alias ls='ls -FG'
+        #alias l='ls -FG'
+        #alias ls='ls -FG'
+        alias l='ls -G'
+        alias ls='ls -G'
         #brew with local proxy
         alias brewlp='echo "Using socks5 proxy: ALL_PROXY=socks5://localhost:1080"&&ALL_PROXY=socks5://localhost:1080 brew'
         # export PATH=/usr/local/Cellar/privoxy/3.0.26/sbin:$PATH
@@ -545,6 +547,30 @@ EOF
 #         command brew "$@"
 #     fi
 # }
+#launchd plist file
+plistFile(){
+cat>/tmp/$1.plist<<EOF
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+    <key>Label</key>
+    <string></string>
+    <key>ProgramArguments</key>
+    <array>
+        <string></string>
+    </array>
+    <key>StandardOutPath</key>
+    <string></string>
+    <key>StandardErrorPath</key>
+    <string></string>
+    <key>RunAtLoad</key>
+    <true/>
+</dict>
+</plist>
+EOF
+vim /tmp/$1.plist
+}
 #systemd service file
 serviceFile(){
     if (($#<1));then
