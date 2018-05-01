@@ -142,7 +142,7 @@ if command -v git >/dev/null 2>&1;then
     }
     #gpon(){
     #    #add default parameter
-    #    local proxy=${1:-http://localhost:8118}
+    #    local proxy=${1:-http://localhost:6116}
     #    # local proxy=${1:-socks5://localhost:1080}
 
     #    git config --global http.proxy $proxy
@@ -185,7 +185,7 @@ slientExe(){
 
 proxyon(){
     #add default parameter
-    local proxy=${1:-http://localhost:8118}
+    local proxy=${1:-http://localhost:6116}
     #delete: grep -P can not work on mac
     #port=$(grep -oP '(?<=listen-address 127.0.0.1:)\d+' /usr/local/share/ss-local/privoxy.config)
     echoExec "export http_proxy=$proxy"
@@ -240,10 +240,10 @@ proxyoff(){
 }
 
 proxystatus(){
-    # if declare -x | grep 'http_proxy="\{,1\}127.0.0.1:8118' >/dev/null 2>&1;then
+    # if declare -x | grep 'http_proxy="\{,1\}127.0.0.1:6116' >/dev/null 2>&1;then
     if declare -x | grep '_proxy=' >/dev/null 2>&1;then
         echo "http proxy is set:"
-        #declare -x |grep 8118
+        #declare -x |grep 6116
         declare -x |grep -i '_proxy'
     else
         echo "[http] proxy is off"
