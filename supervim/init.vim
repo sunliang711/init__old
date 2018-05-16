@@ -105,6 +105,8 @@ inoremap <silent> <C-j> <esc><C-W>j
 " noremap <silent> <C-k> <C-W>k
 " inoremap <silent> <C-k> <esc><C-W>k
 
+"save as root
+cmap w!! w !sudo tee>/dev/null %
 "设置gf指令的寻找路径
 set path =.,~/.local/include,/usr/local/include,/usr/include,,
 
