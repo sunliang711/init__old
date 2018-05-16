@@ -9,17 +9,25 @@ if ! command -v apt >/dev/null 2>&1;then
     exit 1
 fi
 
+logfile=install-logfile
 apt update
 apt install -y samba samba-common
+echo "backup /etc/samba/smb.conf -> /etc/samba/smb.conf.bak" >> $logfile
 mv /etc/samba/smb.conf{,.bak}
 
+echo "add group smbadmin..." >> $logfile
 groupadd smbadmin -f
+echo "add group smbuser..." >> $logfile
 groupadd smbuser -f
 
+echo "mkdir /home/public..." >> $logfile
 mkdir -p /home/public
+echo "chown root:smbadmin /home/public..." >> $logfile
 chown root:smbadmin /home/public
+echo "chmod 775 /home/public..." >>$logfile
 chmod 775 /home/public
 
+echo "create /etc/samba/smb.conf..." >> $logfile
 cat>/etc/samba/smb.conf<<EOF
 [global]
 workgroup = WORKGROUP
@@ -56,23 +64,31 @@ addSmbUser(){
     user=$1
     group=$2
     if grep -q $user <<< $userlist;then
-        echo "$user already exists,add it to group $group..."
+        echo "$user already exists,add it to group $group..." >>$logfile
         usermod -a -G $group $user
     else
-        echo "$user doesn't exist,create it and add it to group $group.."
+        echo "$user doesn't exist,create it and add it to group $group.." >>$logfile
         useradd $user -m -G $group
-        echo "Enter password for user: $user"
+        echo "Enter password for user: $user" >>$logfile
         passwd $user
     fi
-    echo "Enter smb password for user: $user"
+    echo "Enter smb password for user: $user" >>$logfile
     smbpasswd -a $user
 }
+echo "restart smbd.service..." >>$logfile
 systemctl restart smbd.service
 
 #add administrator
-addSmbUser eagle smbadmin
+user=${SUDO_USER:-$(whoami)}
+read -p "add user to smbadmin: [default: $user]" admin
+if [ -n $admin ];then
+    addSmbUser $admin smbadmin
+fi
 
-#add user1
-addSmbUser user1 smbuser
+#add normal user
+read-p "add user to smbuser: " normalUser
+if [ -n "$normalUser" ];then
+    addSmbUser $normalUser smbuser
+fi
 #reference https://www.howtoforge.com/tutorial/debian-samba-server/
 #https://www.samba.org/samba/docs/man/manpages-3/smb.conf.5.html
