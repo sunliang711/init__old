@@ -84,7 +84,7 @@ alias grep='grep --color=auto'
 #tcp listen
 alias listen='netstat -tan|grep LISTEN'
 #udp listen
-alias ulisten='netstat -uan|grep LISTEN'
+alias ulisten='netstat -uln'
 alias cdgo="cd $GOPATH/src"
 
 if command -v emacs >/dev/null 2>&1;then
