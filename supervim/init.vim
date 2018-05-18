@@ -89,7 +89,11 @@ if has('nvim')
 else
     " when vim version is 7.4, v:version is 704
     if v:version >= 704
-        nnoremap <silent> <leader>e :tab e ~/.vim/vimrc<CR>
+        if filereadable(expand('~/.vim/vimrc'))
+            nnoremap <silent> <leader>e :tab e ~/.vim/vimrc<CR>
+        else
+            nnoremap <silent> <leader>e :tab e ~/.vimrc<CR>
+        endif
     else
         nnoremap <silent> <leader>e :tab e ~/.vimrc<CR>
     endif
