@@ -1,0 +1,96 @@
+#!/bin/bash
+
+usage(){
+    cat<<EOF
+lctl is a tool to load unload start stop edit launchAgents in \$HOME/Library/LaunchAgents/someAgent.plist
+
+Usage: $(basename $0) cmd
+
+cmd:
+    load name
+    unload name
+    reload name
+
+    start name
+    stop name
+    restart name
+
+    edit name
+
+    list
+EOF
+exit 1
+}
+
+user=${SUDO_USER:-$(whoami)}
+home=$(eval echo ~$user)
+
+agentPath=$home/Library/LaunchAgents
+load(){
+    launchctl load -w $agent
+}
+
+unload(){
+    launchctl unload -w $agent
+}
+
+start(){
+    launchctl start $agent
+}
+
+stop(){
+    launchctl stop $agent
+}
+
+edit(){
+    editor=vi
+    if command -v vim >/dev/null 2>&1;then
+        editor=vim
+    fi
+    $editor $agent
+}
+
+cmd=$1
+
+if [ "$cmd" == "list" ];then
+    ls $agentPath
+    exit 0
+fi
+
+if [ $# -lt 2 ];then
+    usage
+fi
+agent=$agentPath/$2
+if [ ! -f $agent ];then
+    echo "No found $agent !"
+    exit 1
+fi
+case $cmd in
+    load)
+        load $agent
+        ;;
+    unload)
+        unload $agent
+        ;;
+    reload)
+        unload $agent
+        load $agent
+        ;;
+    start)
+        start $agent
+        ;;
+    stop)
+        stop $agent
+        ;;
+    restart)
+        stop $agent
+        start $agent
+        ;;
+    edit)
+        edit $agent
+        ;;
+    *)
+        usage
+        ;;
+esac
+# vim: set filetype=shell

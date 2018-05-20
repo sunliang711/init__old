@@ -1,4 +1,9 @@
 #!/bin/bash
+thisScriptDir=$(cd $(dirname ${BASH_SOURCE}) && pwd)
+cd $thisScriptDir
+
+cp lctl /usr/local/bin
+exit 0
 if [[ "$(uname)" != "Darwin" ]];then
     echo "Not macOS"
     exit 1
