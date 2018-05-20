@@ -6,22 +6,27 @@
 
 check(){
     [ -d bin ] || { echo "bin/ doesn't exist!"; exit 1; }
-}
+    [ "$(ls -A bin)" ] || { echo "nothing in bin/"; exit 1; }
+    user=${SUDO_USER:-$(whoami)}
+    home=$(eval echo ~$user)
 
-user=${SUDO_USER:-$(whoami)}
-home=$(eval echo ~$user)
-
-cat<<EOF
+    cat<<EOF
 user: $user
 home: $home
 EOF
+}
+
 
 #install need change to original privilege
 #plist need change to root privilege
 #service need change to root privilege
 install(){
+    if [ $# -lt 1 ];then
+        echo 'install cmd need "name" argument'
+        exit 1
+    fi
     check
-    name=$(\ls bin)
+    name=$1
     echo "name: $name"
     root=$home/.$name
     echo "root: $root"
@@ -92,23 +97,48 @@ service(){
     WantedBy=multi-user.target
 EOF
 }
+autoBoot(){
+    #TODO root privilege check
+    case $(uname) in
+        Darwin)
+            plist
+            ;;
+        Linux)
+            if [ $EUID -ne 0 ];then
+                sudo service || { echo "You don't have sudo privilege or something else."; exit 1; }
+            else
+                service
+            fi
+            ;;
+    esac
+}
 perm(){
     if [ -n ${SUDO_USER} ];then
         chown -R $user "$root"
     fi
 }
-install
-#TODO root privilege check
-case $(uname) in
-    Darwin)
-        plist
+
+usage(){
+    cat<<EOF
+Usage: $(basename $0) cmd
+
+cmd:
+    install <name>
+    uninstall
+    usage
+EOF
+}
+case $1 in
+    install)
+        install $2
+        autoBoot
+        perm
         ;;
-    Linux)
-        if [ $EUID -ne 0 ];then
-            sudo service || { echo "You don't have sudo privilege or something else."; exit 1; }
-        else
-            service
-        fi
+    uninstall)
+        #TODO
+        echo "uninstall not complete"
+        ;;
+    *)
+        usage
         ;;
 esac
-perm
