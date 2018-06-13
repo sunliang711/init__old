@@ -37,6 +37,9 @@ fi
 #因为git log调用less命令
 export LESSCHARSET=utf-8
 #END environment variable
+export LANG="en_US.utf8"
+export LC_ALL="en_US.utf8"
+export LC_CTYPE="en_US.utf8"
 
 
 #BEGIN alias
