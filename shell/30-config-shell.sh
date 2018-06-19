@@ -71,9 +71,11 @@ install(){
         if [ ! -e $rc ];then
             echo "copy shellrc to $rc"
             if (($EUID!=0));then
-                sudo cp shellrc  $rc
+                # sudo cp shellrc  $rc
+                sudo ln -sf "$SCRIPTDIR"/shellrc $rc
             else
-                cp shellrc  $rc
+                # cp shellrc  $rc
+                ln -sf "$SCRIPTDIR"/shellrc $rc
             fi
         fi
         #insert header
