@@ -3,7 +3,7 @@ set -o vi
 #END
 
 #BEGIN environment variable
-[ -d $HOME/go ] && export GOPATH=$HOME/go
+[ -d $HOME/workspace/go ] && export GOPATH=$HOME/workspace/go
 
 append_path(){
     if [ -z "$1" ];then
@@ -37,9 +37,10 @@ fi
 #因为git log调用less命令
 export LESSCHARSET=utf-8
 #END environment variable
-export LANG="en_US.utf8"
-export LC_ALL="en_US.utf8"
-export LC_CTYPE="en_US.utf8"
+# 设置下面三个环境变量会让macos下终端显示文件名乱码(中文文件名变成一堆问号，虽然可以在终端输入中文)
+# export LANG="en_US.utf8"
+# export LC_ALL="en_US.utf8"
+# export LC_CTYPE="en_US.utf8"
 
 
 #BEGIN alias
