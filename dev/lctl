@@ -17,6 +17,8 @@ cmd:
 
     edit name
 
+    rm name
+
     list
 EOF
 exit 1
@@ -60,7 +62,12 @@ fi
 if [ $# -lt 2 ];then
     usage
 fi
-agent=$agentPath/$2
+filename=$2
+if ! grep -q "\.plist$" <<<"$filename";then
+    filename="${filename}.plist"
+fi
+
+agent="$agentPath/$filename"
 if [ ! -f $agent ];then
     echo "No found $agent !"
     exit 1
@@ -88,6 +95,10 @@ case $cmd in
         ;;
     edit)
         edit $agent
+        ;;
+    rm)
+        echo "remove $agent"
+        rm -rf $agent
         ;;
     *)
         usage

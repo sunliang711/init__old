@@ -19,6 +19,9 @@ append_path /usr/bin
 append_path /sbin
 append_path /bin
 
+user=${SUDO_USER:-$(whoami)}
+home=$(eval echo ~$user)
+
 [ -n "$GOPATH" ] && append_path $GOPATH/bin
 
 #export LS_COLORS=$LS_COLORS:"di=0;33:"
@@ -565,6 +568,10 @@ EOF
 # }
 #launchd plist file
 plistFile(){
+if [ $# -eq 0 ];then
+    echo "Usage: $(basename $0) plist_filename"
+    return 1
+fi
 cat>/tmp/$1.plist<<EOF
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
@@ -574,18 +581,33 @@ cat>/tmp/$1.plist<<EOF
     <string></string>
     <key>ProgramArguments</key>
     <array>
-        <string></string>
+        <string>PROGRAM_PUT_HERE</string>
+        <string>PARAMETER</string>
     </array>
+    <!--
     <key>StandardOutPath</key>
-    <string></string>
+    <string>STD_OUT_FILE_PUT_HERE</string>
+    -->
+    <!--
     <key>StandardErrorPath</key>
-    <string></string>
+    <string>STD_ERR_FILE_PUT_HERE</string>
+    -->
+    <!--
     <key>RunAtLoad</key>
     <true/>
+    -->
 </dict>
 </plist>
 EOF
 vim /tmp/$1.plist
+if command -v launchctl >/dev/null 2>&1;then
+    echo -n "Copy /tmp/$1.plist to $home/Library/LaunchAgents ? [y/n] "
+    read cpPlist
+    if [[ "$cpPlist" == "y" ]];then
+        cp "/tmp/$1.plist" $home/Library/LaunchAgents && chmod 644 $home/Library/LaunchAgents/$1.plist
+    fi
+fi
+rm /tmp/$1.plist
 }
 #systemd service file
 serviceFile(){
