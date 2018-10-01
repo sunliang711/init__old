@@ -3,7 +3,7 @@ set -o vi
 #END
 
 #BEGIN environment variable
-[ -d $HOME/workspace/go ] && export GOPATH=$HOME/workspace/go
+[ -d $HOME/Workspace/go ] && export GOPATH=$HOME/Workspace/go
 
 append_path(){
     if [ -z "$1" ];then
