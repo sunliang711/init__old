@@ -58,11 +58,21 @@ if has("win32")
     set guioptions-=R
     set guioptions-=b
 endif
-" linux gvim setting
-if has("unix") && has("gui_running")
-    set guifont=DroidSansMonoForPowerline\ Nerd\ Font\ 10
-endif
+" " linux gvim setting
+" if has("unix") && has("gui_running")
+"     set guifont=DroidSansMonoForPowerline\ Nerd\ Font\ 10
+" endif
 
+" gvim setting
+if has("gui_running")
+    if has("gui_macvim")
+        set guifont=HackNerdFontComplete-Regular:h14
+    elseif has("gui_gtk2") || has("gui_gtk3")
+        set guifont=DroidSansMonoForPowerline\ Nerd\ Font\ 10
+    elseif has("gui_win32")
+        "Win32/64 GVim
+    endif
+endif
 if has("gui_running")
     set lines=50
     set columns=100
