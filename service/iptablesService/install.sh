@@ -1,4 +1,7 @@
 #!/bin/bash
+if [ -e /tmp/proxy ];then
+    source /tmp/proxy
+fi
 if (( $EUID!=0 ));then
     echo "Need root privilege!"
     exit 1

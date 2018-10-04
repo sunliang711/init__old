@@ -1,4 +1,7 @@
 #!/bin/bash
+if [ -e /tmp/proxy ];then
+    source /tmp/proxy
+fi
 SCRIPTDIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 cd "$SCRIPTDIR"
 

@@ -13,7 +13,7 @@ usage(){
     echo -e "\t-s                  Set shell"
     echo -e "\t-v whichVIM         Install supervim for whichVIM(vim n(eo)vim or both)"
     echo -e "\t-h                  Print this message"
-    echo -e "\t-l                  local proxy ie: http://localhost:8118"
+    echo -e "\t-l                  local proxy ie: http://localhost:6117"
     echo -e "\t-p <URL of proxy>   Using URL as proxy"
     exit 1
 }
@@ -49,7 +49,7 @@ while getopts ":diglsv:hp:" opt;do
             usage
             ;;
         l)
-            proxy=http://localhost:8118
+            proxy=http://localhost:6117
             ;;
         p)
             proxy=$OPTARG
@@ -87,17 +87,20 @@ fi
 
 if [[ -n "$proxy" ]];then
     echo "Using proxy: $proxy"
-    shopt -s expand_aliases
-    export http_proxy=$proxy
-    export https_proxy=$proxy
-    export ftp_proxy=$proxy
-    export HTTP_PROXY=$proxy
-    export HTTPS_PROXY=$proxy
-    export FTP_PROXY=$proxy
-    git config --global http.proxy "$proxy"
-    git config --global https.proxy "$proxy"
-    #alias curl="curl -x $proxy"
-    echo "proxy=$proxy" >$HOME/.curlrc
+    cat<<-EOF>/tmp/proxy
+	#shopt -s expand_aliases
+	export http_proxy=$proxy
+	export https_proxy=$proxy
+	export ftp_proxy=$proxy
+	export all_proxy=$proxy
+	export HTTP_PROXY=$proxy
+	export HTTPS_PROXY=$proxy
+	export FTP_PROXY=$proxy
+	export ALL_PROXY=$proxy
+	git config --global http.proxy "$proxy"
+	git config --global https.proxy "$proxy"
+	#echo "proxy=$proxy" >$HOME/.curlrc
+	EOF
 fi
 #check OS type
 version=$(bash linux-version.sh)
@@ -208,4 +211,7 @@ git config --global --unset-all http.proxy
 git config --global --unset-all https.proxy
 if [ -e $HOME/.curlrc ];then
     rm $HOME/.curlrc
+fi
+if [ -e /tmp/proxy ];then
+    rm /tmp/proxy
 fi

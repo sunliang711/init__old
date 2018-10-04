@@ -6,7 +6,7 @@ usage(){
     echo "Usage: $(basename $0) [OPTIONS] [VIM]"
     echo "OPTIONS:"
     echo -e "\t\t-h                     Print this help message"
-    echo -e "\t\t-l                     Using http://localhost:8118 as proxy"
+    echo -e "\t\t-l                     Using http://localhost:6117 as proxy"
     echo -e "\t\t-p [URL of proxy]      Using URL of proxy as proxy"
     echo -e "\t\t-f                     Install font-hack-nerd-font on MacOS"
     echo -e "\t\t-g                     Install vim-go plugin"
@@ -98,7 +98,7 @@ while getopts ":hlp:fgy:d" opt;do
             usage
             ;;
         l)
-            proxy="http://localhost:8118"
+            proxy="http://localhost:6117"
             ;;
         p)
             proxy=$(echo "$OPTARG" | tr 'A-Z' 'a-z')
@@ -222,14 +222,16 @@ if [[ -n $proxy ]];then
     shopt -s expand_aliases
     git config --global http.proxy "$proxy"
     git config --global https.proxy "$proxy"
-    alias curl="curl -x $proxy"
-    alias brew="ALL_PROXY=$proxy brew"
+    #alias curl="curl -x $proxy"
+    #alias brew="ALL_PROXY=$proxy brew"
     export http_proxy=$proxy
     export https_proxy=$proxy
     export ftp_proxy=$proxy
+    export all_proxy=$proxy
     export HTTP_PROXY=$proxy
     export HTTPS_PROXY=$proxy
     export FTP_PROXY=$proxy
+    export ALL_PROXY=$proxy
 fi
 
 #Install font
