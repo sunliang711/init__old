@@ -109,6 +109,7 @@ alias cdgo="cd $GOPATH/src"
 if command -v emacs >/dev/null 2>&1;then
     alias emacs='emacs -nw'
 fi
+alias ipe='curl myip.ipip.net'
 
 # if command -v vim >/dev/null 2>&1;then
 #     alias vi='vim'
@@ -250,6 +251,8 @@ proxyoff(){
     echoExec "unset HTTP_PROXY"
     echoExec "unset HTTPS_PROXY"
     echoExec "unset FTP_PROXY"
+    echoExec "unset all_proxy"
+    echoExec "unset ALL_PROXY"
 
     if command -v git >/dev/null 2>&1;then
         echoExec "git config --global --unset-all http.proxy"
@@ -339,6 +342,34 @@ currentOS(){
     echo "$currentos" | tr A-Z a-z
 }
 
+function www(){
+    if [ "$1" = "-h" ];then
+        echo "usage: $0 [port,default 8000]"
+        return
+    fi
+    if [ -z "$1" ];then
+        echo "Not specify port,use default: 8000"
+        python -m SimpleHTTPServer
+    else
+        echo "Use sepcify port: $1"
+        python -m SimpleHTTPServer "$1"
+    fi
+}
+
+speed(){
+    if [ "$1" = "-h" ];then
+        echo "usage: $0 [-s,for silent]"
+        return
+    fi
+    #speedtest-cli 可以用brew install speedtest-cli安装(MAC OS下，linux还没测试)
+    #3633表示上海电信服务器，可以通过speedtest-cli --list获取
+    #speedtest-cli --list | grep -i shanghai
+    if [ "$1" = "-s" ];then
+        speedtest-cli --server 3633 --simple
+    else
+        speedtest-cli --server 3633
+    fi
+}
 # bk(){
 #     if (($# !=1));then
 #         echo "Usage: bk The_exist_file_or_directory" 1>&2
