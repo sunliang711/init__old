@@ -1,6 +1,8 @@
 #BEGIN mode
 set -o vi
 #END
+LC_CTYPE=en_US.UTF-8
+LC_ALL=en_US.UTF-8
 
 #BEGIN environment variable
 [ -d $HOME/Workspace/go ] && export GOPATH=$HOME/Workspace/go
