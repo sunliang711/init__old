@@ -77,6 +77,7 @@ make(){
         ["16.10"]=yakkety
         ["17.04"]=zesty
         ["17.10"]=artful
+        ["18.04"]=bionic
         )
     codename=$(grep -oP '(?<=DISTRIB_CODENAME=)[^=]+' /etc/lsb-release)
     #if cannot find codename,then use find release to find it
