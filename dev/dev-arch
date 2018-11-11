@@ -10,6 +10,10 @@ if [[ $EUID != 0 ]];then
     echo "Error:need root priviledge!"
     exit 1
 fi
+
+user=${SUDO_USER:-$(whoami)}
+home=$(eval echo ~$user)
+
 # basicApps="neovim vim git openssh net-tools tree screenfetch wget cronie unzip zsh zsh-syntax-highlighting ctags fontconfig"
 basicApps="neovim vim git openssh net-tools tree screenfetch wget cronie unzip zsh ctags fontconfig"
 devApps="base-devel linux-headers clang cmake python boost python-pip go go-tools"
@@ -58,7 +62,7 @@ if [[ "$de" == [yY] ]];then
     pacman -S "$dm" --noconfirm --needed
     systemctl enable "$dm"
 
-    pacman -S adobe-source-han-sans-cn-fonts --noconfirm  -needed
+    pacman -S adobe-source-han-sans-cn-fonts --noconfirm  --needed
     pacman -S gnome-terminal --noconfirm  --needed
     read -p "Install lxde ?(Y/n) " lxde
     if [[ "$lxde" != [nN] ]];then
@@ -94,9 +98,9 @@ if [[ "$de" == [yY] ]];then
         pacman -S plasma kde-applications --noconfirm --needed
         echo "exec startkde" >> /etc/X11/xinit/xinitrc
 
-        echo 'export GTK_IM_MODULE=fcitx' >> ~/.xprofile
-        echo 'export QT_IM_MODULE=fcitx' >> ~/.xprofile
-        echo 'export XMODIFIERS="@im=fcitx"' >> ~/.xprofile
+        echo 'export GTK_IM_MODULE=fcitx' >> ${home}/.xprofile
+        echo 'export QT_IM_MODULE=fcitx' >> ${home}/.xprofile
+        echo 'export XMODIFIERS="@im=fcitx"' >> ${home}/.xprofile
     fi
     read -p "Install fcitx ?(Y/n) " fcitx
     if [[ "$fcitx" != [nN] ]];then
@@ -104,9 +108,9 @@ if [[ "$de" == [yY] ]];then
         pacman -S fcitx-configtool --noconfirm --needed
         pacman -S fcitx-sunpinyin --noconfirm --needed
 
-        echo 'export GTK_IM_MODULE=fcitx' >> ~/.xprofile
-        echo 'export QT_IM_MODULE=fcitx' >> ~/.xprofile
-        echo 'export XMODIFIERS="@im=fcitx"' >> ~/.xprofile
+        echo 'export GTK_IM_MODULE=fcitx' >> ${home}/.xprofile
+        echo 'export QT_IM_MODULE=fcitx' >> ${home}/.xprofile
+        echo 'export XMODIFIERS="@im=fcitx"' >> ${home}/.xprofile
     fi
 
 fi
