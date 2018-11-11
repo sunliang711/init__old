@@ -54,7 +54,7 @@ if [[ "$de" == [yY] ]];then
     #the basis of all DE
     pacman -S xorg --noconfirm --needed
     pacman -S xorg-xinit --noconfirm --needed
-    #install dm 
+    #install dm
     pacman -S "$dm" --noconfirm --needed
     systemctl enable "$dm"
 
@@ -80,6 +80,15 @@ if [[ "$de" == [yY] ]];then
         pacman -S gnome-terminal --noconfirm --needed
     fi
 
+    read -p "Install lxqt ? (y/N)" lxqt
+    if [[ "$lxqt" == [yY] ]];then
+        pacman -S lxqt oxygen-icons --noconfirm --needed
+        pacman -S libstatgrab --noconfirm --needed
+        pacman -S qterminal --noconfirm --needed
+        sddm --example-config > /etc/sddm.conf
+
+    fi
+
     read -p "Install KDE ? (y/N) " kde
     if [[ "$kde" == [yY] ]];then
         pacman -S plasma kde-applications --noconfirm --needed
@@ -94,6 +103,10 @@ if [[ "$de" == [yY] ]];then
         pacman -S fcitx-im --noconfirm --needed
         pacman -S fcitx-configtool --noconfirm --needed
         pacman -S fcitx-sunpinyin --noconfirm --needed
+
+        echo 'export GTK_IM_MODULE=fcitx' >> ~/.xprofile
+        echo 'export QT_IM_MODULE=fcitx' >> ~/.xprofile
+        echo 'export XMODIFIERS="@im=fcitx"' >> ~/.xprofile
     fi
 
 fi
