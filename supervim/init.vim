@@ -10,7 +10,8 @@ set relativenumber
 set cursorline
 " set cursorcolumn
 
-set mouse=c
+"set mouse=c
+set mouse=a
 "如果用ssh的连接工具，比如putty xshell连接远程服务器
 "打开vim的话，它的t_Co会设置成8，这样airline的状态栏
 "就不会有五颜六色了，所以这里设置成256来让airline正
@@ -62,7 +63,6 @@ endif
 " if has("unix") && has("gui_running")
 "     set guifont=DroidSansMonoForPowerline\ Nerd\ Font\ 10
 " endif
-
 " gvim setting
 if has("gui_running")
     if has("gui_macvim")
@@ -73,6 +73,7 @@ if has("gui_running")
         "Win32/64 GVim
     endif
 endif
+
 if has("gui_running")
     set lines=50
     set columns=100
@@ -120,12 +121,14 @@ inoremap <silent> <C-j> <esc><C-W>j
 " inoremap <silent> <C-k> <esc><C-W>k
 
 "save as root
-cmap w!! w !sudo tee>/dev/null %
+"cmap w!! w !sudo tee>/dev/null %
+
 "设置gf指令的寻找路径
 set path =.,~/.local/include,/usr/local/include,/usr/include,,
 
 "设置空白字符的视觉效果提示
 set list listchars=extends:❯,precedes:❮,tab:▸\ ,trail:˽
+" set list listchars=extends:❯,precedes:❮,tab:▸\ ,trail:˽,eol:$
 
 "这条指令放到这里可以,放到前面的话会导致windows下的gui的airline箭头显示不了,或者直接注释掉
 "scriptencoding utf-8
@@ -416,3 +419,4 @@ command! JsonFormat :%!python -m json.tool
 "
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 command! W :execute ':silent w !sudo tee % > /dev/null' | :edit!
+command! Wq :execute ':silent w !sudo tee % > /dev/null' | :edit! | :quit
