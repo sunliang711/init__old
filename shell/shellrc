@@ -54,6 +54,10 @@ alias ikev2='ssh -p 2002 eagle@sh.eagle711.win'
 alias google='ssh -p 2000 root@g.eagle711.win'
 alias dsm='ssh -p 2003 root@sh.eagle711.win'
 alias c7='ssh -p 2004 eagle@sh.eagle711.win'
+if command -v vim >/dev/null 2>&1;then
+    alias vi='vim'
+fi
+
 case $(uname) in
     "Linux")
         alias lA='ls -aF --color=auto'
@@ -688,6 +692,25 @@ if command -v systemctl >/dev/null 2>&1;then
     fi
 fi
 rm /tmp/$1.service
+}
+
+function serviceEdit(){
+    local name=$1
+    if [ -z "$name" ];then
+        echo "Need serviceName"
+        return 1
+    fi
+
+    local filePath="$(systemctl status $name | perl -ne 'print if /Loaded/' | awk -F'(' '{print $2}' | awk -F';' '{print $1}')"
+    if [ -z "$filePath" ];then
+        echo "Cannot find service file of '$name'!"
+        return 1
+    fi
+    editor=vi
+    if command -v vim >/dev/null 2>&1;then
+        editor=vim
+    fi
+    $editor $filePath
 }
 
 function enc(){
