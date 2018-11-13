@@ -77,6 +77,12 @@ if [[ "$de" == [yY] ]];then
         # pacman -S gnome-terminal --noconfirm --needed
         # sed -i 's/^# \(session.*startlxde$\)/\1/' /etc/lxdm/lxdm.conf
     fi
+
+    read -p "Install xfce ?(y/N) " xfce
+    if [[ "$xfce" == [yY] ]];then
+        pacman -S xfce4 xfce4-goodies --noconfirm --needed
+    fi
+
     read -p "Install Cinnamon ?(y/N) " cinnamon
     if [[ "$cinnamon" == [yY] ]];then
         #安装cinnamon桌面环境
