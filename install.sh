@@ -7,13 +7,13 @@ HOME=$(eval echo ~$USER)
 usage(){
     echo "Usage: $(basename $0) OPTIONS"
     echo "OPTIONS:"
+    echo -e "\t-h                  Print this message"
     echo -e "\t-d                  Install dev apps"
-    echo -e "\t-i                  Install iptables service (need systemd)"
     echo -e "\t-g                  Set git"
     echo -e "\t-s                  Set shell"
-    echo -e "\t-v whichVIM         Install supervim for whichVIM(vim n(eo)vim or both)"
-    echo -e "\t-h                  Print this message"
     echo -e "\t-l                  local proxy ie: http://localhost:6117"
+    echo -e "\t-v whichVIM         Install supervim for whichVIM(vim n(eo)vim or both)"
+    echo -e "\t-i                  Install iptables service (need systemd)"
     echo -e "\t-p <URL of proxy>   Using URL as proxy"
     exit 1
 }
