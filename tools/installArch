@@ -10,9 +10,10 @@ else
 fi
 
 timedatectl set-ntp true
-read -p "use 163 linux source? [Y/n] " use163
-if [[ "$use163" != [nN] ]];then
-    sed -i '1iServer = http://mirrors.163.com/archlinux/$repo/os/$arch' /etc/pacman.d/mirrorlist
+read -p "use Chinese linux source? [Y/n] " useChinese
+if [[ "$useChinese" != [nN] ]];then
+    sed -i.bak '1iServer = http://mirrors.163.com/archlinux/$repo/os/$arch' /etc/pacman.d/mirrorlist
+    sed -i.bak '1iServer = https://mirrors.tuna.tsinghua.edu.cn/archlinux/$repo/os/$arch' /etc/pacman.d/mirrorlist
 fi
 
 while read -p "boot partition size: (default:512M) " bootSize;do
