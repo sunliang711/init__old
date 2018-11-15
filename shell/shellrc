@@ -309,6 +309,13 @@ function mkcddir(){
     fi
     mkdir "$1" && cd $_
 }
+
+function rm(){
+    for i in "$@";do
+        echo "move $i to /tmp/$i-$(date +%FT%T)"
+        mv "$i" "/tmp/$i-$(date +%FT%T)"
+    done
+}
 # 检测出当前系统的版本，形如ubuntu-16.10,archlinux,fedora-23,centos-6.8,debian-8,macos
 currentOS(){
     local currentos=
