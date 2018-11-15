@@ -63,6 +63,7 @@ if [[ "$de" == [yY] ]];then
     systemctl enable "$dm"
 
     pacman -S adobe-source-han-sans-cn-fonts --noconfirm  --needed
+    pacman -S wqy-zenhei --noconfirm  --needed
     pacman -S gnome-terminal --noconfirm  --needed
     read -p "Install lxde ?(Y/n) " lxde
     if [[ "$lxde" != [nN] ]];then
