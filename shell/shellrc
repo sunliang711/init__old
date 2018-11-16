@@ -234,6 +234,15 @@ proxyon(){
         echoExec "git config --global https.proxy $proxy"
     fi
 
+    if command -v pip >/dev/null 2>&1;then
+        echo "alias pip=\"pip --proxy $proxy\""
+        alias pip="pip --proxy $proxy"
+    fi
+    if command -v pip3 >/dev/null 2>&1;then
+        echo "alias pip3=\"pip3 --proxy $proxy\""
+        alias pip3="pip3 --proxy $proxy"
+    fi
+
     ##set curl proxy
     #echo "alias curl=curl -x $proxy"
     #alias curl="curl -x $proxy"
@@ -271,6 +280,8 @@ proxyoff(){
     fi
     echoExec "unalias brew" 2>/dev/null
     echoExec "unalias curl" 2>/dev/null
+    echoExec "unalias pip" 2>/dev/null
+    echoExec "unalias pip3" 2>/dev/null
     local configFile="/tmp/curlrc"
     rm -rf "$configFile" 2>/dev/null
 }
@@ -325,6 +336,8 @@ function extract ()
     fi;
     if file "$name" | grep -qE '(compressed data|tar archive)'; then
         tar xvf "$name";
+    elif file "$name" | grep -qE '(Zip archive data)';then
+        unzip "$name"
     fi
 }
 
