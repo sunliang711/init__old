@@ -312,10 +312,22 @@ function mkcddir(){
 
 function rm(){
     for i in "$@";do
-        echo "move $i to /tmp/$i-$(date +%FT%T)"
-        mv "$i" "/tmp/$i-$(date +%FT%T)"
+        echo "move $i to /tmp/${i//\//@}-$(date +%FT%T)"
+        mv "$i" "/tmp/${i//\//@}-$(date +%FT%T)"
     done
 }
+
+function extract ()
+{
+    name=$1;
+    if [ -z "$name"  ]; then
+        return 1;
+    fi;
+    if file "$name" | grep -qE '(compressed data|tar archive)'; then
+        tar xvf "$name";
+    fi
+}
+
 # 检测出当前系统的版本，形如ubuntu-16.10,archlinux,fedora-23,centos-6.8,debian-8,macos
 currentOS(){
     local currentos=
