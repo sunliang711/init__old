@@ -120,7 +120,6 @@ alias cdgo="cd $GOPATH/src"
 if command -v emacs >/dev/null 2>&1;then
     alias emacs='emacs -nw'
 fi
-alias myip='curl myip.ipip.net'
 
 # if command -v vim >/dev/null 2>&1;then
 #     alias vi='vim'
@@ -339,6 +338,13 @@ function extract ()
     elif file "$name" | grep -qE '(Zip archive data)';then
         unzip "$name"
     fi
+}
+
+function myip(){
+    sources=(ipinfo.io cip.cc myip.ipip.net ifconfig.me)
+    for i in "${sources[@]}";do
+        curl "$i"
+    done
 }
 
 # 检测出当前系统的版本，形如ubuntu-16.10,archlinux,fedora-23,centos-6.8,debian-8,macos
