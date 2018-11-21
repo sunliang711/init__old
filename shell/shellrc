@@ -281,8 +281,8 @@ proxyoff(){
     echoExec "unalias curl" 2>/dev/null
     echoExec "unalias pip" 2>/dev/null
     echoExec "unalias pip3" 2>/dev/null
-    local configFile="/tmp/curlrc"
-    rm -rf "$configFile" 2>/dev/null
+    # local configFile="/tmp/curlrc"
+    # rm -rf "$configFile" 2>/dev/null
 }
 
 proxystatus(){
@@ -343,7 +343,7 @@ function extract ()
 function myip(){
     sources=(ipinfo.io cip.cc myip.ipip.net ifconfig.me)
     for i in "${sources[@]}";do
-        curl "$i"
+        curl --max-time 3 "$i"
     done
 }
 
