@@ -104,17 +104,6 @@ fi
 alias cd..='cd ..'
 alias cd-='cd -'
 alias grep='grep --color=auto'
-case $(uname) in
-    Linux)
-        alias listen='netstat -tan | grep LISTEN'
-        alias ulisten='netstat -uln'
-        ;;
-    Darwin)
-        alias listen='lsof -iTCP -sTCP:LISTEN -P'
-        alias ulisten='lsof -iUDP -P -n'
-        ;;
-esac
-
 alias cdgo="cd $GOPATH/src"
 
 if command -v emacs >/dev/null 2>&1;then
@@ -780,6 +769,38 @@ cecho() {
         -e "s/@reset@/$(tput sgr0)/g" \
         -e "s/@b@/$(tput bold)/g" \
         -e "s/@u@/$(tput sgr 0 1)/g"
+}
+# case $(uname) in
+#     Linux)
+#         alias listen='netstat -tan | grep LISTEN'
+#         alias ulisten='netstat -uln'
+#         ;;
+#     Darwin)
+#         alias listen='lsof -iTCP -sTCP:LISTEN -P'
+#         alias ulisten='lsof -iUDP -P -n'
+#         ;;
+# esac
+
+function listen(){
+    case $(uname) in
+        Linux)
+            # if (($EUID!=0));then
+            #     netstat -tan | grep LISTEN
+            #     netstat -uln
+            #     echo "run as root privilege,to get more info."
+            # else
+            #     lsof -iTCP -sTCP:LISTEN -P
+            #     lsof -iUDP -P -n
+            # fi
+            sudo lsof -iTCP -sTCP:LISTEN -P
+            sudo lsof -iUDP -P -n
+            ;;
+        Darwin)
+            lsof -iTCP -sTCP:LISTEN -P
+            lsof -iUDP -P -n
+            ;;
+    esac
+
 }
 #END function
 
