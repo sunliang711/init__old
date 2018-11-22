@@ -9,6 +9,7 @@ case $(uname) in
     Linux)
         SWAP=/var/swap.img
         if [[ ! -e "$SWAP" ]];then
+            echo "create $SWAP file,wait a minute..."
             dd if=/dev/zero of="$SWAP" bs=1024k count=1000
             chmod 0600 "$SWAP"
             mkswap "$SWAP"
