@@ -10,7 +10,11 @@ case $(uname) in
         SWAP=/var/swap.img
         if [[ ! -e "$SWAP" ]];then
             echo "create $SWAP file,wait a minute..."
-            dd if=/dev/zero of="$SWAP" bs=1024k count=1000
+            if command -v pv >/dev/null 2>&1;then
+                pv /dev/zero | dd of="$SWAP" bs=1024K count=1000
+            else
+                dd if=/dev/zero of="$SWAP" bs=1024k count=1000
+            fi
             chmod 0600 "$SWAP"
             mkswap "$SWAP"
             swapon "$SWAP"
