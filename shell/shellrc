@@ -792,12 +792,10 @@ function listen(){
             #     lsof -iTCP -sTCP:LISTEN -P
             #     lsof -iUDP -P -n
             # fi
-            sudo lsof -iTCP -sTCP:LISTEN -P
-            sudo lsof -iUDP -P -n
+            (sudo lsof -iTCP -sTCP:LISTEN -P; sudo lsof -iUDP -P -n) | less
             ;;
         Darwin)
-            lsof -iTCP -sTCP:LISTEN -P
-            lsof -iUDP -P -n
+            (lsof -iTCP -sTCP:LISTEN -P; lsof -iUDP -P -n) | less
             ;;
     esac
 
