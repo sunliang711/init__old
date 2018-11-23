@@ -13,7 +13,7 @@ if [[ $EUID != 0 ]];then
 fi
 
 
-basicApps="net-tools vim tree wget zsh bc"
+basicApps="net-tools vim tree wget zsh bc pv"
 #install development tools
 devApps="kernel-devel kernel-headers clang python-devel cmake golang boost-devel ncurses-devel"
 read -p "Install development apps (ie: clang python golang boost)? [Y/n] "  installDev

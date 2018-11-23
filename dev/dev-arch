@@ -15,7 +15,7 @@ user=${SUDO_USER:-$(whoami)}
 home=$(eval echo ~$user)
 
 # basicApps="neovim vim git openssh net-tools tree screenfetch wget cronie unzip zsh zsh-syntax-highlighting ctags fontconfig"
-basicApps="tmux neovim vim git openssh net-tools tree screenfetch wget cronie unzip zsh ctags fontconfig"
+basicApps="tmux neovim vim git openssh net-tools tree screenfetch wget cronie unzip zsh ctags fontconfig pv"
 devApps="base-devel linux-headers clang cmake python boost python-pip go go-tools"
 
 read -p "Install development apps (ie:clang python boost go) [Y/n] "  installDev
