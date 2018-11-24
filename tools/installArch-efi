@@ -66,7 +66,7 @@ chmod +x autoPartition
 ./autoPartition
 
 #boot
-mkfs.vfat /dev/${disk}1
+mkfs.vfat -F32 /dev/${disk}1
 #swap
 mkswap /dev/${disk}2
 #root
