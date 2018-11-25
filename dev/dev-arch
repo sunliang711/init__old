@@ -15,7 +15,7 @@ user=${SUDO_USER:-$(whoami)}
 home=$(eval echo ~$user)
 
 # basicApps="neovim vim git openssh net-tools tree screenfetch wget cronie unzip zsh zsh-syntax-highlighting ctags fontconfig"
-basicApps="tmux neovim vim git openssh net-tools tree screenfetch wget cronie unzip zsh ctags fontconfig pv"
+basicApps="tmux neovim vim git openssh net-tools tree screenfetch wget cronie unzip zsh ctags fontconfig pv lsof"
 devApps="base-devel linux-headers clang cmake python boost python-pip go go-tools"
 
 read -p "Install development apps (ie:clang python boost go) [Y/n] "  installDev
@@ -46,7 +46,7 @@ systemctl enable cronie
 
 read -p "Install Desktop Environment? [y/N] "  de
 if [[ "$de" == [yY] ]];then
-    while read -p "Install which display manager ?[lxdm or sddm ] " dm;do
+    while read -p "Install which display manager ?[lxdm or sddm ] (prefer sddm) " dm;do
         if echo $dm | grep -P '^(lxdm|sddm)$';then
             echo "$dm will be installed"
             break
@@ -67,8 +67,18 @@ if [[ "$de" == [yY] ]];then
     pacman -S wqy-microhei --noconfirm  --needed
     pacman -S gnome-terminal --noconfirm  --needed
     pacman -S gnome-disk-utility --noconfirm --needed
-    read -p "Install lxde ?(Y/n) " lxde
-    if [[ "$lxde" != [nN] ]];then
+
+    read -p "Install lxqt ? (Y/n)" lxqt
+    if [[ "$lxqt" != [nN] ]];then
+        pacman -S lxqt oxygen-icons --noconfirm --needed
+        pacman -S libstatgrab --noconfirm --needed
+        pacman -S qterminal --noconfirm --needed
+        sddm --example-config > /etc/sddm.conf
+
+    fi
+
+    read -p "Install lxde ?(y/N) " lxde
+    if [[ "$lxde" =~ [yY] ]];then
         #安装lxde桌面环境相关
         pacman -S lxde-common --noconfirm --needed
         pacman -S lxsession --noconfirm --needed
@@ -82,28 +92,19 @@ if [[ "$de" == [yY] ]];then
     fi
 
     read -p "Install xfce ?(y/N) " xfce
-    if [[ "$xfce" == [yY] ]];then
+    if [[ "$xfce" =~ [yY] ]];then
         pacman -S xfce4 xfce4-goodies --noconfirm --needed
     fi
 
     read -p "Install Cinnamon ?(y/N) " cinnamon
-    if [[ "$cinnamon" == [yY] ]];then
+    if [[ "$cinnamon" =~ [yY] ]];then
         #安装cinnamon桌面环境
         pacman -S cinnamon --noconfirm --needed
         pacman -S gnome-terminal --noconfirm --needed
     fi
 
-    read -p "Install lxqt ? (y/N)" lxqt
-    if [[ "$lxqt" == [yY] ]];then
-        pacman -S lxqt oxygen-icons --noconfirm --needed
-        pacman -S libstatgrab --noconfirm --needed
-        pacman -S qterminal --noconfirm --needed
-        sddm --example-config > /etc/sddm.conf
-
-    fi
-
     read -p "Install KDE ? (y/N) " kde
-    if [[ "$kde" == [yY] ]];then
+    if [[ "$kde" =~ [yY] ]];then
         pacman -S plasma kde-applications --noconfirm --needed
         echo "exec startkde" >> /etc/X11/xinit/xinitrc
 

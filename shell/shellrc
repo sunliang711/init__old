@@ -821,7 +821,12 @@ function listen(){
             #     lsof -iTCP -sTCP:LISTEN -P
             #     lsof -iUDP -P -n
             # fi
-            (sudo lsof -iTCP -sTCP:LISTEN -P; sudo lsof -iUDP -P -n | grep -v '\*:\*$') | less
+            if command -v lsof >/dev/null 2>&1;then
+                (sudo lsof -iTCP -sTCP:LISTEN -P; sudo lsof -iUDP -P -n | grep -v '\*:\*$') | less
+            else
+                netstat -tan | grep LISTEN
+                netstat -uln
+            fi
             ;;
         Darwin)
             (lsof -iTCP -sTCP:LISTEN -P; lsof -iUDP -P -n | grep -v '\*:\*$') | less
