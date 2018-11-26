@@ -57,6 +57,8 @@ alias dsm='ssh -p 2001 root@sh.eagle711.win'
 alias c7='ssh -p 2004 eagle@sh.eagle711.win'
 
 
+#original rm
+alias orm='/bin/rm'
 alias prettyjson='python -m json.tool'
 #TODO hard coded
 alias sm='source /etc/shellrc'
@@ -822,14 +824,16 @@ function listen(){
             #     lsof -iUDP -P -n
             # fi
             if command -v lsof >/dev/null 2>&1;then
-                (sudo lsof -iTCP -sTCP:LISTEN -P; sudo lsof -iUDP -P -n | grep -v '\*:\*$') | less
+                (sudo lsof -iTCP -sTCP:LISTEN -P; echo "-----------------------";sudo lsof -iUDP -P -n | grep -v '\*:\*$') | less
             else
                 netstat -tan | grep LISTEN
+                echo "-----------------------"
                 netstat -uln
             fi
             ;;
         Darwin)
-            (lsof -iTCP -sTCP:LISTEN -P; lsof -iUDP -P -n | grep -v '\*:\*$') | less
+            (lsof -iTCP -sTCP:LISTEN -P;echo "-----------------------";
+ lsof -iUDP -P -n | grep -v '\*:\*$') | less
             ;;
     esac
 
