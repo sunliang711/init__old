@@ -53,7 +53,7 @@ alias dell='ssh -p 2001 eagle@sh.eagle711.win'
 alias ikev2='ssh -p 2002 eagle@sh.eagle711.win'
 alias google='ssh -p 2000 root@g.eagle711.win'
 alias google2='ssh -p 2000 root@g2.eagle711.win'
-alias dsm='ssh -p 2003 root@sh.eagle711.win'
+alias dsm='ssh -p 2001 root@sh.eagle711.win'
 alias c7='ssh -p 2004 eagle@sh.eagle711.win'
 
 
