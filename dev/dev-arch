@@ -14,7 +14,6 @@ fi
 user=${SUDO_USER:-$(whoami)}
 home=$(eval echo ~$user)
 
-# basicApps="neovim vim git openssh net-tools tree screenfetch wget cronie unzip zsh zsh-syntax-highlighting ctags fontconfig"
 basicApps="tmux neovim vim git openssh net-tools tree screenfetch wget cronie unzip zsh ctags fontconfig pv lsof"
 devApps="base-devel linux-headers clang cmake python boost python-pip go go-tools"
 
@@ -86,9 +85,6 @@ if [[ "$de" == [yY] ]];then
         pacman -S lxpanel --noconfirm --needed
         pacman -S openbox --noconfirm --needed
         pacman -S pcmanfm --noconfirm --needed
-        # pacman -S lxterminal --noconfirm --needed
-        # pacman -S xterm --noconfirm --needed
-        # pacman -S gnome-terminal --noconfirm --needed
         # sed -i 's/^# \(session.*startlxde$\)/\1/' /etc/lxdm/lxdm.conf
     fi
 
