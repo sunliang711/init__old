@@ -64,7 +64,8 @@ if [[ "$de" == [yY] ]];then
 
     # pacman -S adobe-source-han-sans-cn-fonts --noconfirm  --needed
     # pacman -S wqy-zenhei --noconfirm  --needed
-    pacman -S wqy-microhei --noconfirm  --needed
+    pacman -S wqy-microhei --noconfirm  --needed #浏览器中文乱码
+    pacman -S bdf-unifont  --noconfirm  --needed #vim listchars character font
     pacman -S gnome-terminal --noconfirm  --needed
     pacman -S gnome-disk-utility --noconfirm --needed
 
