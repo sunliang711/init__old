@@ -66,6 +66,8 @@ if command -v vim >/dev/null 2>&1;then
     alias vi='vim'
 fi
 
+alias pushall='git remote | xargs -L1 -IR git push R'
+
 case $(uname) in
     "Linux")
         alias lA='ls -aF --color=auto'

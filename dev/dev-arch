@@ -14,7 +14,7 @@ fi
 user=${SUDO_USER:-$(whoami)}
 home=$(eval echo ~$user)
 
-basicApps="tmux neovim vim git openssh net-tools tree screenfetch wget cronie unzip zsh ctags fontconfig pv lsof"
+basicApps="tmux neovim vim git openssh net-tools dnsutils tree screenfetch wget cronie unzip zsh ctags fontconfig pv lsof"
 devApps="base-devel linux-headers clang cmake python boost python-pip go go-tools"
 
 read -p "Install development apps (ie:clang python boost go) [Y/n] "  installDev
