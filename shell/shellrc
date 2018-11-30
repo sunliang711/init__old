@@ -66,8 +66,8 @@ if command -v vim >/dev/null 2>&1;then
     alias vi='vim'
 fi
 
-alias pushall='git remote | xargs -L1 -IR git push R'
-alias fetchall='git remote | xargs -L1 -IR git fetch R'
+alias pushall='git remote | xargs -L1 -t -IR git push R'
+alias fetchall='git remote | xargs -L1 -t -IR git fetch R'
 
 
 case $(uname) in
