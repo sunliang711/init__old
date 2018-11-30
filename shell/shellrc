@@ -67,6 +67,8 @@ if command -v vim >/dev/null 2>&1;then
 fi
 
 alias pushall='git remote | xargs -L1 -IR git push R'
+alias fetchall='git remote | xargs -L1 -IR git fetch R'
+
 
 case $(uname) in
     "Linux")
@@ -840,6 +842,15 @@ function listen(){
     esac
 
 }
+
+function em(){
+    editor=vi
+    if command -v vim >/dev/null 2>&1;then
+        editor=vim
+    fi
+    $editor /etc/shellrc
+}
+
 #END function
 
 #BEGIN others
