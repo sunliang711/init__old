@@ -9,6 +9,11 @@ else
     exit 1
 fi
 
+if [ ! -d /sys/firmware/efi ];then
+    echo "Not in efi mode"
+    exit 1
+fi
+
 timedatectl set-ntp true
 read -p "use Chinese linux source? [Y/n] " useChinese
 if [[ "$useChinese" != [nN] ]];then
@@ -58,6 +63,7 @@ wipefs -a /dev/${disk}
 parted /dev/${disk} -a optimal -s \
     mklabel gpt \
     mkpart primary 1MiB ${bootSize}MiB \
+    set 1 boot on \
     mkpart primary ${bootSize}MiB $((bootSize+swapSize))MiB \
     mkpart primary $((bootSize+swapSize))MiB 100%
 
@@ -140,7 +146,8 @@ sudo timedatectl set-ntp true
 
 #install git
 pacman -S git --noconfirm --needed
-
+rm /installArch.sh
+rm /afterReboot.sh
 afterReboot
 EOF4
 
