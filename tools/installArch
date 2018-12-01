@@ -78,17 +78,17 @@ swapSize=$(echo $swapSize | grep -oP '\d+')
 #now bootSize and swapSize are in unit 'MiB'
 wipefs -a /dev/${disk}
 parted /dev/${disk} -a optimal -s \
-    mklabel gpt \
+    mklabel msdos \
     mkpart primary 1MiB ${bootSize}MiB \
     mkpart primary ${bootSize}MiB $((bootSize+swapSize))MiB \
     mkpart primary $((bootSize+swapSize))MiB 100%
 
 #boot
-mkfs.ext4 /dev/${disk}1
+#mkfs.ext4 /dev/${disk}1
 #swap
 mkswap /dev/${disk}2
 #root
-mkfs.ext4 /dev/${disk}3
+#mkfs.ext4 /dev/${disk}3
 
 mount /dev/${disk}3 /mnt
 mkdir /mnt/boot
