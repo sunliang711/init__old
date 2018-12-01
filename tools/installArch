@@ -84,11 +84,11 @@ parted /dev/${disk} -a optimal -s \
     mkpart primary $((bootSize+swapSize))MiB 100%
 
 #boot
-#mkfs.ext4 /dev/${disk}1
+mkfs.ext4 -F /dev/${disk}1
 #swap
 mkswap /dev/${disk}2
 #root
-#mkfs.ext4 /dev/${disk}3
+mkfs.ext4 -F /dev/${disk}3
 
 mount /dev/${disk}3 /mnt
 mkdir /mnt/boot
