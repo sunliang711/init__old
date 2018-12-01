@@ -41,29 +41,25 @@ while read -p "swap partition size: (default:2G) " swapSize;do
         echo "input error,try again! (valid input example: 512m 2g 8g)"
     fi
 done
-cat>autoPartition<<end
-fdisk /dev/${disk}<<EOF1
-n
-p
-1
 
-+$bootSize
-n
-p
-2
+if echo "$bootSize" | grep -qP '^\s*\d+[gG]\s*$';then
+    bootSize=$(echo "$bootSize" | grep -oP '\d+')
+    bootSize=$((bootSize*1024))
+fi
+if echo "$swapSize" | grep -qP '^\s*\d+[gG]\s*$';then
+    swapSize=$(echo "$swapSize" | grep -oP '\d+')
+    swapSize=$((swapSize*1024))
+fi
 
-+$swapSize
-n
-p
-3
-
-
-w
-EOF1
-end
-
-chmod +x autoPartition
-./autoPartition
+bootSize=$(echo $bootSize | grep -oP '\d+')
+swapSize=$(echo $swapSize | grep -oP '\d+')
+#now bootSize and swapSize are in unit 'MiB'
+wipefs -a /dev/${disk}
+parted /dev/${disk} -a optimal -s \
+    mklabel gpt \
+    mkpart primary 1MiB ${bootSize}MiB \
+    mkpart primary ${bootSize}MiB $((bootSize+swapSize))MiB \
+    mkpart primary $((bootSize+swapSize))MiB 100%
 
 #boot
 mkfs.vfat -F32 /dev/${disk}1
