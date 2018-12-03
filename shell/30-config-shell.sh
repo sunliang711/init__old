@@ -43,6 +43,16 @@ user=${SUDO_USER:-$(whoami)}
 HOME=$(eval echo ~$user)
 
 install(){
+    case $(uname) in
+        Darwin)
+            # macOS uses libedit, 'bind -v' set vi mode,such as python interactive shell,mysql
+            echo 'bind -v' >> "$HOME/.editrc"
+            ;;
+        Linux)
+            # Linux uses readline library,'set editing-mode vi' set vi mode
+            echo 'set editing-mode vi' >> "$HOME/.inputrc"
+            ;;
+    esac
     shell=${1:?"missing shell type"}
     case "$shell" in
         bash)
