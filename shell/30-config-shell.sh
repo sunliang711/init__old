@@ -97,6 +97,13 @@ install(){
         echo "[ -f $rc ] && source $rc" >> $cfgFile
         #insert tailer
         echo "$endLine" >> $cfgFile
+
+        #link tools to /usr/local/bin/tools
+        if (($EUID!=0));then
+            sudo ln -sf $SCRIPTDIR/tools /usr/local/bin
+        else
+            ln -sf $SCRIPTDIR/tools /usr/local/bin
+        fi
         echo "Done."
     fi
 }
@@ -123,15 +130,18 @@ uninstall(){
     echo "Uninstall setting of $shell..."
     #uninstall custom config
     #delete lines from header to tailer
-    sed -i bak "/$startLine/,/$endLine/ d" $cfgFile
+    sed -ibak -e "/$startLine/,/$endLine/ d" $cfgFile
     rm ${cfgFile}bak
     if [ -e /etc/shellrc ];then
         if (($EUID!=0));then
             sudo rm /etc/shellrc
+            sudo rm /usr/local/bin/tools
         else
             rm /etc/shellrc
+            rm /usr/local/bin/tools
         fi
     fi
+
     echo "Done."
 }
 

@@ -1,0 +1,54 @@
+#!/usr/bin/env python
+# -*- encoding: utf-8 -*-
+
+import argparse
+import subprocess
+import os
+
+DefaultHost = "socks5://localhost"
+DefaultPort = 1080
+DefaultMTime = 3
+
+me=os.path.realpath(__file__)
+
+def main():
+    parser = argparse.ArgumentParser(description = "find out ip IP Address of wan")
+    parser.add_argument("--host",help = "proxy host")
+    parser.add_argument("-p","--port",type = int,help = "proxy port")
+    parser.add_argument("-m","--max-time",dest = "mtime",type = int,help = "curl max-time option")
+    parser.add_argument("--edit",action="store_true",help="edit this script")
+
+    args = parser.parse_args()
+
+    edit = args.edit
+    if edit:
+        ret = subprocess.call(['which','vim'])
+        if ret == 0:
+            subprocess.call(["vim",me])
+        else:
+            subprocess.call(['vi',me])
+        return 0
+
+    host = args.host
+    port = args.port
+    mtime = args.mtime
+
+    if host is None:
+        host = DefaultHost
+    if port is None:
+        port = DefaultPort
+    if mtime is None:
+        mtime = DefaultMTime
+    proxy = "{}:{}".format(host,port)
+
+    sources = ['cip.cc','ipinfo.io','myip.ipip.net','ifconfig.me']
+
+    print("me: {}".format(me))
+    for s in sources:
+        print("Got ip from: {}".format(s))
+        subprocess.call(["curl","-m","{}".format(mtime),"-x",proxy,s])
+        print("\n")
+
+
+if __name__ == "__main__":
+    main()

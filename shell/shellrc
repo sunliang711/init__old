@@ -11,9 +11,19 @@ append_path(){
     if [ -z "$1" ];then
         return
     fi
-    echo -e ${PATH//:/'\n'} | grep -c "^$1$" >/dev/null 2>&1 || export PATH=$PATH:$1
+    echo -e ${PATH//:/"\n"} | grep -c "^$1$" >/dev/null 2>&1 || export PATH=$PATH:$1
+}
+
+insert_path(){
+    if [ -z "$1" ];then
+        return
+    fi
+    echo -e ${PATH//:/"\n"} | grep -c "^$1$" >/dev/null 2>&1 || export PATH=$1:$PATH
 }
 #set PATH
+[ -n "$GOPATH" ] && insert_path $GOPATH/bin
+[ -d "$HOME/bin" ] && insert_path "$HOME/bin"
+append_path /usr/local/bin/tools
 append_path /usr/local/sbin
 append_path /usr/local/bin
 append_path /usr/sbin
@@ -23,8 +33,6 @@ append_path /bin
 
 user=${SUDO_USER:-$(whoami)}
 home=$(eval echo ~$user)
-
-[ -n "$GOPATH" ] && append_path $GOPATH/bin
 
 #export LS_COLORS=$LS_COLORS:"di=0;33:"
 #export PS1='[\u@\h \[\e[32;1m\]\W\\$\e[0m'
@@ -60,6 +68,7 @@ alias c7='ssh -p 2004 eagle@sh.eagle711.win'
 #original rm
 alias orm='/bin/rm'
 alias prettyjson='python -m json.tool'
+alias path='echo ${PATH//:/"\n"}'
 #TODO hard coded
 alias sm='source /etc/shellrc'
 if command -v vim >/dev/null 2>&1;then
@@ -336,7 +345,7 @@ function extract ()
     fi
 }
 
-function myip(){
+function myip_(){
     #-h: host(include scheme:http socks5...) 
     #-p port
     #-t timeout
