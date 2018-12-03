@@ -412,6 +412,8 @@ nnoremap <silent> <F10> :NextColorScheme<CR>
 ":%!python -m json.tool
 command! JsonFormat :%!python -m json.tool
 
+command! Pyheader :execute "0put='#!/usr/bin/env python'|1put='# -*- encoding: utf-8 -*-'"
+command! Pyencoding :execute "0put='#!/usr/bin/env python'|1put='# -*- encoding: utf-8 -*-'"
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 "
