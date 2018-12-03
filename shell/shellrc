@@ -67,8 +67,8 @@ alias c7='ssh -p 2004 eagle@sh.eagle711.win'
 
 #original rm
 alias orm='/bin/rm'
+alias cl='clear'
 alias prettyjson='python -m json.tool'
-alias path='echo ${PATH//:/"\n"}'
 #TODO hard coded
 alias sm='source /etc/shellrc'
 if command -v vim >/dev/null 2>&1;then
@@ -858,6 +858,10 @@ function em(){
         editor=vim
     fi
     $editor /etc/shellrc
+}
+
+function path(){
+    echo -e ${PATH//:/'\n'}
 }
 
 #END function
