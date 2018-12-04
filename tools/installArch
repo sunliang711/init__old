@@ -56,6 +56,7 @@ wipefs -a /dev/${disk}
 parted /dev/${disk} -a optimal -s \
     mklabel msdos \
     mkpart primary 1MiB ${bootSize}MiB \
+    set 1 boot on \
     mkpart primary ${bootSize}MiB $((bootSize+swapSize))MiB \
     mkpart primary $((bootSize+swapSize))MiB 100%
 
