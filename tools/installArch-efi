@@ -63,7 +63,7 @@ wipefs -a /dev/${disk}
 parted /dev/${disk} -a optimal -s \
     mklabel gpt \
     mkpart primary 1MiB ${bootSize}MiB \
-    set 1 boot on \
+    set 1 esp on \
     mkpart primary ${bootSize}MiB $((bootSize+swapSize))MiB \
     mkpart primary $((bootSize+swapSize))MiB 100%
 
@@ -72,7 +72,7 @@ mkfs.vfat -F32 /dev/${disk}1
 #swap
 mkswap /dev/${disk}2
 #root
-mkfs.ext4 /dev/${disk}3
+mkfs.ext4 -F /dev/${disk}3
 
 mount /dev/${disk}3 /mnt
 mkdir /mnt/boot
