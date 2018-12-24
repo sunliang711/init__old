@@ -864,6 +864,10 @@ function path(){
     echo -e ${PATH//:/'\n'}
 }
 
+function gfmt(){
+    find . -name "*.go" -print0 | xargs -0 -I R go fmt R
+}
+
 #END function
 
 #BEGIN others
