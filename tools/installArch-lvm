@@ -11,8 +11,8 @@ fi
 timedatectl set-ntp true
 read -p "use Chinese linux source? [Y/n] " useChinese
 if [[ "$useChinese" != [nN] ]];then
-    sed -i.bak '1iServer = http://mirrors.163.com/archlinux/$repo/os/$arch' /etc/pacman.d/mirrorlist
     sed -i.bak '1iServer = https://mirrors.tuna.tsinghua.edu.cn/archlinux/$repo/os/$arch' /etc/pacman.d/mirrorlist
+    sed -i.bak '1iServer = http://mirrors.163.com/archlinux/$repo/os/$arch' /etc/pacman.d/mirrorlist
 fi
 
 while read -p "boot partition size: (default:512M) " bootSize;do
@@ -97,14 +97,14 @@ if [ -z "$hostname" ];then
 fi
 echo "$hostname">>/etc/hostname
 
-echo "set password for root:"
-passwd
+# echo "set password for root:"
+# passwd
 
 #if need default password ,uncomment the following
-##passwd<<EOF3
-##sl580226
-##sl580226
-##EOF3
+passwd<<eop
+root
+root
+eop
 
 #grub
 pacman -S grub --noconfirm --needed
@@ -122,6 +122,7 @@ grub-mkconfig -o /boot/grub/grub.cfg
 perl -iold -pe "s/(^HOOKS\s*=\s*.+block )(filesystems.*)/\1lvm2 \2/" /etc/mkinitcpio.conf
 mkinitcpio -p linux
 
+echo 'default root password: root'
 echo "Now exit,then reboot, after reboot execute /afterReboot.sh"
 
 #'afterReboot' can avoid variable expanding
