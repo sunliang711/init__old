@@ -868,6 +868,36 @@ function gfmt(){
     find . -name "*.go" -print0 | xargs -0 -I R go fmt R
 }
 
+#folder disk usage
+function siz(){
+    dest="${1:-$(pwd)}"
+    echo "folder[:$dest] usage:(unit MB)"
+    find "$dest" -maxdepth 1 -print0 | xargs -0 -IR du -sm R 2>/dev/null
+}
+
+#soft link(support relative path)
+function softlink(){
+    src="${1}"
+    if [ -z "$src" ];then
+        echo "Usage: $(basename $0) src dest"
+        return 1
+    fi
+    if [ ! -e "$src" ];then
+        echo "$src not exist."
+        return 1
+    fi
+    dest="${2}"
+    if [ -z "$dest" ];then
+        echo "Usage: $(basename $0) src dest"
+        return 1
+    fi
+    src="$(realpath $src)"
+    if [ -z "$src" ];then
+        return 1
+    fi
+    ln -sf "$src" "$dest"
+}
+
 #END function
 
 #BEGIN others
