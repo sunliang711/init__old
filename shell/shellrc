@@ -870,9 +870,27 @@ function gfmt(){
 
 #folder disk usage
 function siz(){
+    if [ $1 = "-h" ];then
+        echo "Usage: $(basename $0) <path> [unit(mb,kb)]"
+        return 1
+    fi
     dest="${1:-$(pwd)}"
-    echo "folder[:$dest] usage:(unit MB)"
-    find "$dest" -maxdepth 1 -print0 | xargs -0 -IR du -sm R 2>/dev/null
+    unit=${2:-MB}
+    unit="$(echo $unit | tr 'a-z' 'A-Z')"
+    case "$unit" in
+        MB)
+            (echo "folder[:$dest] usage:(unit $unit)";
+            find "$dest" -maxdepth 1 -print0 | xargs -0 -IR du -sm R 2>/dev/null | sort -nr) | less
+            ;;
+        KB)
+            (echo "folder[:$dest] usage:(unit $unit)";
+            find "$dest" -maxdepth 1 -print0 | xargs -0 -IR du -sk R 2>/dev/null | sort -nr) | less
+            ;;
+        *)
+            echo "Usage: $(basename $0) <path> [unit(mb,kb)]"
+            return 1
+            ;;
+    esac
 }
 
 #soft link(support relative path)
