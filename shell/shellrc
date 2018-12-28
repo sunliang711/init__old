@@ -916,6 +916,53 @@ function softlink(){
     ln -sf "$src" "$dest"
 }
 
+function lines(){
+    usage="Usage: $(basename $0) [-e|-h] folderName"
+    ext=
+    while getopts ":he:" opt;do
+        case $opt in
+            e)
+                ext=$OPTARG
+                ;;
+            h)
+                echo $usage
+                return 1
+                ;;
+            :)
+                echo "Option: \"$OPTARG\" need argument"
+                echo $usage
+                return 1
+                ;;
+            \?)
+                echo "Unkown option: \"$OPTARg\""
+                echo $usage
+                return 1
+                ;;
+        esac
+    done
+    shift $((OPTIND-1))
+    folder=$1
+    if [ -z "$folder" ];then
+        folder="$(pwd)"
+    fi
+    if [ ! -d "$folder" ];then
+        echo "$folder not exist"
+        return 1
+    fi
+    if [ -s "$folder" ];then
+        echo "$folder is soft link"
+        folder=$(realpath $folder)
+        echo "Dest folder is $folder"
+    fi
+    if [ -z "$ext" ];then
+        echo "Total lines in $folder: "
+        find "$folder" -print0| xargs -0 -IR wc -l R | awk 'BEGIN{sum=0}{sum+=$1}END{print sum}'
+    else
+        echo "Total lines with ext($ext) in $folder: "
+        find "$folder" -iname "*.$ext" -print0| xargs -0 -IR wc -l R | awk 'BEGIN{sum=0}{sum+=$1}END{print sum}'
+    fi
+}
+
 #END function
 
 #BEGIN others
