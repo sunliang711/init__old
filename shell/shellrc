@@ -949,7 +949,7 @@ function lines(){
         echo "$folder not exist"
         return 1
     fi
-    if [ -s "$folder" ];then
+    if [ -h "$folder" ];then
         echo "$folder is soft link"
         folder=$(realpath $folder)
         echo "Dest folder is $folder"
