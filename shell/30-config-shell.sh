@@ -94,8 +94,9 @@ install(){
     #the actual config is in file ~/.bashrc(for linux) or ~/.bash_profile(for mac)
 
     #grep for $startLine quietly
-    if grep  -q "$startLine" $cfgFile;then
-        echo "Already installed,Quit! (or use reinstall to reinstall)"
+    echo "Add \"source $rc\" to $cfgFile ..."
+    if grep  -q "$startLine" $cfgFile 2>/dev/null;then
+        echo "Already added,Quit! (or use reinstall to reinstall)"
         exit 1
     else
         echo "Install setting of $shell..."
