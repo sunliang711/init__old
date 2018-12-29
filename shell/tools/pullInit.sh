@@ -18,4 +18,4 @@ Time: $(date +%FT%T)
 Message:
 EOF
 git pull >> $logfile
-echo "*************************" >> $logfile
+echo "**************************************************" >> $logfile
