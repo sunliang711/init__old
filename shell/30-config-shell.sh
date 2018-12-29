@@ -76,7 +76,7 @@ install(){
 
     #grep for $startLine quietly
     if grep  -q "$startLine" $cfgFile;then
-        echo "Already installed,Quit!"
+        echo "Already installed,Quit! (or use reinstall to reinstall)"
         exit 1
     else
         echo "Install setting of $shell..."
