@@ -59,7 +59,9 @@ install(){
                 echo 'set editing-mode vi' >> "$HOME/.inputrc"
             fi
 
-            (crontab -l 2>/dev/null;echo "*/1 * * * * /usr/local/bin/tools/pullInit.sh") | crontab -
+            if ! crontab -l 2>/dev/null | grep -q pullInit.sh;then
+                (crontab -l 2>/dev/null;echo "*/1 * * * * /usr/local/bin/tools/pullInit.sh") | crontab -
+            fi
             ;;
     esac
     shell=${1:?"missing shell type"}
@@ -80,6 +82,14 @@ install(){
             exit 1
             ;;
     esac
+    #link tools to /usr/local/bin/tools
+    echo "link tools to /usr/local/bin/tools ..."
+    if (($EUID!=0));then
+        sudo ln -sf $SCRIPTDIR/tools /usr/local/bin
+    else
+        ln -sf $SCRIPTDIR/tools /usr/local/bin
+    fi
+    echo "Done"
     #install custom config
     #the actual config is in file ~/.bashrc(for linux) or ~/.bash_profile(for mac)
 
@@ -107,12 +117,6 @@ install(){
         #insert tailer
         echo "$endLine" >> $cfgFile
 
-        #link tools to /usr/local/bin/tools
-        if (($EUID!=0));then
-            sudo ln -sf $SCRIPTDIR/tools /usr/local/bin
-        else
-            ln -sf $SCRIPTDIR/tools /usr/local/bin
-        fi
         echo "Done."
     fi
 }
@@ -150,6 +154,25 @@ uninstall(){
             rm /usr/local/bin/tools
         fi
     fi
+
+    case $(uname) in
+        Darwin)
+            if [ -e "$HOME/Library/LaunchAgents/pullInit.plist" ];then
+                launchctl unload -w "$HOME/Library/LaunchAgents/pullInit.plist" 2>/dev/null
+                rm "$HOME/Library/LaunchAgents/pullInit.plist"
+            fi
+            if [ -e "$HOME/.editrc" ];then
+                sed -i.bak '/bind -v/d' $HOME/.editrc
+                rm $HOME/.editrc.bak
+            fi
+            ;;
+        Linux)
+            if [ -e "$HOME/.inputrc" ];then
+                sed -i '/set editing-mode vi/d' $HOME/.inputrc
+            fi
+            crontab -l 2>/dev/null | grep -v pullInit.sh | crontab -
+            ;;
+    esac
 
     echo "Done."
 }
