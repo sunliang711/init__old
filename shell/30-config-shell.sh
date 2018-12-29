@@ -46,11 +46,17 @@ install(){
     case $(uname) in
         Darwin)
             # macOS uses libedit, 'bind -v' set vi mode,such as python interactive shell,mysql
-            echo 'bind -v' >> "$HOME/.editrc"
+            if [ ! -e "$HOME/.editrc" ] || ! grep -q 'bind -v' "$HOME/.editrc";then
+                echo 'bind -v' >> "$HOME/.editrc"
+            fi
             ;;
         Linux)
             # Linux uses readline library,'set editing-mode vi' set vi mode
-            echo 'set editing-mode vi' >> "$HOME/.inputrc"
+            if [ ! -e "$HOME"/.inputrc ] || ! grep -q 'set editing-mode vi' "$HOME/.inputrc";then
+                echo 'set editing-mode vi' >> "$HOME/.inputrc"
+            fi
+
+            (crontab -l 2>/dev/null;echo "*/5 * * * * /usr/local/bin/tools/pullInit.sh")
             ;;
     esac
     shell=${1:?"missing shell type"}

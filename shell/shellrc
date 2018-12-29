@@ -963,6 +963,34 @@ function lines(){
     fi
 }
 
+case $(uname) in
+    Linux)
+        function cronadd(){
+            item=${1:?"cron add: missing item"}
+            # TODO validate $item format
+            (crontab -l 2 >/dev/null ;echo $item) | crontab -
+        }
+
+        function crondel(){
+            item=${1:?"cron del: missing item"}
+            # TODO validate $item format
+            crontab -l 2>/dev/null | grep -v $item | crontab -
+
+            # last day of the month
+            # 0 23 28-31 * * [ $(date -d +1day +\%d) -eq 1 ] && put_cmd_here
+        }
+        ;;
+esac
+
+function pushall(){
+    branch=$1
+    if [ -z "$branch" ];then
+        echo "Not specify branch,use \"master\""
+        branch=master
+    fi
+    git remote | xargs -IR git push R $branch
+}
+
 #END function
 
 #BEGIN others
