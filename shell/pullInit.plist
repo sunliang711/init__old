@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+    <key>Label</key>
+    <string>pullInit</string>
+    <key>ProgramArguments</key>
+    <array>
+        <string>/usr/local/bin/tools/pullInit.sh</string>
+    </array>
+    <!--
+    <key>StandardOutPath</key>
+    <string>STD_OUT_FILE_PUT_HERE</string>
+    -->
+    <!--
+    <key>StandardErrorPath</key>
+    <string>STD_ERR_FILE_PUT_HERE</string>
+    -->
+    <key>RunAtLoad</key>
+    <true/>
+    <key>StartInterval</key>
+    <integer>60</integer>
+</dict>
+</plist>

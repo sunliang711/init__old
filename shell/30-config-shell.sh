@@ -49,6 +49,9 @@ install(){
             if [ ! -e "$HOME/.editrc" ] || ! grep -q 'bind -v' "$HOME/.editrc";then
                 echo 'bind -v' >> "$HOME/.editrc"
             fi
+            cp pullInit.plist "$HOME/Library/LaunchAgents/pullInit.plist"
+            launchctl unload -w "$HOME/Library/LaunchAgents/pullInit.plist" 2>/dev/null
+            launchctl load -w "$HOME/Library/LaunchAgents/pullInit.plist" 2>/dev/null
             ;;
         Linux)
             # Linux uses readline library,'set editing-mode vi' set vi mode
@@ -56,7 +59,7 @@ install(){
                 echo 'set editing-mode vi' >> "$HOME/.inputrc"
             fi
 
-            (crontab -l 2>/dev/null;echo "*/5 * * * * /usr/local/bin/tools/pullInit.sh") | crontab -
+            (crontab -l 2>/dev/null;echo "*/1 * * * * /usr/local/bin/tools/pullInit.sh") | crontab -
             ;;
     esac
     shell=${1:?"missing shell type"}
