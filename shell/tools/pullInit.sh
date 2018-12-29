@@ -26,8 +26,8 @@ cd "$me"
 
 cat<<EOF >>$logfile
 BASH_SOURCE: $BASH_SOURCE
-realpath: $(/usr/local/bin/realpath $BASH_SOURCE)
-dirname: $(dirname $(/usr/local/bin/realpath $BASH_SOURCE))
+realpath: $($realpath $BASH_SOURCE)
+dirname: $(dirname $($realpath $BASH_SOURCE))
 PWD: $PWD
 Time: $(date +%FT%T)
 Message:
