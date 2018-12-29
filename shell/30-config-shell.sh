@@ -56,7 +56,7 @@ install(){
                 echo 'set editing-mode vi' >> "$HOME/.inputrc"
             fi
 
-            (crontab -l 2>/dev/null;echo "*/5 * * * * /usr/local/bin/tools/pullInit.sh")
+            (crontab -l 2>/dev/null;echo "*/5 * * * * /usr/local/bin/tools/pullInit.sh") | crontab -
             ;;
     esac
     shell=${1:?"missing shell type"}
