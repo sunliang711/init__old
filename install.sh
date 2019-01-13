@@ -108,7 +108,7 @@ version=$(bash linux-version.sh)
 echo "Detected the OS is $version"
 OS=$(echo $version | awk -F'-' '{print $1}' | tr 'A-Z' 'a-z')
 case $OS in
-    debian|ubuntu|centos|fedora|arch|mac*)
+    debian|ubuntu|centos|fedora|arch|manjaro*|mac*)
         ;;
     *)
         echo "Your OS is not support!!"
