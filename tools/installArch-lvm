@@ -82,9 +82,13 @@ genfstab -U /mnt >>/mnt/etc/fstab
 #swap config to fstab
 #echo "UUID=$(lsblk -no UUID /dev/${disk}2) none swap defaults 0 0" >>/mnt/etc/fstab
 echo "/dev/${VG}/lvmswap none swap defaults 0 0" >>/mnt/etc/fstab
+mkdir /mnt/hostrun
+mount --bind /run /mnt/hostrun
 
 #'EOF2' can avoid variable expanding
 cat>/mnt/installArch.sh<<'EOF2'
+mkdir /run/lvm
+mount --bind /hostrun/lvm /run/lvm
 ln -sf /usr/share/zoneinfo/Asia/Shanghai /etc/localtime
 hwclock --systohc
 sed -i 's/^#\(en_US.UTF-8 UTF-8\)/\1/' /etc/locale.gen
@@ -124,6 +128,7 @@ mkinitcpio -p linux
 
 echo 'default root password: root'
 echo "Now exit,then reboot, after reboot execute /afterReboot.sh"
+umount /run/lvm
 
 #'afterReboot' can avoid variable expanding
 cat>afterReboot.sh<<'afterReboot'
