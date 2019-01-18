@@ -11,8 +11,25 @@ fi
 timedatectl set-ntp true
 read -p "use Chinese linux source? [Y/n] " useChinese
 if [[ "$useChinese" != [nN] ]];then
-    sed -i.bak '1iServer = https://mirrors.tuna.tsinghua.edu.cn/archlinux/$repo/os/$arch' /etc/pacman.d/mirrorlist
-    sed -i.bak '1iServer = http://mirrors.163.com/archlinux/$repo/os/$arch' /etc/pacman.d/mirrorlist
+    cat<<-'EOF' >/tmp/china.mirror
+	# China
+	Server = http://mirrors.163.com/archlinux/$repo/os/$arch
+	Server = http://mirror.lzu.edu.cn/archlinux/$repo/os/$arch
+	Server = http://mirrors.neusoft.edu.cn/archlinux/$repo/os/$arch
+	Server = https://mirrors.neusoft.edu.cn/archlinux/$repo/os/$arch
+	Server = http://mirrors.shu.edu.cn/archlinux/$repo/os/$arch
+	Server = https://mirrors.shu.edu.cn/archlinux/$repo/os/$arch
+	Server = https://mirrors.sjtug.sjtu.edu.cn/archlinux/$repo/os/$arch
+	Server = http://mirrors.tuna.tsinghua.edu.cn/archlinux/$repo/os/$arch
+	Server = https://mirrors.tuna.tsinghua.edu.cn/archlinux/$repo/os/$arch
+	Server = http://mirrors.ustc.edu.cn/archlinux/$repo/os/$arch
+	Server = https://mirrors.ustc.edu.cn/archlinux/$repo/os/$arch
+	Server = http://mirrors.xjtu.edu.cn/archlinux/$repo/os/$arch
+	Server = https://mirrors.xjtu.edu.cn/archlinux/$repo/os/$arch
+	Server = http://mirrors.zju.edu.cn/archlinux/$repo/os/$arch
+	EOF
+    cat /tmp/china.mirror /etc/pacman.d/mirrorlist > /tmp/full.mirror
+    mv /tmp/full.mirror /etc/pacman.d/mirrorlist
 fi
 
 while read -p "boot partition size: (default:512M) " bootSize;do
@@ -65,14 +82,16 @@ mkfs.ext4 -F /dev/${disk}1
 pvcreate /dev/${disk}2
 
 VG=arch_vg
+SWAP=lvm_swap
+ROOT=lvm_root
+
 vgcreate ${VG} /dev/${disk}2
+lvcreate -L ${swapSize}M ${VG} -n $SWAP
+lvcreate -l 100%FREE ${VG} -n $ROOT
 
-lvcreate -L ${swapSize}M ${VG} -n lvmswap
-lvcreate -l 100%FREE ${VG} -n lvmroot
-
-mkswap /dev/${VG}/lvmswap
-mkfs.ext4 -F /dev/${VG}/lvmroot
-mount /dev/${VG}/lvmroot /mnt
+mkswap /dev/${VG}/$SWAP
+mkfs.ext4 -F /dev/${VG}/$ROOT
+mount /dev/${VG}/$ROOT /mnt
 mkdir /mnt/boot
 mount /dev/${disk}1 /mnt/boot
 mount /dev/${VG}/lvmboot /mnt/boot
@@ -81,7 +100,7 @@ pacstrap /mnt base base-devel --needed
 genfstab -U /mnt >>/mnt/etc/fstab
 #swap config to fstab
 #echo "UUID=$(lsblk -no UUID /dev/${disk}2) none swap defaults 0 0" >>/mnt/etc/fstab
-echo "/dev/${VG}/lvmswap none swap defaults 0 0" >>/mnt/etc/fstab
+echo "/dev/${VG}/$SWAP none swap defaults 0 0" >>/mnt/etc/fstab
 mkdir /mnt/hostrun
 mount --bind /run /mnt/hostrun
 
@@ -89,6 +108,7 @@ mount --bind /run /mnt/hostrun
 cat>/mnt/installArch.sh<<'EOF2'
 mkdir /run/lvm
 mount --bind /hostrun/lvm /run/lvm
+
 ln -sf /usr/share/zoneinfo/Asia/Shanghai /etc/localtime
 hwclock --systohc
 sed -i 's/^#\(en_US.UTF-8 UTF-8\)/\1/' /etc/locale.gen
@@ -136,14 +156,12 @@ cat>afterReboot.sh<<'afterReboot'
 systemctl enable dhcpcd
 systemctl start dhcpcd
 
-#add new user of group sudo
+echo '%sudo ALL=(ALL:ALL) NOPASSWD:ALL' >/etc/sudoers.d/custom-sudoers
 groupadd sudo
 read -p "add new user: " user
 useradd -m -G sudo $user
 echo "set password for $user"
 passwd $user
-#uncomment sudo priviledge in file /etc/sudoers
-sed -i 's/^#\( %sudo.*$\)/\1/' /etc/sudoers
 
 #set time
 sudo timedatectl set-ntp true

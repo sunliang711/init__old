@@ -132,20 +132,19 @@ cat>afterReboot.sh<<'afterReboot'
 systemctl enable dhcpcd
 systemctl start dhcpcd
 
-#add new user of group sudo
+echo '%sudo ALL=(ALL:ALL) NOPASSWD:ALL' >/etc/sudoers.d/custom-sudoers
 groupadd sudo
 read -p "add new user: " user
 useradd -m -G sudo $user
 echo "set password for $user"
 passwd $user
-#uncomment sudo priviledge in file /etc/sudoers
-sed -i 's/^#\( %sudo.*$\)/\1/' /etc/sudoers
 
 #set time
 sudo timedatectl set-ntp true
 
 #install git
 pacman -S git --noconfirm --needed
+
 rm /installArch.sh
 rm /afterReboot.sh
 afterReboot
