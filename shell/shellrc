@@ -5,7 +5,7 @@ export LC_CTYPE=en_US.UTF-8
 export LC_ALL=en_US.UTF-8
 
 #BEGIN environment variable
-export PREFIX=$HOME/Dropbox/OneDrive/Workspace
+export PREFIX=$HOME/Workspace
 [ -d $PREFIX/go ] && export GOPATH=$PREFIX/go && export GOBIN=$GOPATH/bin
 
 append_path(){
@@ -79,6 +79,13 @@ fi
 alias pushall='git remote | xargs -L1 -t -IR git push R'
 alias fetchall='git remote | xargs -L1 -t -IR git fetch R'
 
+if command -v proxychains >/dev/null 2>&1;then
+    alias pc='proxychains'
+elif command -v proxychains4 >/dev/null 2>&1;then
+    alias pc='proxychains4'
+elif command -v proxychains5 >/dev/null 2>&1;then
+    alias pc='proxychains5'
+fi
 
 case $(uname) in
     "Linux")
@@ -97,7 +104,7 @@ case $(uname) in
         alias l='ls -G'
         alias ls='ls -G'
         #brew with local proxy
-        alias brewlp='echo "Using socks5 proxy: ALL_PROXY=socks5://localhost:1080"&&ALL_PROXY=socks5://localhost:1080 brew'
+        # alias brewlp='echo "Using socks5 proxy: ALL_PROXY=socks5://localhost:1080"&&ALL_PROXY=socks5://localhost:1080 brew'
         # export PATH=/usr/local/Cellar/privoxy/3.0.26/sbin:$PATH
         ;;
 esac
@@ -247,6 +254,11 @@ proxyon(){
         echo "alias pip3=\"pip3 --proxy $proxy\""
         alias pip3="pip3 --proxy $proxy"
     fi
+    if command -v npm >/dev/null 2>&1;then
+        echo "npm config set proxy $proxy"
+        npm config set proxy $proxy
+        npm config set https-proxy $proxy
+    fi
 
     ##set curl proxy
     #echo "alias curl=curl -x $proxy"
@@ -289,6 +301,8 @@ proxyoff(){
     echoExec "unalias pip3" 2>/dev/null
     # local configFile="/tmp/curlrc"
     # rm -rf "$configFile" 2>/dev/null
+    npm config rm proxy
+    npm config rm https-proxy
 }
 
 proxystatus(){
@@ -990,6 +1004,12 @@ function pushall(){
         branch=master
     fi
     git remote | xargs -IR git push R $branch
+}
+
+function brewlp(){
+    export ALL_PROXY="socks5://localhost:1080"
+    brew "$@"
+    unset ALL_PROXY
 }
 
 #END function
