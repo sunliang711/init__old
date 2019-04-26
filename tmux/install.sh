@@ -1,6 +1,6 @@
 #!/bin/bash
 
-this=$(cd $(dirname $BASH_SOURCE) && PWD)
+this=$(cd $(dirname $BASH_SOURCE) && pwd)
 cd $this
 
 user=${SUDO_USER:-$(whoami)}
