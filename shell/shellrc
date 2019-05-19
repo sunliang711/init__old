@@ -1059,6 +1059,13 @@ function newpy(){
     cat> "$filename" <<-EOF
 		#!/usr/bin/env python3
 		# -*- coding: utf-8 -*-
+		import logging
+
+		LOG_FORMAT = "%(asctime)s - %(levelname)s - %(message)s"
+		DATE_FORMAT = "%Y/%m/%d %H:%M:%S %p"
+		#logging.basicConfig(level=logging.DEBUG, format=LOG_FORMAT, datefmt=DATE_FORMAT)
+		#logging.basicConfig(filename='my.log', level=logging.DEBUG, format=LOG_FORMAT, datefmt=DATE_FORMAT)
+
 		def main():
 		    pass
 
