@@ -1015,15 +1015,57 @@ function pushall(){
 }
 
 function brewlp(){
-<<<<<<< HEAD
-    export ALL_PROXY=socks5://localhost:1080
+    port=${1:-'1080'}
+    export ALL_PROXY="socks5://localhost:$port"
+    echo "export $(tput setaf 1)ALL_PROXY=\"socks5://localhost:$port\"$(tput sgr0)"
     brew "$@"
-    # unset ALL_PROXY
-=======
-    export ALL_PROXY="socks5://localhost:1080"
-    brew "$@"
+    echo "$(tput setaf 1)unset ALL_PROXY$(tput sgr0)"
     unset ALL_PROXY
->>>>>>> b991c979f94e809b4a30b3f168d6b2aa3878e782
+}
+
+function newsh(){
+    filename=${1:?'missing new shell script name'}
+    editor=vi
+    if command -v vim >/dev/null 2>&1;then
+        editor=vim
+    fi
+    cat>"$filename" <<-'EOF'
+		#!/bin/bash
+		rpath="$(readlink ${BASH_SOURCE})"
+		if [ -z "$rpath" ];then
+		    rpath=${BASH_SOURCE}
+		fi
+		root="$(cd $(dirname $rpath) && pwd)"
+		cd "$root"
+
+		user="${SUDO_USER:-$(whoami)}"
+		home="$(eval echo ~$user)"
+
+		red=$(tput setaf 1)
+		yellow=$(tput setaf 3)
+		blue=$(tput setaf 4)
+		cyan=$(tput setaf 5)
+		reset=$(tput sgr0)
+		EOF
+    "$editor" "$filename"
+}
+
+function newpy(){
+    filename=${1:?'missing new python file name'}
+    editor=vi
+    if command -v vim >/dev/null 2>&1;then
+        editor=vim
+    fi
+    cat> "$filename" <<-EOF
+		#!/usr/bin/env python3
+		# -*- coding: utf-8 -*-
+		def main():
+		    pass
+
+		if __name__ == '__main__':
+		    main()
+	EOF
+    "$editor" "$filename"
 }
 
 #END function
