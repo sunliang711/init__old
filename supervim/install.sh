@@ -265,10 +265,10 @@ if [[ -n "$ycm" ]];then
     sed -ibak "s|\"[ ]*\(Plug 'Valloric/YouCompleteMe'\)|\1|" $cfg
     rm -f "${cfg}bak"
     case $whichVim in
-        vim|neovim)
+        nvim|neovim)
             dest="$HOME/.config/nvim/plugins/YouCompleteMe"
             ;;
-        nvim)
+        vim)
             dest="$HOME/.vim/plugins/YouCompleteMe"
             ;;
     esac

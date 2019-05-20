@@ -6,13 +6,18 @@ import subprocess
 import os
 import logging
 
+LOG_FORMAT = "[%(asctime)s - %(levelname)s - %(message)s]"
+DATE_FORMAT = "%Y/%m%d %H:%M:%S %p"
+
+
 DefaultHost = "socks5://localhost"
 DefaultPort = 1080
 DefaultMTime = 3
 
 logging.basicConfig(
         level = logging.DEBUG,
-        format = "[%(asctime)s] %(name)s:%(levelname)s: %(message)s"
+        format = LOG_FORMAT,
+        datefmt=DATE_FORMAT
         )
 me=os.path.realpath(__file__)
 
