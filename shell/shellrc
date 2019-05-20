@@ -710,6 +710,8 @@ cat>/tmp/$1.plist<<EOF
 <dict>
     <key>Label</key>
     <string></string>
+    <key>WorkingDirectory</key>
+    <string>PWD</string>
     <key>ProgramArguments</key>
     <array>
         <string>PROGRAM_PUT_HERE</string>
