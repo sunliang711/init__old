@@ -158,8 +158,15 @@ elif command -v proxychains4 >/dev/null 2>&1;then
 fi
 
 #用法:在echo中使用$(RED)some-text-to-be-color-red$(CLEAR)
-alias RED='tput setaf 1'
-alias CLEAR='tput sgr0'
+# alias RED='tput setaf 1'
+# alias CLEAR='tput sgr0'
+
+#用法:echo ${red}red text${reset}
+red=$(tput setaf 1)
+yellow=$(tput setaf 3)
+blue=$(tput setaf 4)
+cyan=$(tput setaf 5)
+reset=$(tput sgr0)
 # RED=$(tput setaf 1)
 # CLEAR=$(tput sgr0)
 #END alias
@@ -1026,7 +1033,11 @@ function brewlp(){
 }
 
 function newsh(){
-    filename=${1:?'missing new shell script name'}
+    filename=${1}
+    if [ -z "$filename" ];then
+        echo "Usage: ${green}$(basename $0)${reset} <new-shell-script-file-name>"
+        return 1
+    fi
     editor=vi
     if command -v vim >/dev/null 2>&1;then
         editor=vim
@@ -1053,7 +1064,11 @@ function newsh(){
 }
 
 function newpy(){
-    filename=${1:?'missing new python file name'}
+    filename=${1}
+    if [ -z "$filename" ];then
+        echo "Usage: ${green}$(basename $0)${reset} <new-python-file-name>"
+        return 1
+    fi
     editor=vi
     if command -v vim >/dev/null 2>&1;then
         editor=vim
