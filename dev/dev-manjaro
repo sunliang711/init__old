@@ -17,6 +17,9 @@ home=$(eval echo ~$user)
 basicApps="tmux neovim vim git openssh net-tools dnsutils tree screenfetch wget cronie unzip zsh ctags fontconfig pv lsof"
 devApps="base-devel linux-headers clang cmake python boost python-pip go go-tools"
 
+sudo pacman-mirrors -i -c China -m rank
+sudo pacman -Syy
+
 read -p "Install development apps (ie:clang python boost go) [Y/n] "  installDev
 echo "pacman -Syu ..."
 pacman -Syu --noconfirm --needed >/dev/null 2>&1 || { echo "pacman upate failed!";exit 1; }
