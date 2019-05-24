@@ -3,6 +3,7 @@ set -o vi
 #END
 export LC_CTYPE=en_US.UTF-8
 export LC_ALL=en_US.UTF-8
+export TZ='Asia/Shanghai'
 
 #BEGIN environment variable
 export PREFIX=$HOME/Workspace
@@ -1059,6 +1060,23 @@ function newsh(){
 		blue=$(tput setaf 4)
 		cyan=$(tput setaf 5)
 		reset=$(tput sgr0)
+runAsRoot(){
+    cmd="$@"
+    if [ -z "$cmd" ];then
+        echo "${red}Need cmd${reset}"
+        exit 1
+    fi
+
+    if (($EUID==0));then
+        sh -c "$cmd"
+    else
+        if ! command -v sudo >/dev/null 2>&1;then
+            echo "Need sudo cmd"
+            exit 1
+        fi
+        sudo sh -c "$cmd"
+    fi
+}
 		EOF
     "$editor" "$filename"
 }
