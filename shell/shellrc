@@ -266,12 +266,8 @@ proxyon(){
     if command -v npm >/dev/null 2>&1;then
         echo "npm config set proxy $proxy"
         npm config set proxy $proxy
+        echo "npm config set https-proxy $proxy"
         npm config set https-proxy $proxy
-    fi
-
-    if command -v npm >/dev/null 2>&1;then
-        npm config set https-proxy $proxy
-        npm config set proxy $proxy
     fi
 
     ##set curl proxy
@@ -316,8 +312,8 @@ proxyoff(){
     # local configFile="/tmp/curlrc"
     # rm -rf "$configFile" 2>/dev/null
     if command -v npm >/dev/null 2>&1;then
-        npm config set https-proxy $proxy
-        npm config set proxy $proxy
+        npm config delete https-proxy
+        npm config delete proxy
     fi
 }
 
