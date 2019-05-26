@@ -2,206 +2,149 @@
 if [ -e /tmp/proxy ];then
     source /tmp/proxy
 fi
-SCRIPTDIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-cd "$SCRIPTDIR"
-
-USAGE="usage: $(basename $0) {install|uninstall|reinstall}"
-if (($# == 0));then
-    echo "$USAGE" >& 2
-    exit 0
+rpath="$(readlink $BASH_SOURCE)"
+if [ -z "$rpath" ];then
+    rpath="$BASH_SOURCE"
 fi
+root="$(cd $(dirname $rpath) && pwd)"
+cd "$root"
+user=${SUDO_USER:-$(whoami)}
+home=$(eval echo ~$user)
 
-if (($EUID!=0));then
-    #非root用户的时候,需要检测是否有sudo命令,如果有还要检测当前用户可以使用sudo命令
-    #因为下面需要把shellrc复制到/etc,这要求root权限
-    if command -v sudo >/dev/null 2>&1;then
-        sudo true || { echo "Error: Current user cannot use sudo cmd!";exit 1; }
-    else
-        echo "Error: Current user is not root,and can not find sudo cmd!"
+red=$(tput setaf 1)
+green=$(tput setaf 2)
+yellow=$(tput setaf 3)
+blue=$(tput setaf 4)
+cyan=$(tput setaf 5)
+reset=$(tput sgr0)
+runAsRoot(){
+    cmd="$@"
+    if [ -z "$cmd" ];then
+        echo "${red}Need cmd${reset}"
         exit 1
     fi
-fi
 
-OS=""
-case $(uname) in
-    "Darwin")
-        OS="darwin"
-        ;;
-    "Linux")
-        OS="linux"
-        ;;
-    *)
-        echo "Unknown os,Quit!"
-        exit 1;;
-esac
-
-
+    if (($EUID==0));then
+        sh -c "$cmd"
+    else
+        if ! command -v sudo >/dev/null 2>&1;then
+            echo "Need sudo cmd"
+            exit 1
+        fi
+        sudo sh -c "$cmd"
+    fi
+}
 startLine="##CUSTOM BEGIN"
 endLine="##CUSTOM END"
 
-user=${SUDO_USER:-$(whoami)}
-HOME=$(eval echo ~$user)
+usage(){
+    cat<<-EOF
+Usage: $(basename $0) CMD
+
+CMD:
+    install     bash|zsh
+    uninstall   bash|zsh
+EOF
+    exit 1
+}
+
+bashrc="${home}/.bashrc"
+zshrc="${home}/.zshrc"
+globalrc=/etc/shellrc
 
 install(){
+    local type=${1}
+    if [ -z "$type" ];then
+        usage
+    fi
+    case $type in
+        bash)
+            configFile="$bashrc"
+            ;;
+        zsh)
+            configFile="$zshrc"
+            ;;
+        *)
+            usage
+            ;;
+    esac
     case $(uname) in
         Darwin)
             # macOS uses libedit, 'bind -v' set vi mode,such as python interactive shell,mysql
-            if [ ! -e "$HOME/.editrc" ] || ! grep -q 'bind -v' "$HOME/.editrc";then
-                echo 'bind -v' >> "$HOME/.editrc"
+            if [ ! -e "$home/.editrc" ] || ! grep -q 'bind -v' "$home/.editrc";then
+                echo 'bind -v' >> "$home/.editrc"
             fi
-            # cp pullInit.plist "$HOME/Library/LaunchAgents/pullInit.plist"
-            # launchctl unload -w "$HOME/Library/LaunchAgents/pullInit.plist" 2>/dev/null
-            # launchctl load -w "$HOME/Library/LaunchAgents/pullInit.plist" 2>/dev/null
             ;;
         Linux)
             # Linux uses readline library,'set editing-mode vi' set vi mode
-            if [ ! -e "$HOME"/.inputrc ] || ! grep -q 'set editing-mode vi' "$HOME/.inputrc";then
-                echo 'set editing-mode vi' >> "$HOME/.inputrc"
+            if [ ! -e "$home"/.inputrc ] || ! grep -q 'set editing-mode vi' "$home/.inputrc";then
+                echo 'set editing-mode vi' >> "$home/.inputrc"
             fi
-
-            # if ! crontab -l 2>/dev/null | grep -q pullInit.sh;then
-            #     (crontab -l 2>/dev/null;echo "*/1 * * * * /usr/local/bin/tools/pullInit.sh") | crontab -
-            # fi
             ;;
     esac
-    shell=${1:?"missing shell type"}
-    case "$shell" in
-        bash)
-            if [[ "$OS" == linux ]];then
-                cfgFile=$HOME/.bashrc
-            else
-                #mac os
-                cfgFile=$HOME/.bash_profile
-            fi
-            ;;
-        zsh)
-            cfgFile=$HOME/.zshrc
-            ;;
-        *)
-            echo -e "Only support bash or zsh! ${RED}\u2717${RESET}"
-            exit 1
-            ;;
-    esac
-    #link tools to /usr/local/bin/tools
-    echo "link tools to /usr/local/bin/tools ..."
-    if (($EUID!=0));then
-        sudo ln -sf $SCRIPTDIR/tools /usr/local/bin
+    runAsRoot ln -sf "$root/tools" /usr/local/bin
+    if grep -q "$startLine" "$configFile";then
+        echo "Already exist."
+        exit 0
     else
-        ln -sf $SCRIPTDIR/tools /usr/local/bin
-    fi
-    echo "Done"
-    #install custom config
-    #the actual config is in file ~/.bashrc(for linux) or ~/.bash_profile(for mac)
-
-    #grep for $startLine quietly
-    echo "Add \"source $rc\" to $cfgFile ..."
-    if grep  -q "$startLine" $cfgFile 2>/dev/null;then
-        echo "Already added,Quit! (or use reinstall to reinstall)"
-        exit 1
-    else
-        echo "Install setting of $shell..."
-        rc=/etc/shellrc
-        if [ ! -e $rc ];then
-            echo "copy shellrc to $rc"
-            if (($EUID!=0));then
-                # sudo cp shellrc  $rc
-                sudo ln -sf "$SCRIPTDIR"/shellrc $rc
-            else
-                # cp shellrc  $rc
-                ln -sf "$SCRIPTDIR"/shellrc $rc
-            fi
+        if [ -e $"globalrc" ];then
+            echo "link shellrc to $globalrc"
+            runAsRoot ln -sf "$root/shellrc" $globalrc
         fi
-        #insert header
-        echo "$startLine" >> $cfgFile
-        #insert body
-        echo "[ -f $rc ] && source $rc" >> $cfgFile
-        #insert tailer
-        echo "$endLine" >> $cfgFile
 
+        echo "$startLine" >> "$configFile"
+        echo "[ -f $globalrc ] && source $globalrc" >> "$configFile"
+        echo "$endLine" >> "$configFile"
         echo "Done."
     fi
 }
 
 uninstall(){
-    shell=${1:?"missing shell type"}
-    case "$shell" in
+    local type=${1}
+    if [ -z "$typ3" ];then
+        usage
+    fi
+    case $type in
         bash)
-            if [[ "$OS" == linux ]];then
-                cfgFile=$HOME/.bashrc
-            else
-                #mac os
-                cfgFile=$HOME/.bash_profile
-            fi
+            configFile="$bashrc"
             ;;
         zsh)
-            cfgFile=$HOME/.zshrc
+            configFile="$zshrc"
             ;;
         *)
-            echo -e "Only support bash or zsh! ${RED}\u2717${RESET}"
-            exit 1
+            usage
             ;;
     esac
-    echo "Uninstall setting of $shell..."
-    #uninstall custom config
-    #delete lines from header to tailer
-    sed -ibak -e "/$startLine/,/$endLine/ d" $cfgFile
-    rm ${cfgFile}bak
-    if [ -e /etc/shellrc ];then
-        if (($EUID!=0));then
-            sudo rm /etc/shellrc
-            sudo rm /usr/local/bin/tools
-        else
-            rm /etc/shellrc
-            rm /usr/local/bin/tools
-        fi
-    fi
-
     case $(uname) in
         Darwin)
-            if [ -e "$HOME/Library/LaunchAgents/pullInit.plist" ];then
-                launchctl unload -w "$HOME/Library/LaunchAgents/pullInit.plist" 2>/dev/null
-                rm "$HOME/Library/LaunchAgents/pullInit.plist"
-            fi
-            if [ -e "$HOME/.editrc" ];then
-                sed -i.bak '/bind -v/d' $HOME/.editrc
-                rm $HOME/.editrc.bak
+            if [ -e "$home/.editrc" ];then
+                sed -i.bak '/bind -v/d' $home/.editrc
+                rm $home/.editrc.bak
             fi
             ;;
         Linux)
-            if [ -e "$HOME/.inputrc" ];then
-                sed -i '/set editing-mode vi/d' $HOME/.inputrc
+            if [ -e "$home/.inputrc" ];then
+                sed -i '/set editing-mode vi/d' $home/.inputrc
             fi
-            crontab -l 2>/dev/null | grep -v pullInit.sh | crontab -
             ;;
     esac
+    runAsRoot rm $globalrc
+    runAsRoot rm /usr/local/bin/tools
 
-    echo "Done."
+    sed -ibak -e "/$startLine/,/$endLine/ d" "$configFile"
 }
 
-reinstall(){
-    uninstall bash
-    uninstall zsh
-    install bash
-    install zsh
-}
+cmd=$1
+shift
 
-case "$1" in
-    install | ins*)
-        install bash
-        install zsh
-        exit 0
+case $cmd in
+    install)
+        install "$@"
         ;;
-    uninstall | unins*)
-        uninstall bash
-        uninstall zsh
-        exit 0
+    uninstall)
+        uninstall "$@"
         ;;
-    reinstall | reins*)
-        reinstall
-        exit 0
-        ;;
-    --help | -h | --h* | *)
-        echo "$USAGE" >& 2
-        exit 0
+    *)
+        usage
         ;;
 esac

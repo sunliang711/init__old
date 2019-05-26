@@ -1,0 +1,208 @@
+#!/bin/bash
+if [ -e /tmp/proxy ];then
+    source /tmp/proxy
+fi
+SCRIPTDIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+cd "$SCRIPTDIR"
+runAsRoot(){
+    cmd="$@"
+    if [ -z "$cmd" ];then
+        echo "${red}Need cmd${reset}"
+        exit 1
+    fi
+
+    if (($EUID==0));then
+        sh -c "$cmd"
+    else
+        if ! command -v sudo >/dev/null 2>&1;then
+            echo "Need sudo cmd"
+            exit 1
+        fi
+        sudo sh -c "$cmd"
+    fi
+}
+USAGE="usage: $(basename $0) {install|uninstall|reinstall}"
+if (($# == 0));then
+    echo "$USAGE" >& 2
+    exit 0
+fi
+
+if (($EUID!=0));then
+    #非root用户的时候,需要检测是否有sudo命令,如果有还要检测当前用户可以使用sudo命令
+    #因为下面需要把shellrc复制到/etc,这要求root权限
+    if command -v sudo >/dev/null 2>&1;then
+        sudo true || { echo "Error: Current user cannot use sudo cmd!";exit 1; }
+    else
+        echo "Error: Current user is not root,and can not find sudo cmd!"
+        exit 1
+    fi
+fi
+
+OS=""
+case $(uname) in
+    "Darwin")
+        OS="darwin"
+        ;;
+    "Linux")
+        OS="linux"
+        ;;
+    *)
+        echo "Unknown os,Quit!"
+        exit 1;;
+esac
+
+
+startLine="##CUSTOM BEGIN"
+endLine="##CUSTOM END"
+
+user=${SUDO_USER:-$(whoami)}
+HOME=$(eval echo ~$user)
+
+install(){
+    case $(uname) in
+        Darwin)
+            # macOS uses libedit, 'bind -v' set vi mode,such as python interactive shell,mysql
+            if [ ! -e "$HOME/.editrc" ] || ! grep -q 'bind -v' "$HOME/.editrc";then
+                echo 'bind -v' >> "$HOME/.editrc"
+            fi
+            # cp pullInit.plist "$HOME/Library/LaunchAgents/pullInit.plist"
+            # launchctl unload -w "$HOME/Library/LaunchAgents/pullInit.plist" 2>/dev/null
+            # launchctl load -w "$HOME/Library/LaunchAgents/pullInit.plist" 2>/dev/null
+            ;;
+        Linux)
+            # Linux uses readline library,'set editing-mode vi' set vi mode
+            if [ ! -e "$HOME"/.inputrc ] || ! grep -q 'set editing-mode vi' "$HOME/.inputrc";then
+                echo 'set editing-mode vi' >> "$HOME/.inputrc"
+            fi
+
+            # if ! crontab -l 2>/dev/null | grep -q pullInit.sh;then
+            #     (crontab -l 2>/dev/null;echo "*/1 * * * * /usr/local/bin/tools/pullInit.sh") | crontab -
+            # fi
+            ;;
+    esac
+    shell=${1:?"missing shell type"}
+    case "$shell" in
+        bash)
+            if [[ "$OS" == linux ]];then
+                cfgFile=$HOME/.bashrc
+            else
+                #mac os
+                cfgFile=$HOME/.bash_profile
+            fi
+            ;;
+        zsh)
+            cfgFile=$HOME/.zshrc
+            ;;
+        *)
+            echo -e "Only support bash or zsh! ${RED}\u2717${RESET}"
+            exit 1
+            ;;
+    esac
+    #link tools to /usr/local/bin/tools
+    echo "link tools to /usr/local/bin/tools ..."
+    runAsRoot ln -sf $SCRIPTDIR/tools /usr/local/bin
+    echo "Done"
+    #install custom config
+    #the actual config is in file ~/.bashrc(for linux) or ~/.bash_profile(for mac)
+
+    #grep for $startLine quietly
+    echo "Add \"source $rc\" to $cfgFile ..."
+    if grep  -q "$startLine" $cfgFile 2>/dev/null;then
+        echo "Already added,Quit! (or use reinstall to reinstall)"
+        exit 1
+    else
+        echo "Install setting of $shell..."
+        rc=/etc/shellrc
+        if [ ! -e $rc ];then
+            echo "copy shellrc to $rc"
+            runAsRoot ln -sf "$SCRIPTDIR"/shellrc $rc
+        fi
+        #insert header
+        echo "$startLine" >> $cfgFile
+        #insert body
+        echo "[ -f $rc ] && source $rc" >> $cfgFile
+        #insert tailer
+        echo "$endLine" >> $cfgFile
+
+        echo "Done."
+    fi
+}
+
+uninstall(){
+    shell=${1:?"missing shell type"}
+    case "$shell" in
+        bash)
+            if [[ "$OS" == linux ]];then
+                cfgFile=$HOME/.bashrc
+            else
+                #mac os
+                cfgFile=$HOME/.bash_profile
+            fi
+            ;;
+        zsh)
+            cfgFile=$HOME/.zshrc
+            ;;
+        *)
+            echo -e "Only support bash or zsh! ${RED}\u2717${RESET}"
+            exit 1
+            ;;
+    esac
+    echo "Uninstall setting of $shell..."
+    #uninstall custom config
+    #delete lines from header to tailer
+    sed -ibak -e "/$startLine/,/$endLine/ d" $cfgFile
+    rm ${cfgFile}bak
+    if [ -e /etc/shellrc ];then
+        runAsRoot rm /etc/shellrc
+        runAsRoot rm /usr/local/bin/tools
+    fi
+
+    case $(uname) in
+        Darwin)
+            if [ -e "$HOME/Library/LaunchAgents/pullInit.plist" ];then
+                launchctl unload -w "$HOME/Library/LaunchAgents/pullInit.plist" 2>/dev/null
+                rm "$HOME/Library/LaunchAgents/pullInit.plist"
+            fi
+            if [ -e "$HOME/.editrc" ];then
+                sed -i.bak '/bind -v/d' $HOME/.editrc
+                rm $HOME/.editrc.bak
+            fi
+            ;;
+        Linux)
+            if [ -e "$HOME/.inputrc" ];then
+                sed -i '/set editing-mode vi/d' $HOME/.inputrc
+            fi
+            crontab -l 2>/dev/null | grep -v pullInit.sh | crontab -
+            ;;
+    esac
+
+    echo "Done."
+}
+
+reinstall(){
+    uninstall bash
+    uninstall zsh
+    install bash
+    install zsh
+}
+
+case "$1" in
+    install | ins*)
+        install bash
+        install zsh
+        exit 0
+        ;;
+    uninstall | unins*)
+        uninstall bash
+        uninstall zsh
+        exit 0
+        ;;
+    reinstall | reins*)
+        reinstall
+        exit 0
+        ;;
+    --help | -h | --h* | *)
+        echo "$USAGE" >& 2
+        exit 0
+        ;;
+esac
