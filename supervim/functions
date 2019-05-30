@@ -163,6 +163,11 @@ installBasic(){
     $CURL -fLo $root/autoload/plug.vim --create-dirs \
             https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim || { echo "download vim-plug failed.";uninstall; exit 1; }
     cp  init.vim $cfg
+    case $(uname) in
+        Darwin)
+            echo "Install ctags manually using brew to enable Tagbar plugin."
+            ;;
+    esac
 }
 
 uninstall(){
