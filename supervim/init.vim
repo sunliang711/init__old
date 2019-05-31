@@ -205,8 +205,8 @@ if v:version > 704
     " Plug 'Valloric/YouCompleteMe'
 endif
 
-" Plug 'SirVer/ultisnips'
-" Plug 'honza/vim-snippets'
+Plug 'SirVer/ultisnips'
+Plug 'honza/vim-snippets'
 
 "给其他插件比如ctrlp nerdtree startify增加图标
 Plug 'ryanoasis/vim-devicons'
@@ -253,7 +253,7 @@ endif
 "the fonts airline used is here ->  https://github.com/powerline/fonts
 let g:airline_powerline_fonts = 1
 let g:airline#extensions#tabline#enabled = 1
-" let g:airline_theme="luna" 
+" let g:airline_theme="luna"
 let g:airline_detect_modified=1
 let g:airline_detect_paste=1
 
@@ -360,9 +360,9 @@ let g:ycm_complete_in_strings = 1
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
 " UltiSnips setting
-" let g:UltiSnipsExpandTrigger="<c-k>"
-" let g:UltiSnipsJumpForwardTrigger="<c-b>"
-" let g:UltiSnipsJumpBackwardTrigger="<c-z>"
+let g:UltiSnipsExpandTrigger="<c-k>"
+let g:UltiSnipsJumpForwardTrigger="<c-b>"
+let g:UltiSnipsJumpBackwardTrigger="<c-z>"
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 "
 "      Nerdtree Config
@@ -384,6 +384,8 @@ let g:go_highlight_fields = 1
 let g:go_highlight_types = 1
 let g:go_highlight_operators = 1
 let g:go_highlight_build_constraints = 1
+let g:go_def_mode = 'gopls'
+let g:go_info_mode = 'gopls'
 
 " let g:go_fmt_fail_silently = 1
 " au FileType go map <F3> <Plug>(go-def-vertical)
