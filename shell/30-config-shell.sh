@@ -87,7 +87,7 @@ install(){
         echo "Already exist."
         exit 0
     else
-        if [ -e $"globalrc" ];then
+        if [ ! -e $"globalrc" ];then
             echo "link shellrc to $globalrc"
             runAsRoot ln -sf "$root/shellrc" $globalrc
         fi

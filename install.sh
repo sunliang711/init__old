@@ -176,7 +176,7 @@ fi
 
 #shell for current user
 if (($shell == 1));then
-    bash shell/10-zsh-installer.sh && bash shell/20-set-zsh-theme.sh && bash shell/30-config-shell.sh install
+    bash shell/10-zsh-installer.sh && bash shell/20-set-zsh-theme.sh && bash shell/30-config-shell.sh install bash && bash shell/30-config-shell.sh install zsh
 fi
 
 
