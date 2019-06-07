@@ -6,6 +6,13 @@ if ! command -v apt-get >/dev/null 2>&1;then
     echo "Error: Not ubuntu!"
     exit 1
 fi
+rpath="$(readlink ${BASH_SOURCE})"
+if [ -z "$rpath" ];then
+    rpath=${BASH_SOURCE}
+fi
+root="$(cd $(dirname $rpath) && pwd)"
+cd "$root"
+
 if [[ $EUID != 0 ]];then
     echo "Error:need root priviledge!"
     exit 1
