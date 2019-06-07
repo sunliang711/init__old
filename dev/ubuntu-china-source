@@ -78,4 +78,4 @@ deb-src http://mirrors.163.com/ubuntu/ VERSION main restricted universe multiver
 deb-src http://mirrors.163.com/ubuntu/ VERSION main restricted universe multiverse
 EOF
 
-runAsRoot "sed -e s|VERSION|${version}|g ${tmpSource} > ${ubuntuSource}"
+runAsRoot "sed -e 's|VERSION|${version}|g' ${tmpSource} > ${ubuntuSource}"
