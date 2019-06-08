@@ -18,10 +18,27 @@ blue=$(tput setaf 4)
 cyan=$(tput setaf 5)
 reset=$(tput sgr0)
 runAsRoot(){
+    verbose=0
+    while getopts ":v" opt;do
+        case "$opt" in
+            v)
+                verbose=1
+                ;;
+            \?)
+                echo "Unknown option: \"$OPTARG\""
+                exit 1
+                ;;
+        esac
+    done
+    shift $((OPTIND-1))
     cmd="$@"
     if [ -z "$cmd" ];then
         echo "${red}Need cmd${reset}"
         exit 1
+    fi
+
+    if [ "$verbose" -eq 1 ];then
+        echo "Run cmd:\"${red}$cmd${reset}\" as root..."
     fi
 
     if (($EUID==0));then
@@ -82,21 +99,15 @@ install(){
             fi
             ;;
     esac
-    runAsRoot ln -sf "$root/tools" /usr/local/bin
-    if grep -q "$startLine" "$configFile";then
-        echo "Already exist."
-        exit 0
-    else
-        if [ ! -e $"globalrc" ];then
-            echo "link shellrc to $globalrc"
-            runAsRoot ln -sf "$root/shellrc" $globalrc
-        fi
-
+    runAsRoot -v ln -sf $root/shellrc $globalrc
+    runAsRoot -v ln -sf $root/tools /usr/local/bin
+    if ! grep -q "$startLine" "$configFile";then
         echo "$startLine" >> "$configFile"
         echo "[ -f $globalrc ] && source $globalrc" >> "$configFile"
         echo "$endLine" >> "$configFile"
         echo "Done."
     fi
+
 }
 
 uninstall(){
