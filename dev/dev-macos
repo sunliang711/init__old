@@ -76,6 +76,8 @@ if [[ ! -e /usr/local/bin/brew ]];then
     fi
 fi
 
+sudo spctl --master-disable
+
 apps="coreutils findutils grep gnu-tar gnu-sed gawk gnutls gnu-indent gnu-getopt gnu-which wget neovim python python3 privoxy tree go pv"
 for app in $apps;do
     if ! brew list $app >/dev/null 2>&1;then
