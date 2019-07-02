@@ -170,6 +170,7 @@ cyan=$(tput setaf 5)
 reset=$(tput sgr0)
 # RED=$(tput setaf 1)
 # CLEAR=$(tput sgr0)
+alias aliyun='ssh -p 2000 eagle@aliyun.eagle711.win'
 #END alias
 
 #BEGIN function
@@ -1122,6 +1123,16 @@ function newpy(){
 		    main()
 	EOF
     "$editor" "$filename"
+}
+
+function newgitignore(){
+    dest=${1:-"${PWD}"}
+    ignorefile="${dest}/.gitignore"
+    cat<<EOF>>"$ignorefile"
+.DS_Store
+*.swp
+.idea/
+EOF
 }
 
 #END function
