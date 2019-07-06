@@ -69,7 +69,6 @@ bashrc="${home}/.bashrc"
 zshrc="${home}/.zshrc"
 # globalrc=/etc/shellrc
 shellrc="$home/.shellrc"
-tools="$home/.tools"
 
 install(){
     local type=${1}
@@ -104,7 +103,7 @@ install(){
     # runAsRoot -v ln -sf $root/shellrc $globalrc
     # runAsRoot -v ln -sf $root/tools /usr/local/bin
     ln -sf $root/shellrc $shellrc
-    ln -sf $root/.tools $tools
+    ln -sf $root/.tools $home
     if ! grep -q "$startLine" "$configFile";then
         echo "$startLine" >> "$configFile"
         # echo "[ -f $globalrc ] && source $globalrc" >> "$configFile"
