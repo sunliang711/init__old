@@ -11,7 +11,7 @@ usage(){
     echo -e "\t\t-f                     Install font-hack-nerd-font on MacOS"
     echo -e "\t\t-g                     Install vim-go plugin"
     echo -e "\t\t-y [clang|golang|both] Install YouCompleteMe plugin for clang or golang or both"
-    echo -e "\t\t-d                     Download From NAS"
+    echo -e "\t\t-o                     Download vim plugins from github.com else from gitee.com"
     echo
     echo "VIM:"
     echo -e "\t\tvim or nvim( or neovim)            Install plugin for vim or nvim"
@@ -67,6 +67,7 @@ installBasic(){
     needCmd curl
     uninstall
 
+
     mkdir -pv $root/autoload
     mkdir -pv $root/plugins
 
@@ -75,10 +76,21 @@ installBasic(){
     #copy ftplugin
     cp -r ftplugin $root
 
-    echo  "Downloading vim-plug from github..."
-    curl -fLo $root/autoload/plug.vim --create-dirs \
+    if (($origin==1));then
+        echo  "Downloading vim-plug from github..."
+        curl -fLo $root/autoload/plug.vim --create-dirs \
             https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim || { echo "download vim-plug failed.";uninstall; exit 1; }
-    cp  init.vim $cfg
+        cp  init.vim $cfg
+    else
+
+        echo  "Downloading vim-plug from gitee..."
+        curl -fLo $root/autoload/plug.vim --create-dirs \
+            https://gitee.com/sunliang711/vim-plug/raw/master/plug.vim || { echo "download vim-plug failed.";uninstall; exit 1; }
+        #use gitee.com repo (in China!!)
+        sed -i bak -e 's|github.com/junegunn|gitee.com/sunliang711|g' -e 's|github\.com|gitee.com|g'  -e 's|github\\\.com|gitee\\.com|g' $root/autoload/plug.vim
+        cp init-gitee.vim $cfg
+    fi
+
 }
 
 uninstall(){
@@ -91,8 +103,9 @@ proxy=
 vimGo=0
 ycm=
 font=0
-downloadFromNAS=0
-while getopts ":hlp:fgy:d" opt;do
+#origin means fetch repo from github.com instead of gitee.com
+origin=0
+while getopts ":hlp:fgy:do" opt;do
     case "$opt" in
         h)
             usage
@@ -112,8 +125,8 @@ while getopts ":hlp:fgy:d" opt;do
         y)
             ycm=$(echo "$OPTARG" | tr 'A-Z' 'a-z')
             ;;
-        d)
-            downloadFromNAS=1
+        o)
+            origin=1
             ;;
         :)
             echo "Options \"$OPTARG\" missing argument!!"
@@ -212,9 +225,6 @@ echo "$whichVim etc file: $cfg"
 if (($vimGo==1));then
     echo "Install plugin vim-go"
 fi
-if (($downloadFromNAS==1));then
-    echo "Download from NAS"
-fi
 
 #set proxy
 if [[ -n $proxy ]];then
@@ -262,7 +272,7 @@ installBasic
 #install YouCompleteMe
 if [[ -n "$ycm" ]];then
     #1 去掉注释
-    sed -ibak "s|\"[ ]*\(Plug 'Valloric/YouCompleteMe'\)|\1|" $cfg
+    sed -ibak "s|\"[ ]*\(Plug '.*/YouCompleteMe'\)|\1|" $cfg
     rm -f "${cfg}bak"
     case $whichVim in
         nvim|neovim)
@@ -272,30 +282,16 @@ if [[ -n "$ycm" ]];then
             dest="$HOME/.vim/plugins/YouCompleteMe"
             ;;
     esac
-    if [[ "$downloadFromNAS" -eq 1 ]];then
-        echo "Download YouCompleteMe from NAS..."
-        \curl -L -o YouCompleteMe.tar.gz http://home.eagle711.win:5000/fbsharing/I0CloRro
-        echo "Extract YouCompleteMe..."
-        tar -C $root/plugins -xf YouCompleteMe.tar.gz
-        rm -rf YouCompleteMe.tar.gz
-    fi
 fi
 
 if (($vimGo==1));then
     echo "modify $cfg for vim-go"
-    sed -ibak "s|\"[ ]*\(Plug 'fatih/vim-go'\)|\1|" $cfg
+    sed -ibak "s|\"[ ]*\(Plug '.*/vim-go'\)|\1|" $cfg
     rm -f "${cfg}bak"
     echo "Set GOPATH to ~/go"
     export GOPATH=~/go
     if [[ ! -d $GOPATH ]];then
         mkdir -pv $GOPATH
-    fi
-    if [[ "$downloadFromNAS" -eq 1 ]];then
-        echo "Download vim-go source from NAS..."
-        \curl -L -o vimgosrc.tar.gz http://home.eagle711.win:5000/fbsharing/OHdvYwf9
-        echo "Extract..."
-        tar -C $GOPATH -xf vimgosrc.tar.gz
-        rm -rf vimgosrc.tar.gz
     fi
 fi
 
