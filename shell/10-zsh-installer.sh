@@ -29,9 +29,11 @@ if ! command -v zsh >/dev/null 2>&1;then
 fi
 
 origin=0
-if [ $1="-o" ];then
-    origin=1
-fi
+case $1 in
+    -o)
+        origin=1
+        ;;
+esac
 
 main() {
   # Use colors, but only if connected to a terminal, and that terminal

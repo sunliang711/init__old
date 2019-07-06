@@ -6,9 +6,11 @@ SCRIPTDIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 cd "$SCRIPTDIR"
 
 origin=0
-if [ $1="-o" ];then
-    origin=1
-fi
+case $1 in
+    -o)
+        origin=1
+        ;;
+esac
 
 user=${SUDO_USER:-$(whoami)}
 HOME=$(eval echo ~$user)
