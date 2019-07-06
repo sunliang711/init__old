@@ -104,7 +104,7 @@ install(){
     # runAsRoot -v ln -sf $root/shellrc $globalrc
     # runAsRoot -v ln -sf $root/tools /usr/local/bin
     ln -sf $root/shellrc $shellrc
-    ln -sf $root/tools $tools
+    ln -sf $root/.tools $tools
     if ! grep -q "$startLine" "$configFile";then
         echo "$startLine" >> "$configFile"
         # echo "[ -f $globalrc ] && source $globalrc" >> "$configFile"
