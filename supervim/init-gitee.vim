@@ -149,8 +149,8 @@ Plug 'sunliang711/nerdtree-git-plugin'
 Plug 'sunliang711/ctrlp.vim'
 
 "状态栏
-Plug 'sunliang711-airline/vim-airline'
-Plug 'sunliang711-airline/vim-airline-themes'
+Plug 'sunliang711/vim-airline'
+Plug 'sunliang711/vim-airline-themes'
 "括号补全
 Plug 'sunliang711/auto-pairs'
 
@@ -171,7 +171,7 @@ Plug 'sunliang711/incsearch.vim'
 "对齐插件 :Tab /<char-to-be-alignment>
 Plug 'sunliang711/tabular'
 "头文件源文件切换插件
-" Plug 'sunliang711-scripts/a.vim'
+" Plug 'sunliang711/a.vim'
 
 "快速给词加环绕符号,例如单引号 双引号括号
 "常用命令
@@ -188,7 +188,7 @@ Plug 'sunliang711/vim-endwise'
 
 "文档生成工具
 "常用命令: :Dox自动生成函数说明  :DoxAuthor自动生成文件说明
-Plug 'sunliang711-scripts/DoxygenToolkit.vim'
+Plug 'sunliang711/DoxygenToolkit.vim'
 
 "vim-go
 " Plug 'sunliang711/vim-go'
