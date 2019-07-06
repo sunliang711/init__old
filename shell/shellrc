@@ -5,6 +5,9 @@ export LC_CTYPE=en_US.UTF-8
 export LC_ALL=en_US.UTF-8
 export TZ='Asia/Shanghai'
 
+user=${SUDO_USER:-$(whoami)}
+home=$(eval echo ~$user)
+
 #BEGIN environment variable
 export PREFIX=$HOME/Workspace
 [ -d $PREFIX/go ] && export GOPATH=$PREFIX/go && export GOBIN=$GOPATH/bin
@@ -25,17 +28,13 @@ insert_path(){
 #set PATH
 [ -n "$GOPATH" ] && insert_path $GOPATH/bin
 [ -d "$HOME/bin" ] && insert_path "$HOME/bin"
-append_path /usr/local/bin/tools
+append_path $HOME/.tools
 append_path /usr/local/sbin
 append_path /usr/local/bin
 append_path /usr/sbin
 append_path /usr/bin
 append_path /sbin
 append_path /bin
-append_path ~/Downloads/protoc-3.7.1-osx-x86_64/bin
-
-user=${SUDO_USER:-$(whoami)}
-home=$(eval echo ~$user)
 
 #export LS_COLORS=$LS_COLORS:"di=0;33:"
 #export PS1='[\u@\h \[\e[32;1m\]\W\\$\e[0m'
@@ -73,7 +72,7 @@ alias orm='/bin/rm'
 alias cl='clear'
 alias prettyjson='python -m json.tool'
 #TODO hard coded
-alias sm='source /etc/shellrc'
+alias sm="source $HOME/.shellrc"
 if command -v vim >/dev/null 2>&1;then
     alias vi='vim'
 fi
@@ -887,7 +886,7 @@ function em(){
     if command -v vim >/dev/null 2>&1;then
         editor=vim
     fi
-    $editor /etc/shellrc
+    $editor $HOME/.shellrc
 }
 
 function path(){

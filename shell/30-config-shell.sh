@@ -51,8 +51,8 @@ runAsRoot(){
         sudo sh -c "$cmd"
     fi
 }
-startLine="##CUSTOM BEGIN"
-endLine="##CUSTOM END"
+startLine="##CUSTOM BEGIN v2"
+endLine="##CUSTOM END v2"
 
 usage(){
     cat<<-EOF
@@ -67,7 +67,9 @@ EOF
 
 bashrc="${home}/.bashrc"
 zshrc="${home}/.zshrc"
-globalrc=/etc/shellrc
+# globalrc=/etc/shellrc
+shellrc="$home/.shellrc"
+tools="$home/.tools"
 
 install(){
     local type=${1}
@@ -99,11 +101,14 @@ install(){
             fi
             ;;
     esac
-    runAsRoot -v ln -sf $root/shellrc $globalrc
-    runAsRoot -v ln -sf $root/tools /usr/local/bin
+    # runAsRoot -v ln -sf $root/shellrc $globalrc
+    # runAsRoot -v ln -sf $root/tools /usr/local/bin
+    ln -sf $root/shellrc $shellrc
+    ln -sf $root/tools $tools
     if ! grep -q "$startLine" "$configFile";then
         echo "$startLine" >> "$configFile"
-        echo "[ -f $globalrc ] && source $globalrc" >> "$configFile"
+        # echo "[ -f $globalrc ] && source $globalrc" >> "$configFile"
+        echo "[ -f $shellrc ] && source $shellrc" >> "$configFile"
         echo "$endLine" >> "$configFile"
         echo "Done."
     fi
@@ -112,7 +117,7 @@ install(){
 
 uninstall(){
     local type=${1}
-    if [ -z "$typ3" ];then
+    if [ -z "$type" ];then
         usage
     fi
     case $type in
@@ -139,8 +144,9 @@ uninstall(){
             fi
             ;;
     esac
-    runAsRoot rm $globalrc
-    runAsRoot rm /usr/local/bin/tools
+    # runAsRoot rm $globalrc
+    # runAsRoot rm /usr/local/bin/tools
+    rm $shellrc
 
     sed -ibak -e "/$startLine/,/$endLine/ d" "$configFile"
 }
