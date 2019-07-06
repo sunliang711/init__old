@@ -28,6 +28,11 @@ if ! command -v zsh >/dev/null 2>&1;then
     exit 1
 fi
 
+origin=0
+if [ $1="-o" ];then
+    origin=1
+fi
+
 main() {
   # Use colors, but only if connected to a terminal, and that terminal
   # supports them.
@@ -92,14 +97,19 @@ main() {
       exit 1
     fi
   fi
-  # env git clone --depth=1 https://github.com/robbyrussell/oh-my-zsh.git $ZSH || {
-  #   printf "Error: git clone of oh-my-zsh repo failed\n"
-  #   exit 1
-  # }
-  env git clone --depth=1 https://gitee.com/sunliang711/oh-my-zsh.git $ZSH || {
-    printf "Error: git clone of oh-my-zsh repo failed\n"
-    exit 1
+  if (($origin==1));then
+      echo "clone from github.com..."
+      env git clone --depth=1 https://github.com/robbyrussell/oh-my-zsh.git $ZSH || {
+          printf "Error: git clone of oh-my-zsh repo failed\n"
+      exit 1
   }
+  else
+      echo "clone from gitee.com..."
+      env git clone --depth=1 https://gitee.com/sunliang711/oh-my-zsh.git $ZSH || {
+          printf "Error: git clone of oh-my-zsh repo failed\n"
+      exit 1
+  }
+  fi
 
 
   printf "${BLUE}Looking for an existing zsh config...${NORMAL}\n"
