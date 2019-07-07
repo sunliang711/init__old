@@ -87,7 +87,7 @@ installBasic(){
         curl -fLo $root/autoload/plug.vim --create-dirs \
             https://gitee.com/sunliang711/vim-plug/raw/master/plug.vim || { echo "download vim-plug failed.";uninstall; exit 1; }
         #use gitee.com repo (in China!!)
-        sed -i bak -e 's|github.com/junegunn|gitee.com/sunliang711|g' -e 's|github\.com|gitee.com|g'  -e 's|github\\\.com|gitee\\.com|g' $root/autoload/plug.vim
+        sed -ibak -e 's|github.com/junegunn|gitee.com/sunliang711|g' -e 's|github\.com|gitee.com|g'  -e 's|github\\\.com|gitee\\.com|g' $root/autoload/plug.vim
         cp init-gitee.vim $cfg
     fi
 
