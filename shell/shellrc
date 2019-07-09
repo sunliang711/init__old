@@ -780,6 +780,7 @@ Description=
 #ExecStart=
 #ExecStop=
 
+#Restart=on-failure
 #Environment=
 [Install]
 WantedBy=multi-user.target
