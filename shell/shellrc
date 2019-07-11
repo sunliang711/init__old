@@ -1135,6 +1135,16 @@ function newgitignore(){
 EOF
 }
 
+function gofmtdir(){
+    if [ "$1" = "-h" ] || [ "$1" = "--help" ];then
+        echo "Usage: $0 <dir>"
+        return 1
+    fi
+    dir=${1:-$PWD}
+    echo "Format directory: $dir"
+    find "$dir" -iname "*.go" -print0 | xargs -0 -n 1 -t go fmt
+}
+
 #END function
 
 #BEGIN others
