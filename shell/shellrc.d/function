@@ -1,11 +1,52 @@
-append_path(){
-    if [ -z "$1" ];then
-        return
+function functions(){
+    functionFile=$HOME/.shellrc.d/function
+    if [ ! -f $functionFile ];then
+        echo "No file $functionFile"
+        return 1
     fi
-    echo -e ${PATH//:/"\n"} | grep -c "^$1$" >/dev/null 2>&1 || export PATH=$PATH:$1
+    echo "Custom functions:"
+    perl -ne 'print "$2\n" if/^\s*(function)\s*(\w+)\s*\(\s*\)/' $functionFile
 }
 
-insert_path(){
+function append_path(){
+    save=0
+    while getopts ":hs" opt;do
+        case $opt in
+            h)
+                echo "Usage: $0 [-h|-s] <path>  -s means to save"
+                return 1
+                ;;
+            s)
+                save=1
+                ;;
+            :)
+                echo "missing arg for option: \"$OPTARG\""
+                return 1
+                ;;
+            \?)
+                echo "Valid option \"$OPTARG\""
+                return 1
+                ;;
+
+        esac
+    done
+    shift $(($OPTIND-1))
+    if [ -z "$1" ];then
+        echo "Missing path to add."
+        return 1
+    fi
+    if ! echo -e ${PATH//:/"\n"} | grep -c "^$1$" >/dev/null 2>&1;then
+        export PATH=$PATH:$1
+        if (($save==1));then
+            (sed -n -e '1,/#END custom PATH/{
+            /#END custom PATH/!p
+        }' $HOME/.shellrc.d/env;echo "append_path $1";sed -n -e '/#END custom PATH/,$p' $HOME/.shellrc.d/env) >/tmp/tmpenv
+            mv /tmp/tmpenv $HOME/.shellrc.d/env
+        fi
+    fi
+}
+
+function insert_path(){
     if [ -z "$1" ];then
         return
     fi
@@ -13,7 +54,7 @@ insert_path(){
 }
 #BEGIN function
 if command -v git >/dev/null 2>&1;then
-    ghclone(){
+    function ghclone(){
         p=${1:?"Usage: ghclone githubAccount/xx.git [newDir]"}
         if (($#>1));then
             newname=${2}
@@ -22,7 +63,7 @@ if command -v git >/dev/null 2>&1;then
             git clone "https://github.com/$p"
         fi
     }
-    gcclone(){
+    function gcclone(){
         p=${1:?"Usage: gcclone coding.netAccount/xx.git [newDir]"}
         if (($#>1));then
             newname=${2}
@@ -63,18 +104,18 @@ if command -v git >/dev/null 2>&1;then
     #}
 fi
 
-echoExec(){
+function echoExec(){
     cmd=${1:?"missing cmd"}
     echo "$cmd ..."
     eval "$cmd"
 }
 
-slientExe(){
+function slientExe(){
     eval "$@" >/dev/null 2>&1
 }
 
 
-proxyon(){
+function proxyon(){
     #add default parameter
     local proxy=${1:-http://localhost:6117}
     #delete: grep -P can not work on mac
@@ -130,7 +171,7 @@ proxyon(){
     #alias brew="ALL_PROXY=$proxy brew"
 }
 
-proxyoff(){
+function proxyoff(){
     echoExec "unset http_proxy"
     echoExec "unset https_proxy"
     echoExec "unset ftp_proxy"
@@ -247,7 +288,7 @@ function myip_(){
 }
 
 # 检测出当前系统的版本，形如ubuntu-16.10,archlinux,fedora-23,centos-6.8,debian-8,macos
-currentOS(){
+function currentOS(){
     local currentos=
     case "$(uname)" in
         "Linux")
@@ -304,7 +345,7 @@ function www(){
     fi
 }
 
-speed(){
+function speed(){
     if [ "$1" = "-h" ];then
         echo "usage: $0 [-s,for silent]"
         return
@@ -331,7 +372,7 @@ speed(){
 # }
 
 #rotate backup
-bk(){
+function bk(){
     if (($# < 1));then
         echo "Usage: bk the_existing_file_or_directory [optional_max_number]"
         return 1
@@ -360,7 +401,7 @@ bk(){
     mv -v "${file}" "${file}.1"
 }
 
-godoc(){
+function godoc(){
     if command -v godoc >/dev/null 2>&1;then
         if ! ps aux|grep 'godoc -http=:12306'|grep -v grep;then
             #因为godoc做本地文档服务器的时候，会把GOPATH中的本地代码也显示出来
@@ -371,7 +412,7 @@ godoc(){
     fi
 }
 
-pgrep(){
+function pgrep(){
     if (($# != 1));then
         echo "Usage: pgrep some_program_name"
         return 1
@@ -382,7 +423,7 @@ pgrep(){
 }
 
 #流量统计输出
-traffic(){
+function traffic(){
 	if ! command -v iptables >/dev/null 2>&1;then
 		echo "need iptables command"
 		return 1
@@ -405,7 +446,7 @@ traffic(){
     iptables -nvLINPUT | grep 'pt:' | awk '{printf "%-5s %-10s %-10s\n",$10,$11,$2}'
     echo
 }
-sshCopy(){
+function sshCopy(){
     if (($#<1));then
         echo "Usage: $(basename $0) [-p port-value] remoteUser@remoteHost"
         return 1
@@ -436,7 +477,7 @@ sshCopy(){
         ssh-copy-id "$userAtHost"
     fi
 }
-whouseport(){
+function whouseport(){
     if (($#<2));then
         echo "Usage: whouseport protocol port"
         return 1
@@ -480,7 +521,7 @@ whouseport(){
         ;;
     esac
 }
-mailto(){
+function mailto(){
     #homebrew中有gnu版本的常用工具，比如grep sed
     #默认安装的时候为了和mac自带的区分，他们的名字前面加个字母g
     #如何安装这些gnu工具参考dev-mac文件
@@ -549,7 +590,7 @@ EOF
 #     fi
 # }
 #launchd plist file
-plistFile(){
+function plistFile(){
 if [ $# -eq 0 ];then
     echo "Usage: $(basename $0) plist_filename"
     return 1
@@ -594,7 +635,7 @@ fi
 rm /tmp/$1.plist
 }
 #systemd service file
-serviceFile(){
+function serviceFile(){
     if (($#<1));then
         echo "Usage: $(basename $0) serviceName"
         return 1
@@ -669,7 +710,7 @@ function dec(){
 #cecho @b@@red@red text with bold
 #cecho @u@@red@red text with underline
 #cecho @b@@u@@red@red text with underline and bold
-cecho() {
+function cecho() {
     echo "$@" | sed \
         -e "s/\(\(@\(red\|green\|yellow\|blue\|magenta\|cyan\|white\|reset\|b\|u\)@\)\+\)\(.*\)/\1\4@reset@/g" \
         -e "s/@red@/$(tput setaf 1)/g" \
