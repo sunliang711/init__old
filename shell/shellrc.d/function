@@ -857,7 +857,16 @@ function pushall(){
         echo "Not specify branch,use \"master\""
         branch=master
     fi
-    git remote | xargs -IR git push R $branch
+    git remote | xargs -IR git push --tags R $branch
+}
+
+function fetchall(){
+    branch=$1
+    if [ -z "$branch" ];then
+        echo "Not specify branch,use \"master\""
+        branch=master
+    fi
+    git remote | xargs -IR git fetch R $branch
 }
 
 function brewlp(){
