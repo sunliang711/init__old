@@ -61,6 +61,9 @@ Usage: $(basename $0) CMD
 CMD:
     install     bash|zsh
     uninstall   bash|zsh
+
+    all         #to install all
+    uall        #to uninstall all
 EOF
     exit 1
 }
@@ -69,6 +72,8 @@ bashrc="${home}/.bashrc"
 zshrc="${home}/.zshrc"
 # globalrc=/etc/shellrc
 shellrc="$home/.shellrc"
+shellrcd="$home/.shellrc.d"
+tools="$home/.tools"
 
 install(){
     local type=${1}
@@ -102,8 +107,14 @@ install(){
     esac
     # runAsRoot -v ln -sf $root/shellrc $globalrc
     # runAsRoot -v ln -sf $root/tools /usr/local/bin
+    rm -rf $shellrc >/dev/null 2>&1
+    rm -rf $shellrcd >/dev/null 2>&1
+    rm -rf $tools >/dev/null 2>&1
+
     ln -sf $root/shellrc $shellrc
-    ln -sf $root/.tools $home
+    ln -sf $root/shellrc.d $shellrcd
+    ln -sf $root/tools $tools
+
     if ! grep -q "$startLine" "$configFile";then
         echo "$startLine" >> "$configFile"
         # echo "[ -f $globalrc ] && source $globalrc" >> "$configFile"
@@ -145,10 +156,13 @@ uninstall(){
     esac
     # runAsRoot rm $globalrc
     # runAsRoot rm /usr/local/bin/tools
-    rm $shellrc
+    rm -rf $shellrc
+    rm -rf $shellrcd
+    rm -rf $tools
 
     sed -ibak -e "/$startLine/,/$endLine/ d" "$configFile"
 }
+
 
 cmd=$1
 shift
@@ -159,6 +173,14 @@ case $cmd in
         ;;
     uninstall)
         uninstall "$@"
+        ;;
+    all)
+        install bash
+        install zsh
+        ;;
+    uall)
+        uninstall bash
+        uninstall zsh
         ;;
     *)
         usage
