@@ -1034,6 +1034,12 @@ function gofmtdir(){
     find "$dir" -iname "*.go" -print0 | xargs -0 -n 1 -t go fmt
 }
 
+function grepDir(){
+    ext=${1}
+    word=${2}
+    find . -iname "*.$ext" -print0 | xargs -0 grep "$word" 2>/dev/null
+}
+
 #END function
 
 # vim: set ft=sh:

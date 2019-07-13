@@ -42,7 +42,6 @@ append_path /bin
 #BEGIN custom PATH
 append_path $HOME/.tools
 
-append_path /Users/eagle/abc
 #END custom PATH
 #END PATH
 
