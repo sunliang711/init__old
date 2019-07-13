@@ -767,7 +767,32 @@ function em(){
     if command -v vim >/dev/null 2>&1;then
         editor=vim
     fi
-    $editor $HOME/.shellrc
+    destfile="$HOME/.shellrc"
+    while getopts ":hfaeo" opt;do
+        case $opt in
+            h)
+                echo "Usage: $0 [-h|-f|-a|-e|-o] function,alias,env,other"
+                return 1
+                ;;
+            f)
+                destfile="$HOME/.shellrc.d/function"
+                ;;
+            a)
+                destfile="$HOME/.shellrc.d/alias"
+                ;;
+            e)
+                destfile="$HOME/.shellrc.d/env"
+                ;;
+            o)
+                destfile="$HOME/.shellrc.d/other"
+                ;;
+            \?)
+                echo "Unkown option: \"$OPTARG\""
+                ;;
+
+        esac
+    done
+    $editor "$destfile"
 }
 
 function path(){
