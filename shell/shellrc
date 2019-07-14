@@ -1,4 +1,6 @@
 set -o vi
+#load basic
+source "${HOME}/.shellrc.d/basic"
 
 #load function
 source "${HOME}/.shellrc.d/function"

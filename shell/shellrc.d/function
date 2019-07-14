@@ -5,7 +5,8 @@ function functions(){
         return 1
     fi
     echo "Custom functions:"
-    perl -ne 'print "$2\n" if/^\s*(function)\s*(\w+)\s*\(\s*\)/' $functionFile
+    output=$(perl -ne 'print "$2\n" if/^\s*(function)\s*(\w+)\s*\(\s*\)/' $functionFile)
+    echo ${green}$output${reset}
 }
 
 function append_path(){
@@ -768,10 +769,10 @@ function em(){
         editor=vim
     fi
     destfile="$HOME/.shellrc"
-    while getopts ":hfaeo" opt;do
+    while getopts ":hfaeob" opt;do
         case $opt in
             h)
-                echo "Usage: $0 [-h|-f|-a|-e|-o] function,alias,env,other"
+                echo "Usage: $0 [-h|-b|-f|-a|-e|-o] basic,function,alias,env,other"
                 return 1
                 ;;
             f)
@@ -786,8 +787,12 @@ function em(){
             o)
                 destfile="$HOME/.shellrc.d/other"
                 ;;
+            b)
+                destfile="$HOME/.shellrc.d/basic"
+                ;;
             \?)
                 echo "Unkown option: \"$OPTARG\""
+                return 1
                 ;;
 
         esac

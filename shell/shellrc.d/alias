@@ -104,14 +104,6 @@ fi
 # alias RED='tput setaf 1'
 # alias CLEAR='tput sgr0'
 
-#用法:echo ${red}red text${reset}
-red=$(tput setaf 1)
-yellow=$(tput setaf 3)
-blue=$(tput setaf 4)
-cyan=$(tput setaf 5)
-reset=$(tput sgr0)
-# RED=$(tput setaf 1)
-# CLEAR=$(tput sgr0)
 alias aliyun='ssh -p 2000 eagle@aliyun.eagle711.win'
 #END alias
 # vim: set ft=sh:
