@@ -107,7 +107,7 @@ main() {
   }
   else
       echo "clone from gitee.com..."
-      echo "If you want to clone from github.com add -o option."
+      echo "$(tput setaf 2)If you want to clone from github.com add -o option.$(tput sgr0)"
       env git clone --depth=1 https://gitee.com/sunliang711/oh-my-zsh.git $ZSH || {
           printf "Error: git clone of oh-my-zsh repo failed\n"
       exit 1
