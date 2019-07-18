@@ -28,6 +28,7 @@ if [[ ! -d $HOME/.zsh-syntax-highlighting ]];then
         git clone https://github.com/zsh-users/zsh-syntax-highlighting.git $HOME/.zsh-syntax-highlighting
     else
         echo "clone from gitee.com..."
+        echo "If you want to clone from github.com,add -o option."
         git clone https://gitee.com/sunliang711/zsh-syntax-highlighting.git $HOME/.zsh-syntax-highlighting
     fi
 fi
