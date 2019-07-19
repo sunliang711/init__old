@@ -1070,6 +1070,35 @@ function grepDir(){
     find . -iname "*.$ext" -print0 | xargs -0 grep "$word" 2>/dev/null
 }
 
+function postjson(){
+    param=""
+    while getopts ':hd:' opt;do
+        case $opt in
+            h)
+                echo "Usage: $0 -d {\"key\":\"value\"} URL "
+                return 0
+                ;;
+            d)
+                param="$OPTARG"
+                ;;
+            :)
+                echo "Missing argument for option: \"$OPTARG\""
+                return 1
+                ;;
+            \?)
+                echo "Unkown option: \"$OPTARG\""
+                return 1
+                ;;
+        esac
+    done
+    shift $((OPTIND-1))
+    if [ $# -eq 0 ];then
+        echo "Missing URL."
+        echo "Usage: $0 -d {\"key\":\"value\"} URL "
+        return 1
+    fi
+    curl -X POST -H 'Content-Type:application/json' -d "$OPTARG" $1
+}
 #END function
 
 # vim: set ft=sh:
