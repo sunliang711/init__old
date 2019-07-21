@@ -110,10 +110,12 @@ install(){
     rm -rf $shellrc >/dev/null 2>&1
     rm -rf $shellrcd >/dev/null 2>&1
     rm -rf $tools >/dev/null 2>&1
+    rm -rf /etc/shell-header.sh >/dev/null 2>&1
 
     ln -sf $root/shellrc $shellrc
     ln -sf $root/shellrc.d $shellrcd
     ln -sf $root/tools $tools
+    ln -sf $root/shell-header.sh /etc
 
     if ! grep -q "$startLine" "$configFile";then
         echo "$startLine" >> "$configFile"
@@ -159,6 +161,7 @@ uninstall(){
     rm -rf $shellrc
     rm -rf $shellrcd
     rm -rf $tools
+    rm -rf /etc/shell-header.sh
 
     sed -ibak -e "/$startLine/,/$endLine/ d" "$configFile"
 }
