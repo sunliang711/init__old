@@ -968,6 +968,8 @@ function newsh(){
 		root="$(cd $(dirname $rpath) && pwd)"
 		cd "$root"
 		[ -e /etc/shell-header.sh ] && source /etc/shell-header.sh
+		# write your code below
+
 		EOF
     "$editor" "$filename"
 }
