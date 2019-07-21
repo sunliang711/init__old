@@ -92,4 +92,7 @@ if [ ! -d "$dest/$version" ];then
     usage
     exit 1
 fi
-ln -sf "$dest/$version" "$dest/current"
+if [ -d "$dest/current" ];then
+    rm -rf "$dest/current"
+fi
+ln -svf "$dest/$version" "$dest/current"
