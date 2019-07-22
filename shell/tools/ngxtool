@@ -12,9 +12,9 @@ usage(){
 	Usage: $(basename $0) cmd
 
 	cmd:
-		list        [-r ROOT]      <-t e|a>       e for enabled,a for available
-		enable      [-r ROOT]      <siteName>
-		disable     [-r ROOT]      <siteName>
+		list      [-r ROOT] [-t e|a]     e for enabled,a for available
+		enable    [-r ROOT] [siteName]
+		disable   [-r ROOT] [siteName]
 EOF
 exit 1
 }
@@ -31,8 +31,11 @@ list(){
             ls "$dest/sites-available"
             ;;
         *)
-            echo "e or a"
-            usage
+            echo "${green}availate sites:${reset}"
+            ls "$dest/sites-available"
+            echo
+            echo "${green}enabled sites:${reset}"
+            ls "$dest/sites-enabled"
             ;;
     esac
 }
