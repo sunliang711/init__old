@@ -25,6 +25,7 @@ require (
 	github.com/haya14busa/goplay v1.0.0 // indirect
 	github.com/josharian/impl v0.0.0-20190715203526-f0d59e96e372 // indirect
 	github.com/json-iterator/go v1.1.7 // indirect
+	github.com/jstemmer/gotags v1.4.1 // indirect
 	github.com/karrick/godirwalk v1.10.12 // indirect
 	github.com/kisielk/errcheck v1.2.0 // indirect
 	github.com/konsorten/go-windows-terminal-sequences v1.0.2 // indirect

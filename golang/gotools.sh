@@ -1,4 +1,17 @@
 #!/bin/bash
+rpath="$(readlink ${BASH_SOURCE})"
+if [ -z "$rpath" ];then
+    rpath=${BASH_SOURCE}
+fi
+root="$(cd $(dirname $rpath) && pwd)"
+cd "$root"
+if [ -e /etc/shell-header.sh ];then
+    source /etc/shell-header.sh
+else
+    (cd /tmp && wget -q "$shellHeaderLink") && source /tmp/shell-header.sh
+fi
+# write your code below
+
 if [ -z $GO111MODULE ];then
     echo "GO111MODULE not set"
     exit 1
@@ -28,3 +41,10 @@ go get -u -v github.com/davidrjenni/reftools/cmd/fillstruct
 go get -u -v github.com/alecthomas/gometalinter
 go get -u -v golang.org/x/tools/cmd/gopls
 go get -u -v github.com/go-delve/delve
+go get -u -v github.com/jstemmer/gotags
+go get -u -v github.com/fatih/motion
+go get -u -v github.comkisielk/errcheck
+go get -u -v github.comgolangci/golang-ci-lint
+go get -u -v github.comkoron/iferr
+go get -u -v github.comklauspost/asmfmt/cmd/asmfmt
+go get -u -v github.comalecthomas/gometalinkter
