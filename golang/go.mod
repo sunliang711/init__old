@@ -15,6 +15,7 @@ require (
 	github.com/cosiner/argv v0.0.1 // indirect
 	github.com/davidrjenni/reftools v0.0.0-20190411195930-981bbac422f8 // indirect
 	github.com/fatih/gomodifytags v0.0.0-20190716070638-2dd5565a4bd8 // indirect
+	github.com/fatih/motion v0.0.0-20190527122956-41470362fad4 // indirect
 	github.com/go-delve/delve v1.2.0 // indirect
 	github.com/go-kit/kit v0.9.0 // indirect
 	github.com/golang/groupcache v0.0.0-20190702054246-869f871628b6 // indirect
@@ -64,7 +65,7 @@ require (
 	golang.org/x/mobile v0.0.0-20190719004257-d2bd2a29d028 // indirect
 	golang.org/x/net v0.0.0-20190724013045-ca1201d0de80 // indirect
 	golang.org/x/sys v0.0.0-20190726091711-fc99dfbffb4e // indirect
-	golang.org/x/tools v0.0.0-20190727173135-db2fa46ec33c // indirect
+	golang.org/x/tools v0.0.0-20190728063539-fc6e2057e7f6 // indirect
 	google.golang.org/grpc v1.22.1 // indirect
 	gopkg.in/alecthomas/kingpin.v3-unstable v3.0.0-20180810215634-df19058c872c // indirect
 	sourcegraph.com/sqs/goreturns v0.0.0-20181028201513-538ac6014518 // indirect

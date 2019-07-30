@@ -6,7 +6,17 @@ syntax on
 set laststatus=2
 set incsearch
 set hlsearch
-set relativenumber
+if v:version >= 704
+    set number relativenumber
+    augroup numbertoggle
+        autocmd!
+        autocmd BufEnter,FocusGained,InsertLeave * set relativenumber
+        autocmd BufLeave,FocusLost,InsertEnter   * set norelativenumber
+    augroup END
+else
+    set relativenumber
+endif
+
 set cursorline
 " set cursorcolumn
 
