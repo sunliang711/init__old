@@ -43,6 +43,7 @@ set fileencodings=utf8,ucs-bom,gbk,cp936,gb2312,gb18030
 set hidden
 set showcmd
 set autochdir
+set clipboard=unnamed
 nnoremap j gj
 nnoremap k gk
 
