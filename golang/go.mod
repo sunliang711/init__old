@@ -28,6 +28,7 @@ require (
 	github.com/json-iterator/go v1.1.7 // indirect
 	github.com/jstemmer/gotags v1.4.1 // indirect
 	github.com/karrick/godirwalk v1.10.12 // indirect
+	github.com/keegancsmith/rpc v1.1.0 // indirect
 	github.com/kisielk/errcheck v1.2.0 // indirect
 	github.com/konsorten/go-windows-terminal-sequences v1.0.2 // indirect
 	github.com/kr/pty v1.1.8 // indirect
@@ -53,6 +54,7 @@ require (
 	github.com/spf13/jwalterweatherman v1.1.0 // indirect
 	github.com/spf13/viper v1.4.0 // indirect
 	github.com/sqs/goreturns v0.0.0-20181028201513-538ac6014518 // indirect
+	github.com/stamblerre/gocode v0.0.0-20190327203809-810592086997 // indirect
 	github.com/stretchr/objx v0.2.0 // indirect
 	github.com/ugorji/go v1.1.7 // indirect
 	github.com/uudashr/gopkgs v2.0.1+incompatible // indirect

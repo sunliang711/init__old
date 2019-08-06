@@ -48,3 +48,4 @@ go get -u -v github.comgolangci/golang-ci-lint
 go get -u -v github.comkoron/iferr
 go get -u -v github.comklauspost/asmfmt/cmd/asmfmt
 go get -u -v github.comalecthomas/gometalinkter
+go get -u -v github.com/stamblerre/gocode
