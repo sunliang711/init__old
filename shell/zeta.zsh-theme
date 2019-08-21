@@ -138,10 +138,15 @@ function print_prompt_head {
 %{$blue%}@\
 %{$black_bold%}$(get_box_name): \
 %{$magenta_bold%}$(get_current_dir)%{$reset_color%}\
-$(get_git_prompt)\
-$(proxy_status)"
+$(get_git_prompt)"
     local right_prompt="%{$blue%}($(get_time_stamp))%{$reset_color%} "
     print -rP "$left_prompt$(get_space $left_prompt $right_prompt)$right_prompt"
+
+# 再加一行，显示proxy状态
+    proxy_prompt="\
+%{$cyan%}# proxy:%{$reset_color%}$(proxy_status)\
+"
+    print -rP "$proxy_prompt"
 }
 
 function get_prompt_indicator {
