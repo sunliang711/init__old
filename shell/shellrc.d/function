@@ -117,6 +117,12 @@ function slientExe(){
 
 
 function proxyon(){
+    proxyon_
+    sed -i.bak -e 's|proxyoff_|proxyon_|' $HOME/.shellrc.d/env
+    rm $HOME/.shellrc.d/env.bak
+}
+
+function proxyon_(){
     #add default parameter
     local proxy=${1:-http://localhost:6116}
     #delete: grep -P can not work on mac
@@ -170,9 +176,16 @@ function proxyon(){
     ##set brew proxy
     #echo "alias brew=ALL_PROXY=$proxy brew ..."
     #alias brew="ALL_PROXY=$proxy brew"
+
 }
 
 function proxyoff(){
+    proxyoff_
+    sed -i.bak -e 's|proxyon_|proxyoff_|' $HOME/.shellrc.d/env
+    rm $HOME/.shellrc.d/env.bak
+}
+
+function proxyoff_(){
     echoExec "unset http_proxy"
     echoExec "unset https_proxy"
     echoExec "unset ftp_proxy"

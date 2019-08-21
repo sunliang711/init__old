@@ -48,4 +48,9 @@ append_path $HOME/.tools
 #END custom PATH
 #END PATH
 
+#BEGIN proxy setting
+proxyoff_ >/dev/null
+#END proxy setting
+
+
 # vim: set ft=sh:
