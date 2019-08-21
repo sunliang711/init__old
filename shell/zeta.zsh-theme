@@ -118,14 +118,14 @@ function get_space {
 function proxy_status(){
     gp=$(git config --global http.proxy)
     if [ -n "$gp" ];then
-        echo -n "%{$green%} <git> %{$reset_color%}"
+        echo -n "%{$green%} [git]=>$gp %{$reset_color%}"
     else
-        echo -n "%{$grey%} <git> %{$reset_color%}"
+        echo -n "%{$grey%} [git]=>off %{$reset_color%}"
     fi
     if [ -n "$http_proxy" ];then
-        echo -n "%{$green%}<http> %{$reset_color%}"
+        echo -n "%{$green%}[http]=>$http_proxy %{$reset_color%}"
     else
-        echo -n "%{$grey%}<http> %{$reset_color%}"
+        echo -n "%{$grey%}[http]=>off %{$reset_color%}"
     fi
 }
 
@@ -144,7 +144,7 @@ $(get_git_prompt)"
 
 # 再加一行，显示proxy状态
     proxy_prompt="\
-%{$cyan%}# proxy:%{$reset_color%}$(proxy_status)\
+%{$green_bold%}# proxy:%{$reset_color%}$(proxy_status)\
 "
     print -rP "$proxy_prompt"
 }
