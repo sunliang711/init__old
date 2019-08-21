@@ -49,3 +49,8 @@ go get -u -v github.comkoron/iferr
 go get -u -v github.comklauspost/asmfmt/cmd/asmfmt
 go get -u -v github.comalecthomas/gometalinkter
 go get -u -v github.com/stamblerre/gocode
+go get -u -v github.com/mdempsky/gocode
+go get -u -v github.com/go-delve/delve/cmd/dlv
+go get -u -v github.com/golangci/golangci-lint/cmd/golangci-lint
+go get -u -v honnef.co/go/tools/cmd/keyify
+

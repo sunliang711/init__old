@@ -118,7 +118,7 @@ function slientExe(){
 
 function proxyon(){
     #add default parameter
-    local proxy=${1:-http://localhost:6117}
+    local proxy=${1:-http://localhost:6116}
     #delete: grep -P can not work on mac
     #port=$(grep -oP '(?<=listen-address 127.0.0.1:)\d+' /usr/local/share/ss-local/privoxy.config)
     echoExec "export http_proxy=$proxy"

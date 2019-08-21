@@ -115,6 +115,20 @@ function get_space {
     echo $space
 }
 
+function proxy_status(){
+    gp=$(git config --global http.proxy)
+    if [ -n "$gp" ];then
+        echo -n "%{$green%} <git> %{$reset_color%}"
+    else
+        echo -n "%{$grey%} <git> %{$reset_color%}"
+    fi
+    if [ -n "$http_proxy" ];then
+        echo -n "%{$green%}<http> %{$reset_color%}"
+    else
+        echo -n "%{$grey%}<http> %{$reset_color%}"
+    fi
+}
+
 # Prompt: # USER@MACHINE: DIRECTORY <BRANCH [STATUS]> --- (TIME_STAMP)
 # > command
 function print_prompt_head {
@@ -124,7 +138,8 @@ function print_prompt_head {
 %{$blue%}@\
 %{$black_bold%}$(get_box_name): \
 %{$magenta_bold%}$(get_current_dir)%{$reset_color%}\
-$(get_git_prompt) "
+$(get_git_prompt)\
+$(proxy_status)"
     local right_prompt="%{$blue%}($(get_time_stamp))%{$reset_color%} "
     print -rP "$left_prompt$(get_space $left_prompt $right_prompt)$right_prompt"
 }

@@ -84,6 +84,7 @@ installBasic(){
     else
 
         echo  "Downloading vim-plug from gitee..."
+        echo "$(tput setaf 1)Make sure not use git proxy!!$(tput sgr0)"
         curl -fLo $root/autoload/plug.vim --create-dirs \
             https://gitee.com/sunliang711/vim-plug/raw/master/plug.vim || { echo "download vim-plug failed.";uninstall; exit 1; }
         #use gitee.com repo (in China!!)
