@@ -289,7 +289,9 @@ if (($vimGo==1));then
     sed -ibak "s|\"[ ]*\(Plug '.*/vim-go'\)|\1|" $cfg
     rm -f "${cfg}bak"
     echo "Set GOPATH to ~/go"
-    export GOPATH=~/go
+    if [ -z $GOPATH ];then
+        export GOPATH=~/go
+    fi
     if [[ ! -d $GOPATH ]];then
         mkdir -pv $GOPATH
     fi
@@ -327,6 +329,7 @@ fi
 
 if (($vimGo==1));then
     echo "Install vim-go..."
+    (cd ../golang && bash gotools.sh)
     #$whichVim +GoInstallBinaries +qall
     $whichVim -c GoInstallBinaries -c qall
     templateFile=$(find $root -name hello_world.go)
