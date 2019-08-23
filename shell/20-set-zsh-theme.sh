@@ -19,7 +19,7 @@ if [ ! -d $HOME/.oh-my-zsh ];then
     exit 1
 fi
 # cp *.zsh-theme $HOME/.oh-my-zsh/themes
-ln -sf $(PWD)/*.zsh-theme $HOME/.oh-my-zsh/themes
+ln -sf ${PWD}/*.zsh-theme $HOME/.oh-my-zsh/themes
 sed -ibak 's/\(ZSH_THEME=\).\{1,\}/\1"zeta"/' $HOME/.zshrc
 rm $HOME/.zshrcbak
 #install zsh-syntax-highlighting

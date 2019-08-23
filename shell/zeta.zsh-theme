@@ -133,7 +133,7 @@ function proxy_status(){
 # > command
 function print_prompt_head {
     # 再加一行，显示proxy状态
-    proxy_prompt="\
+    proxy_prompt="
 %{$green_bold%}# proxy:%{$reset_color%}$(proxy_status)\
 "
     print -rP "$proxy_prompt"
