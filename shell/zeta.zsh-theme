@@ -132,6 +132,12 @@ function proxy_status(){
 # Prompt: # USER@MACHINE: DIRECTORY <BRANCH [STATUS]> --- (TIME_STAMP)
 # > command
 function print_prompt_head {
+    # 再加一行，显示proxy状态
+    proxy_prompt="\
+%{$green_bold%}# proxy:%{$reset_color%}$(proxy_status)\
+"
+    print -rP "$proxy_prompt"
+
     local left_prompt="\
 %{$blue%}# \
 %{$green_bold%}$(get_usr_name)\
@@ -142,11 +148,6 @@ $(get_git_prompt)"
     local right_prompt="%{$blue%}($(get_time_stamp))%{$reset_color%} "
     print -rP "$left_prompt$(get_space $left_prompt $right_prompt)$right_prompt"
 
-# 再加一行，显示proxy状态
-    proxy_prompt="\
-%{$green_bold%}# proxy:%{$reset_color%}$(proxy_status)\
-"
-    print -rP "$proxy_prompt"
 }
 
 function get_prompt_indicator {
