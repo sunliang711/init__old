@@ -980,7 +980,7 @@ function newsh(){
 		fi
 		root="$(cd $(dirname $rpath) && pwd)"
 		cd "$root"
-		local shellHeaderLink='https://pic711.oss-cn-shanghai.aliyuncs.com/sh/shell-header.sh'
+		shellHeaderLink='https://pic711.oss-cn-shanghai.aliyuncs.com/sh/shell-header.sh'
 		if [ -e /etc/shell-header.sh ];then
 		    source /etc/shell-header.sh
 		else
