@@ -15,6 +15,8 @@ usage(){
 		list      [-r ROOT] [-t e|a]     e for enabled,a for available
 		enable    [-r ROOT] [siteName]
 		disable   [-r ROOT] [siteName]
+		em
+		edit     <siteName>
 EOF
 exit 1
 }
@@ -31,7 +33,7 @@ list(){
             ls "$dest/sites-available"
             ;;
         *)
-            echo "${green}availate sites:${reset}"
+            echo "${green}available sites:${reset}"
             ls "$dest/sites-available"
             echo
             echo "${green}enabled sites:${reset}"
@@ -50,6 +52,28 @@ disable(){
     if [ -e "$dest/sites-enabled/$siteName" ];then
         runAsRoot "rm -rf $dest/sites-enabled/$siteName"
     fi
+}
+
+em(){
+    editor=vi
+    if command -v vim >/dev/null 2>&1;then
+        editor=vim
+    fi
+    $editor ${BASH_SOURCE}
+}
+
+edit(){
+    siteName=${1:?"missing siteName in available directory."}
+    editor=vi
+    if command -v >/dev/null 2>&1;then
+        editor=vim
+    fi
+    local fullPath="$dest/sites-available/$siteName"
+    if [ ! -e "$fullPath" ];then
+        echo "No $siteName configure file."
+        exit 1
+    fi
+    $editor "$fullPath"
 }
 
 cmd=$1
@@ -85,6 +109,12 @@ case $cmd in
         ;;
     d|di|dis|disa|disab|disabl|disable)
         disable "$@"
+        ;;
+    em)
+        em
+        ;;
+    edit)
+        edit "$@"
         ;;
     *)
         usage
