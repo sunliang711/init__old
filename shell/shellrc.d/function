@@ -253,6 +253,13 @@ function rm(){
     done
 }
 
+codePath="/Applications/Visual Studio Code.app/Contents/Resources/app/bin/code"
+if [ -e "$codePath" ];then
+    function code(){
+        "$codePath" "$@"
+    }
+fi
+
 function extract ()
 {
     name=$1;
