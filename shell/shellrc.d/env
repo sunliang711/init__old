@@ -9,8 +9,16 @@ user=${SUDO_USER:-$(whoami)}
 home=$(eval echo ~$user)
 
 #BEGIN environment variable
-export PREFIX=$HOME/Workspace
-[ -d $PREFIX/go ] && export GOPATH=$PREFIX/go && export GOBIN=$GOPATH/bin
+export WORKSPACE=$HOME/Workspace
+[ -d $WORKSPACE/go ] && export GOPATH=$WORKSPACE/go && export GOBIN=$GOPATH/bin
+
+#default editor for `systemctl edit --full <service>`
+#sudo -E systemctl edit --full <service>
+if command -v vim >/dev/null 2>&1;then
+    export SYSTEMD_EDITOR=vim
+else
+    export SYSTEMD_EDITOR=vi
+fi
 
 #export LS_COLORS=$LS_COLORS:"di=0;33:"
 #export PS1='[\u@\h \[\e[32;1m\]\W\\$\e[0m'
