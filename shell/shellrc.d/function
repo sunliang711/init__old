@@ -789,10 +789,10 @@ function em(){
         editor=vim
     fi
     destfile="$HOME/.shellrc"
-    while getopts ":hfaeob" opt;do
+    while getopts ":hfaeobl" opt;do
         case $opt in
             h)
-                echo "Usage: $0 [-h|-b|-f|-a|-e|-o] basic,function,alias,env,other"
+                echo "Usage: $0 [-h|-b|-f|-a|-e|-o|-l] basic,function,alias,env,other,local"
                 return 1
                 ;;
             f)
@@ -809,6 +809,9 @@ function em(){
                 ;;
             b)
                 destfile="$HOME/.shellrc.d/basic"
+                ;;
+            l)
+                destfile="$HOME/.shellrc.d/local"
                 ;;
             \?)
                 echo "Unkown option: \"$OPTARG\""

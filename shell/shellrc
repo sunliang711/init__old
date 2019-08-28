@@ -14,4 +14,6 @@ source "${HOME}/.shellrc.d/alias"
 #other
 source "${HOME}/.shellrc.d/other"
 
+#local
+source "${HOME}/.shellrc.d/local"
 # vim: set ft=sh:
