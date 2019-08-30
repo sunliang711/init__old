@@ -1,3 +1,8 @@
+function Source(){
+    file="${1}"
+    [ -e "$file" ] && source "$file"
+}
+
 function functions(){
     functionFile=$HOME/.shellrc.d/function
     if [ ! -f $functionFile ];then

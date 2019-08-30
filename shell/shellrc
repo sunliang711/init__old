@@ -6,14 +6,14 @@ source "${HOME}/.shellrc.d/basic"
 source "${HOME}/.shellrc.d/function"
 
 #load env
-source "${HOME}/.shellrc.d/env"
+Source "${HOME}/.shellrc.d/env"
 
 #load alias
-source "${HOME}/.shellrc.d/alias"
+Source "${HOME}/.shellrc.d/alias"
 
 #other
-source "${HOME}/.shellrc.d/other"
+Source "${HOME}/.shellrc.d/other"
 
 #local
-source "${HOME}/.shellrc.d/local"
+Source "${HOME}/.shellrc.d/local"
 # vim: set ft=sh:
