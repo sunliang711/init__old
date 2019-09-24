@@ -23,11 +23,12 @@ me=os.path.realpath(__file__)
 
 def main():
     parser = argparse.ArgumentParser(description = "find out ip address of wan")
-    parser.add_argument("--host",help = "proxy host")
+    parser.add_argument("--host",help = "proxy host,ie: socks5://proxyHost or http://proxyHost")
     parser.add_argument("-p","--port",type = int,help = "proxy port")
     parser.add_argument("-m","--max-time",dest = "mtime",type = int,help = "curl max-time option")
     parser.add_argument("-e","--edit",action="store_true",help="edit this script")
-    parser.add_argument("-v","--verbose",action="store_true",help = "verbose mode")
+    # parser.add_argument("-v","--verbose",action="store_true",help = "verbose mode")
+    parser.add_argument("-q","--quiet",action="store_true",help = "quiet mode")
 
     args = parser.parse_args()
 
@@ -45,19 +46,19 @@ def main():
     mtime = args.mtime
 
     if host is None:
-        if args.verbose:
+        if not args.quiet:
             logging.info("use default host: {}".format(DefaultHost))
         host = DefaultHost
     if port is None:
         port = DefaultPort
-        if args.verbose:
+        if not args.quiet:
             logging.info("use default port: {}".format(DefaultPort))
     if mtime is None:
         mtime = DefaultMTime
-        if args.verbose:
+        if not args.quiet:
             logging.info("use default mtime: {}".format(DefaultMTime))
     proxy = "{}:{}".format(host,port)
-    if args.verbose:
+    if not args.quiet:
         logging.info("use proxy: {}".format(proxy))
 
     sources = ['cip.cc','ipinfo.io','myip.ipip.net','ifconfig.me']
