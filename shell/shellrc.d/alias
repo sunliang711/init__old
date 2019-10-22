@@ -102,9 +102,9 @@ fi
 
 alias tree='tree -I node_modules'
 
-alias npm='npm --registry=https://registry.npm.taobao.org'
+# alias npm='npm --registry=https://registry.npm.taobao.org'
 
-alias yarn='yarn --registry=https://registry.npm.taobao.org'
+# alias yarn='yarn --registry=https://registry.npm.taobao.org'
 
 #用法:在echo中使用$(RED)some-text-to-be-color-red$(CLEAR)
 # alias RED='tput setaf 1'

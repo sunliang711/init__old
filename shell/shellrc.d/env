@@ -57,7 +57,7 @@ append_path $HOME/.tools
 #END PATH
 
 #BEGIN proxy setting
-proxyon_ >/dev/null
+proxyoff_ >/dev/null
 #END proxy setting
 
 
