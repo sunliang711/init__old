@@ -778,7 +778,8 @@ function listen(){
             #     lsof -iUDP -P -n
             # fi
             if command -v lsof >/dev/null 2>&1;then
-                (sudo lsof -iTCP -sTCP:LISTEN -P; echo "-----------------------";sudo lsof -iUDP -P -n | grep -v '\*:\*$') | less
+                [ $EUID -eq 0 ] && (lsof -iTCP -sTCP:LISTEN -P; echo "-----------------------";lsof -iUDP -P -n | grep -v '\*:\*$') | less || (sudo lsof -iTCP -sTCP:LISTEN -P; echo "-----------------------";sudo lsof -iUDP -P -n | grep -v '\*:\*$') | less
+
             else
                 netstat -tan | grep LISTEN
                 echo "-----------------------"
