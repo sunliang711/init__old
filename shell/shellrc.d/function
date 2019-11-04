@@ -124,6 +124,9 @@ function slientExe(){
 function proxyon(){
     proxyon_
     destFile="$HOME/.shellrc.d/local"
+    if ! grep -q 'proxyon_\|proxyoff_' $destFile;then
+        echo 'proxyoff_' >> $destFile
+    fi
     sed -i.bak -e 's|proxyoff_|proxyon_|' "$destFile"
     rm "${destFile}.bak"
 }
@@ -186,6 +189,9 @@ function proxyon_(){
 function proxyoff(){
     proxyoff_
     destFile="$HOME/.shellrc.d/local"
+    if ! grep -q 'proxyon_\|proxyoff_' $destFile;then
+        echo 'proxyoff_' >> $destFile
+    fi
     sed -i.bak -e 's|proxyon_|proxyoff_|' "$destFile"
     rm "${destFile}.bak"
 }
