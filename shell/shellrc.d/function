@@ -123,8 +123,9 @@ function slientExe(){
 
 function proxyon(){
     proxyon_
-    sed -i.bak -e 's|proxyoff_|proxyon_|' $HOME/.shellrc.d/env
-    rm $HOME/.shellrc.d/env.bak
+    destFile="$HOME/.shellrc.d/local"
+    sed -i.bak -e 's|proxyoff_|proxyon_|' "$destFile"
+    rm "${destFile}.bak"
 }
 
 function proxyon_(){
@@ -184,8 +185,9 @@ function proxyon_(){
 
 function proxyoff(){
     proxyoff_
-    sed -i.bak -e 's|proxyon_|proxyoff_|' $HOME/.shellrc.d/env
-    rm $HOME/.shellrc.d/env.bak
+    destFile="$HOME/.shellrc.d/local"
+    sed -i.bak -e 's|proxyon_|proxyoff_|' "$destFile"
+    rm "${destFile}.bak"
 }
 
 function proxyoff_(){
