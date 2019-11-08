@@ -1,5 +1,9 @@
 #!/bin/bash
 
+if [ $EUID -ne 0 ];then
+    echo "Need run as root!"
+    exit 1
+fi
 usage(){
     cat<<-EOF
 		Usage: $(basename $0) Options
@@ -104,6 +108,7 @@ make(){
         mv "$tmpoutput" $output
         echo "Done."
     fi
-    echo "Run \"apt-get update\" to update source list" 1>&2
+    # echo "Run \"apt-get update\" to update source list" 1>&2
+    apt-get update
 }
 make

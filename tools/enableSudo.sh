@@ -15,7 +15,7 @@ if [ -z "$user" ];then
         user="${SUDO_USER}"
         echo -n "Enable user:$user ?[y/n] "
         read xx
-        if [ $xx = "n" ];then
+        if [ $xx = n* ];then
             echo "${red}Exit${reset}."
             exit 1
         fi
