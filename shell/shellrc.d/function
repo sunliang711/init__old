@@ -123,8 +123,12 @@ function slientExe(){
 
 function proxyon(){
     proxyon_
-    sed -i.bak -e 's|proxyoff_|proxyon_|' $HOME/.shellrc.d/env
-    rm $HOME/.shellrc.d/env.bak
+    destFile="$HOME/.shellrc.d/local"
+    if ! grep -q 'proxyon_\|proxyoff_' $destFile;then
+        echo 'proxyoff_' >> $destFile
+    fi
+    sed -i.bak -e 's|proxyoff_|proxyon_|' "$destFile"
+    rm "${destFile}.bak"
 }
 
 function proxyon_(){
@@ -156,10 +160,8 @@ function proxyon_(){
         alias pip3="pip3 --proxy $proxy"
     fi
     if command -v npm >/dev/null 2>&1;then
-        echo "npm config set proxy $proxy"
-        npm config set proxy $proxy
-        echo "npm config set https-proxy $proxy"
-        npm config set https-proxy $proxy
+        echo "npm config set registry http://registry.npm.taobao.org"
+        npm config set registry http://registry.npm.taobao.org
     fi
 
     ##set curl proxy
@@ -186,8 +188,12 @@ function proxyon_(){
 
 function proxyoff(){
     proxyoff_
-    sed -i.bak -e 's|proxyon_|proxyoff_|' $HOME/.shellrc.d/env
-    rm $HOME/.shellrc.d/env.bak
+    destFile="$HOME/.shellrc.d/local"
+    if ! grep -q 'proxyon_\|proxyoff_' $destFile;then
+        echo 'proxyoff_' >> $destFile
+    fi
+    sed -i.bak -e 's|proxyon_|proxyoff_|' "$destFile"
+    rm "${destFile}.bak"
 }
 
 function proxyoff_(){
@@ -211,8 +217,7 @@ function proxyoff_(){
     # local configFile="/tmp/curlrc"
     # rm -rf "$configFile" 2>/dev/null
     if command -v npm >/dev/null 2>&1;then
-        npm config delete https-proxy
-        npm config delete proxy
+        npm config delete registry
     fi
 }
 
@@ -773,7 +778,8 @@ function listen(){
             #     lsof -iUDP -P -n
             # fi
             if command -v lsof >/dev/null 2>&1;then
-                (sudo lsof -iTCP -sTCP:LISTEN -P; echo "-----------------------";sudo lsof -iUDP -P -n | grep -v '\*:\*$') | less
+                [ $EUID -eq 0 ] && (lsof -iTCP -sTCP:LISTEN -P; echo "-----------------------";lsof -iUDP -P -n | grep -v '\*:\*$') | less || (sudo lsof -iTCP -sTCP:LISTEN -P; echo "-----------------------";sudo lsof -iUDP -P -n | grep -v '\*:\*$') | less
+
             else
                 netstat -tan | grep LISTEN
                 echo "-----------------------"

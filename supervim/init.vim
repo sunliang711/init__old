@@ -228,6 +228,9 @@ Plug 'majutsushi/tagbar'
 ":DirDiff <dir1> <dir2>
 Plug 'will133/vim-dirdiff'
 
+"emmet-vim
+Plug 'sunliang711/emmet-vim'
+
 call plug#end()
 "}}}
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -457,3 +460,13 @@ command! Pyencoding :execute "0put='#!/usr/bin/env python'|1put='# -*- encoding:
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 command! W :execute ':silent w !sudo tee % > /dev/null' | :edit!
 command! Wq :execute ':silent w !sudo tee % > /dev/null' | :edit! | :quit
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+"
+"      emmet-vim
+"
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" 只在html和css文件中起作用
+let g:user_emmet_install_global = 0
+autocmd FileType html,css EmmetInstal
+" 修改Emmet默认快捷键 将默认的<C-y>修改成<C-e>方便操作
+let g:user_emmet_leader_key = '<C-y>'
