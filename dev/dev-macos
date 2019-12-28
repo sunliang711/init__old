@@ -78,7 +78,7 @@ fi
 
 sudo spctl --master-disable
 
-apps="coreutils findutils grep gnu-tar gnu-sed gawk gnutls gnu-indent gnu-getopt gnu-which wget neovim python python3 privoxy tree go pv"
+apps="coreutils findutils grep gnu-tar gnu-sed gawk gnutls gnu-indent gnu-getopt gnu-which wget python3 privoxy tree go pv"
 for app in $apps;do
     if ! brew list $app >/dev/null 2>&1;then
         echo "Install $app..."
@@ -92,9 +92,9 @@ done
 #install vim with python3 support
 echo "Install vim with python3 support"
 if [[ -n ${SUDO_USER} ]];then
-    su $USER -c "brew install vim --with-python3"
+    su $USER -c "brew install vim"
 else
-    brew install vim --with-python3
+    brew install vim
 fi
 
 SBIN=$(find /usr/local/Cellar/privoxy -name "sbin")
