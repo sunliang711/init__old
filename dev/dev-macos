@@ -5,7 +5,14 @@ fi
 thisScriptDir=$(cd $(dirname ${BASH_SOURCE}) && pwd)
 cd $thisScriptDir
 
-cp lctl /usr/local/bin
+#TODO need root privilege
+if [[ -n ${SUDO_USER} ]];then
+    su $USER -c "cp lctl /usr/local/bin"
+else
+    cp lctl /usr/local/bin
+
+fi
+exit 0
 if [[ "$(uname)" != "Darwin" ]];then
     echo "Not macOS"
     exit 1
@@ -78,7 +85,8 @@ fi
 
 sudo spctl --master-disable
 
-apps="coreutils findutils grep gnu-tar gnu-sed gawk gnutls gnu-indent gnu-getopt gnu-which wget python3 privoxy tree go pv"
+# apps="coreutils findutils grep gnu-tar gnu-sed gawk gnutls gnu-indent gnu-getopt gnu-which wget python3 privoxy tree go pv"
+apps="coreutils findutils grep gnu-tar gnu-sed gawk gnutls gnu-indent gnu-getopt gnu-which wget python3 tree go pv"
 for app in $apps;do
     if ! brew list $app >/dev/null 2>&1;then
         echo "Install $app..."
