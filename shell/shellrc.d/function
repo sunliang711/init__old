@@ -1097,6 +1097,19 @@ function postjson(){
     fi
     curl -X POST -H 'Content-Type:application/json' -d "$OPTARG" $1
 }
+
+function clang++11(){
+    clang++ -std=c++11 "$@"
+}
+
+function clang++14(){
+    clang++ -std=c++14 "$@"
+}
+
+function clang++17(){
+    clang++ -std=c++17 "$@"
+}
+
 #END function
 
 # vim: set ft=sh:
