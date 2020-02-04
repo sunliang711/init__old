@@ -17,7 +17,7 @@ cd /tmp
 curl -LO "${url}" || { echo "download docker release failed!"; exit 1; }
 tar xvf docker-${version}.tgz && cd docker && cp * ${dest}
 
-cat<<EOF>/etc/systemd/system/dockerd
+cat<<EOF>/etc/systemd/system/dockerd.service
 [Unit]
 Description=docker daemon
 #After=network.target
