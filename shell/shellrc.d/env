@@ -11,7 +11,9 @@ home=$(eval echo ~$user)
 
 #BEGIN environment variable
 export WORKSPACE=$HOME/Workspace
-[ -d $WORKSPACE/go ] && export GOPATH=$WORKSPACE/go && export GOBIN=$GOPATH/bin
+export GOPATH=$WORKSPACE/go
+export GOBIN=$GOPATH/bin
+[ ! -d $GOPATH ] && mkdir -p $GOPATH
 
 #default editor for `systemctl edit --full <service>`
 #sudo -E systemctl edit --full <service>
