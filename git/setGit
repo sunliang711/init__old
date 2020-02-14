@@ -16,7 +16,8 @@ gitconfig(){
     git config --global push.default simple
     #save password for several minutes
     git config --global credential.helper cache
-    git config --global alias.tree "log --oneline --graph --decorate --all"
+    # git config --global alias.tree "log --oneline --graph --decorate --all"
+    git config --global alias.tree "log --pretty=format:\"%Cgreen%h %Cred%d %Cblue%s %x09%Creset[%cn %cd]\" --graph --date=iso"
     git config --global alias.list "config --global --list"
     if command -v nvim >/dev/null 2>&1;then
         git config --global core.editor nvim
