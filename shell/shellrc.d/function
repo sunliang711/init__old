@@ -691,6 +691,7 @@ Description=
 #ExecStart=
 #ExecStop=
 
+#WorkingDirectory=/path/to/wd
 #Restart=on-failure
 #Environment=
 [Install]
