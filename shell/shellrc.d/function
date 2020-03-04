@@ -1010,6 +1010,23 @@ function newsh(){
 		fi
 		# write your code below
 
+		help(){
+		    cat<<EOF2
+		Usage: $(basename $0) CMD
+
+		CMD:
+		EOF2
+	    perl -lne 'print "\t$2" if /^(function)?\s*?(\w+)\(\)\{$/' $(basename ${BASH_SOURCE})
+		}
+
+case "$1" in
+  ""|-h|--help|help)
+    help
+    ;;
+  *)
+    "$@"
+esac
+
 		EOF
     "$editor" "$filename"
 }
