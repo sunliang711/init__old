@@ -1128,6 +1128,10 @@ function clang++17(){
     clang++ -std=c++17 "$@"
 }
 
+function comma(){
+    digit=${1:?'missing digit'}
+    echo "$digit" | perl -pe 's|(?<=\d)(?=(\d{3})+\D)|,|g'
+}
 #END function
 
 # vim: set ft=sh:
