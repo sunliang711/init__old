@@ -16,6 +16,7 @@ blue=$(tput setaf 4)
 cyan=$(tput setaf 5)
 reset=$(tput sgr0)
 runAsRoot(){
+    OPTIND=1
     verbose=0
     while getopts ":v" opt;do
         case "$opt" in
@@ -56,15 +57,18 @@ Usage: $(basename $0) option
 
 option:
     -v  <version> switch to specify version of golang
-    -g  switch globally,need root priviledge
+    -l  switch globally,need root priviledge
 EOF
     exit 1
 }
 
-dest=$home/.golang
-version=unknown
+globalPATH=/usr/local/bin
+dest=/usr/local/golang
+version=
+local=0
+executables=(go gofmt)
 
-while getopts ":v:gh" opt;do
+while getopts ":v:lh" opt;do
     case "$opt" in
         h)
             usage
@@ -72,12 +76,9 @@ while getopts ":v:gh" opt;do
         v)
             version=$OPTARG
             ;;
-        g)
-            dest=/usr/local/golang
-            if (($EUID!=0));then
-                echo "Need run as root when swith globally."
-                usage
-            fi
+        l)
+            dest=$HOME/.golang
+            local=1
             ;;
         :)
             ;;
@@ -85,14 +86,38 @@ while getopts ":v:gh" opt;do
             ;;
     esac
 done
+shift $((OPTIND-1))
+
+if [ -z "$version" ];then
+    echo "Need version"
+    usage
+fi
 
 echo "version: $version"
 if [ ! -d "$dest/$version" ];then
-    echo "No such version"
+    echo "No such version in \"$dest\""
     usage
-    exit 1
 fi
+
 if [ -d "$dest/current" ];then
-    rm -rf "$dest/current"
+    if (( $local == 1 ));then
+        rm -rf "$dest/current"
+    else
+        runAsRoot "rm -rf $dest/current"
+    fi
 fi
-ln -svf "$dest/$version" "$dest/current"
+
+if (( $local == 1 ));then
+    ln -svf "$dest/$version" "$dest/current"
+else
+    runAsRoot "ln -svf $dest/$version $dest/current"
+fi
+
+if (( $local == 1 ));then
+    echo "Add $dest/current to your PATH manaually."
+else
+    echo "link executables in $dest/current to $globalPATH..."
+    for exe in "${executables[@]}";do
+        runAsRoot "ln -svf $dest/current/$exe $globalPATH"
+    done
+fi

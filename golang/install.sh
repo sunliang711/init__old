@@ -50,25 +50,32 @@ runAsRoot(){
     fi
 }
 
-usage(){
-    cat<<'EOF'
-Usage: $(basename $0) option
-
-option:
-    -g  install golang to /usr/local/golang,else to $HOME/.golang
-    -v  <version> install specify version of golang
-EOF
-    exit 1
-}
-
-dest=$home/.golang
-version=1.12.7
+dest=/usr/local/golang
+downloadDest=/tmp
+version=1.13.8
+executables=(go gofmt)
+local=0
 
 winlink='https://dl.google.com/go/goVERSION.windows-amd64.msi'
 maclink='https://dl.google.com/go/goVERSION.darwin-amd64.pkg'
 linuxlink='https://dl.google.com/go/goVERSION.linux-amd64.tar.gz'
-
 golink=
+
+usage(){
+    cat<<EOF
+Usage: $(basename $0) option
+
+option:
+    -l  install golang to $HOME/.golang instead of /usr/local/golang
+    -v  <version> install specify version of golang,default version: $version
+
+note:
+     On MacOS, just download golang installer to ${downloadDest}
+EOF
+    exit 1
+}
+
+
 case $(uname) in
     Darwin)
         golink="$maclink"
@@ -81,29 +88,17 @@ case $(uname) in
         ;;
 esac
 
-while getopts ":gv:t:" opt;do
+while getopts ":lv:t:h" opt;do
     case "$opt" in
-        g)
-            dest=/usr/local/golang
-            if (($EUID!=0));then
-                echo "when install to global position,run this script as root."
-                exit 1
-            fi
+        l)
+            dest=$HOME/.golang
+            local=1
             ;;
         v)
             version=$OPTARG
             ;;
-        t)
-            case $OPTARG in
-                linux)
-                    golink="$linuxlink"
-                    ;;
-                Darwin)
-                    golink="$maclink"
-                    ;;
-                *)
-                    usage
-            esac
+        h)
+            usage
             ;;
         :)
             echo "Missing parameter for option: \"$OPTARG\""
@@ -124,7 +119,12 @@ golink="$(echo "$golink" | perl -pe "s|VERSION|$version|")"
 fileName=${golink##*/}
 echo "fileName: $fileName"
 
-cd /tmp
+cd ${downloadDest}
+
+if ! command -v curl >/dev/null 2>&1;then
+    echo "Need curl!"
+    exit 1
+fi
 
 if [ ! -e "$fileName" ];then
     echo "Download link: $golink"
@@ -134,7 +134,7 @@ fi
 
 case $(uname) in
     Darwin)
-        echo "golang has been downloaded"
+        echo "Golang has been downloaded to ${downloadDest}"
         exit 0
         ;;
     Linux)
@@ -147,13 +147,15 @@ if [ ! -d "$dest" ];then
     mkdir -pv $dest
 fi
 
-tar -xvf "$fileName" || { echo "extract file failed.";exit 1; }
+echo "extract $fileName..."
+tar -xvf "$fileName" >/dev/null 2>&1 || { echo "extract ${fileName} failed.";exit 1; }
 
 if [ -d "$dest/$version" ];then
     echo "$dest/$version already exist, delete it? [y/n]"
     read deleteOld
     if [ "$deleteOld" = "y" ];then
-        rm -rf $dest/$version/*
+        rm -rf $dest/$version
+        mkdir -pv "$dest/$version"
     else
         echo "Quit."
         exit 1
@@ -162,6 +164,19 @@ else
     mkdir -pv "$dest/$version"
 fi
 
-mv go/* $dest/$version
-rm -rf go
+cd go/bin
+for exe in "${executables[@]}";do
+    if (( "$local" == 1 ));then
+        install -m 755 "$exe" "$dest/$version"
+    else
+        runAsRoot "install -m 755 $exe $dest/$version"
+    fi
+done
 
+rm -rf "$downloadDest/go"
+
+if (( "$local" == 1 ));then
+    gvm.sh -l -v $version
+else
+    runAsRoot "gvm.sh -v $version"
+fi

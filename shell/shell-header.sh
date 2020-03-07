@@ -9,6 +9,7 @@ blue=$(tput setaf 4)
 cyan=$(tput setaf 5)
 reset=$(tput sgr0)
 runAsRoot(){
+    OPTIND=1
     verbose=0
     while getopts ":v" opt;do
         case "$opt" in
