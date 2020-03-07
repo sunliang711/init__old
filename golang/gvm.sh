@@ -64,9 +64,11 @@ EOF
 
 
 globalPATH=/usr/local/bin
-localDest=$HOME/.go
-globalDest=/usr/local/go
+
+localDest=$HOME/.golang
+globalDest=/usr/local/golang
 dest=${globalDest}
+
 version=
 local=0
 executables=(go gofmt)
@@ -93,18 +95,20 @@ shift $((OPTIND-1))
 
 if [ -z "$version" ];then
     echo "Need version"
-    echo -n "Installed version[s]: "
-    ls $dest/ 2>/dev/null| grep -v current
-    echo
+    #TODO
+    # echo -n "Installed version[s]: "
+    # ls $dest/ 2>/dev/null| grep -v current
+    # echo
     usage
 fi
 
 echo "version: $version"
 if [ ! -d "$dest/$version" ];then
     echo "No such version in \"$dest\""
-    echo -n "Installed version[s]: "
-    ls $dest/ 2>/dev/null| grep -v current
-    echo
+    # TODO
+    # echo -n "Installed version[s]: "
+    # ls $dest/ 2>/dev/null| grep -v current
+    # echo
     exit 1
 fi
 
@@ -127,6 +131,6 @@ if (( $local == 1 ));then
 else
     echo "link executables in $dest/current to $globalPATH..."
     for exe in "${executables[@]}";do
-        runAsRoot "ln -svf $dest/current/$exe $globalPATH"
+        runAsRoot "ln -svf $dest/current/go/bin/$exe $globalPATH"
     done
 fi

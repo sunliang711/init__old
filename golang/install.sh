@@ -51,12 +51,12 @@ runAsRoot(){
     fi
 }
 
-localDest=$HOME/.go
-globalDest=/usr/local/go
+localDest=$HOME/.golang
+globalDest=/usr/local/golang
 dest=${globalDest}
+
 downloadDest=/tmp
 version=1.13.8
-executables=(go gofmt)
 local=0
 
 winlink='https://dl.google.com/go/goVERSION.windows-amd64.msi'
@@ -154,8 +154,8 @@ if [ ! -d "$dest" ];then
     fi
 fi
 
-echo "extract $fileName..."
-tar -xvf "$fileName" >/dev/null 2>&1 || { echo "extract ${fileName} failed.";exit 1; }
+# echo "extract $fileName..."
+# tar -xvf "$fileName" >/dev/null 2>&1 || { echo "extract ${fileName} failed.";exit 1; }
 
 if [ -d "$dest/$version" ];then
     echo "$dest/$version already exist, delete it? [y/n]"
@@ -180,16 +180,12 @@ else
     fi
 fi
 
-cd go/bin
-for exe in "${executables[@]}";do
-    if (( "$local" == 1 ));then
-        install -m 755 "$exe" "$dest/$version"
-    else
-        runAsRoot "install -m 755 $exe $dest/$version"
-    fi
-done
-
-rm -rf "$downloadDest/go"
+echo "extract $fileName to $dest/$version..."
+if (( "$local" == 1 ));then
+    tar -C "$dest/$version" -xvf "$fileName" >/dev/null 2>&1
+else
+    runAsRoot "tar -C $dest/$version -xvf $fileName >/dev/null 2>&1"
+fi
 
 cd "$root"
 if (( "$local" == 1 ));then
