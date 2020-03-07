@@ -57,7 +57,7 @@ Usage: $(basename $0) option
 
 option:
     -v  <version> switch to specify version of golang
-    -l  switch globally,need root priviledge
+    -l  switch locally
 EOF
     exit 1
 }
@@ -95,20 +95,16 @@ shift $((OPTIND-1))
 
 if [ -z "$version" ];then
     echo "Need version"
-    #TODO
-    # echo -n "Installed version[s]: "
-    # ls $dest/ 2>/dev/null| grep -v current
-    # echo
+    echo "Installed version[s]: "
+    ls $dest/ 2>/dev/null| grep -v current
     usage
 fi
 
 echo "version: $version"
 if [ ! -d "$dest/$version" ];then
     echo "No such version in \"$dest\""
-    # TODO
-    # echo -n "Installed version[s]: "
-    # ls $dest/ 2>/dev/null| grep -v current
-    # echo
+    echo  "Installed version[s]: "
+    ls $dest/ 2>/dev/null| grep -v current
     exit 1
 fi
 
@@ -121,9 +117,9 @@ if [ -d "$dest/current" ];then
 fi
 
 if (( $local == 1 ));then
-    ln -svf "$dest/$version" "$dest/current"
+    ln -sf "$dest/$version" "$dest/current"
 else
-    runAsRoot "ln -svf $dest/$version $dest/current"
+    runAsRoot "ln -sf $dest/$version $dest/current"
 fi
 
 if (( $local == 1 ));then
@@ -131,6 +127,7 @@ if (( $local == 1 ));then
 else
     echo "link executables in $dest/current to $globalPATH..."
     for exe in "${executables[@]}";do
-        runAsRoot "ln -svf $dest/current/go/bin/$exe $globalPATH"
+        runAsRoot "ln -sf $dest/current/go/bin/$exe $globalPATH"
     done
 fi
+
