@@ -62,13 +62,14 @@ EOF
     exit 1
 }
 
+
 globalPATH=/usr/local/bin
 dest=/usr/local/golang
 version=
 local=0
 executables=(go gofmt)
 
-while getopts ":v:lh" opt;do
+while getopts ":v:lhs" opt;do
     case "$opt" in
         h)
             usage
@@ -90,13 +91,19 @@ shift $((OPTIND-1))
 
 if [ -z "$version" ];then
     echo "Need version"
+    echo -n "Installed version[s]: "
+    ls -l $dest/ 2>/dev/null| grep -v current
+    echo
     usage
 fi
 
 echo "version: $version"
 if [ ! -d "$dest/$version" ];then
     echo "No such version in \"$dest\""
-    usage
+    echo -n "Installed version[s]: "
+    ls -l $dest/ 2>/dev/null| grep -v current
+    echo
+    exit 1
 fi
 
 if [ -d "$dest/current" ];then

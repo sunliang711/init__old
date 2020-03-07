@@ -51,7 +51,9 @@ runAsRoot(){
     fi
 }
 
-dest=/usr/local/golang
+localDest=$HOME/.go
+globalDest=/usr/local/go
+dest=${globalDest}
 downloadDest=/tmp
 version=1.13.8
 executables=(go gofmt)
@@ -67,7 +69,7 @@ usage(){
 Usage: $(basename $0) option
 
 option:
-    -l  install golang to $HOME/.golang instead of /usr/local/golang
+    -l  install golang to $localDest instead of $globalDest
     -v  <version> install specify version of golang,default version: $version
 
 note:
@@ -92,7 +94,7 @@ esac
 while getopts ":lv:t:h" opt;do
     case "$opt" in
         l)
-            dest=$HOME/.golang
+            dest=$localDest
             local=1
             ;;
         v)
