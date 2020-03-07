@@ -191,8 +191,9 @@ done
 
 rm -rf "$downloadDest/go"
 
+cd "$root"
 if (( "$local" == 1 ));then
-    gvm.sh -l -v $version
+    ./gvm.sh -l -v $version
 else
-    gvm.sh -v $version
+    ./gvm.sh -v $version
 fi
