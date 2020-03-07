@@ -16,6 +16,7 @@ blue=$(tput setaf 4)
 cyan=$(tput setaf 5)
 reset=$(tput sgr0)
 runAsRoot(){
+    OPTIND=1
     verbose=0
     while getopts ":v" opt;do
         case "$opt" in
@@ -144,7 +145,11 @@ esac
 #check dest
 if [ ! -d "$dest" ];then
     echo "mkdir $dest..."
-    mkdir -pv $dest
+    if (( $local == 1 ));then
+        mkdir -pv $dest
+    else
+        runAsRoot "mkdir -pv $dest"
+    fi
 fi
 
 echo "extract $fileName..."
@@ -154,14 +159,23 @@ if [ -d "$dest/$version" ];then
     echo "$dest/$version already exist, delete it? [y/n]"
     read deleteOld
     if [ "$deleteOld" = "y" ];then
-        rm -rf $dest/$version
-        mkdir -pv "$dest/$version"
+        if (( $local == 1 ));then
+            rm -rf $dest/$version
+            mkdir -pv "$dest/$version"
+        else
+            runAsRoot "rm -rf $dest/$version"
+            runAsRoot "mkdir -pv $dest/$version"
+        fi
     else
         echo "Quit."
         exit 1
     fi
 else
-    mkdir -pv "$dest/$version"
+    if (( $local == 1 ));then
+        mkdir -pv "$dest/$version"
+    else
+        runAsRoot "mkdir -pv $dest/$version"
+    fi
 fi
 
 cd go/bin
@@ -178,5 +192,5 @@ rm -rf "$downloadDest/go"
 if (( "$local" == 1 ));then
     gvm.sh -l -v $version
 else
-    runAsRoot "gvm.sh -v $version"
+    gvm.sh -v $version
 fi
