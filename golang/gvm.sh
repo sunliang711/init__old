@@ -94,7 +94,7 @@ shift $((OPTIND-1))
 if [ -z "$version" ];then
     echo "Need version"
     echo -n "Installed version[s]: "
-    ls -l $dest/ 2>/dev/null| grep -v current
+    ls $dest/ 2>/dev/null| grep -v current
     echo
     usage
 fi
@@ -103,7 +103,7 @@ echo "version: $version"
 if [ ! -d "$dest/$version" ];then
     echo "No such version in \"$dest\""
     echo -n "Installed version[s]: "
-    ls -l $dest/ 2>/dev/null| grep -v current
+    ls $dest/ 2>/dev/null| grep -v current
     echo
     exit 1
 fi
