@@ -64,7 +64,9 @@ EOF
 
 
 globalPATH=/usr/local/bin
-dest=/usr/local/golang
+localDest=$HOME/.go
+globalDest=/usr/local/go
+dest=${globalDest}
 version=
 local=0
 executables=(go gofmt)
@@ -78,7 +80,7 @@ while getopts ":v:lhs" opt;do
             version=$OPTARG
             ;;
         l)
-            dest=$HOME/.golang
+            dest=$localDest
             local=1
             ;;
         :)
