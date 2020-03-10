@@ -182,7 +182,7 @@ Plug 'sunliang711/incsearch.vim'
 "对齐插件 :Tab /<char-to-be-alignment>
 Plug 'sunliang711/tabular'
 "头文件源文件切换插件
-" Plug 'sunliang711/a.vim'
+Plug 'sunliang711/a.vim'
 
 "快速给词加环绕符号,例如单引号 双引号括号
 "常用命令
@@ -203,7 +203,7 @@ Plug 'sunliang711/DoxygenToolkit.vim'
 
 "vim-go
 " run :GoInstallBinaries in vim/nvim to install go binaries used by vim-go
-" Plug 'sunliang711/vim-go'
+ Plug 'sunliang711/vim-go'
 
 "better document viewer
 " Plug 'sunliang711/go-explorer'
@@ -217,7 +217,7 @@ Plug 'sunliang711/DoxygenToolkit.vim'
 
 "Coc Conquer of Completion
 " need install yarn on your OS
-" Plug 'sunliang711/coc.nvim', {'do': 'yarn install --frozen-lockfile'}
+Plug 'sunliang711/coc.nvim', {'do': 'yarn install --frozen-lockfile'}
 
 if v:version > 704
     " Plug 'sunliang711/YouCompleteMe'

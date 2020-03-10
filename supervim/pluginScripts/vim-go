@@ -1,0 +1,6 @@
+#!/bin/bash
+
+echo "install go binaries..."
+echo "VIM: $VIM"
+$VIM -c GoInstallBinaries -c qall
+echo "go binaries done"

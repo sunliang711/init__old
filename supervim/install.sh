@@ -64,6 +64,7 @@ installFont(){
             ;;
     esac
 }
+
 installBasic(){
     needCmd curl
     uninstall
@@ -96,7 +97,7 @@ installBasic(){
 }
 
 uninstall(){
-    echo "Uninstall.."
+    echo "Uninstall old version.."
     rm -rf $root
     rm -f $cfg
 }
