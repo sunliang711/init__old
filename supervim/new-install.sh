@@ -94,6 +94,7 @@ install(){
 
     # export VIM for script use
     export VIM
+    export root
     ## plugin script
     for name in "${toBeInstalledPlugins[@]}";do
         if [ -f "pluginScripts/$name" ];then
