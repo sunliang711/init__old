@@ -216,7 +216,7 @@ Plug 'fatih/vim-go'
 
 "Coc Conquer of Completion
 " need install yarn on your OS
-Plug 'neoclide/coc.nvim', {'do': 'yarn install --frozen-lockfile'}
+" Plug 'neoclide/coc.nvim', {'do': 'yarn install --frozen-lockfile'}
 
 if v:version > 704
     " Plug 'Valloric/YouCompleteMe'

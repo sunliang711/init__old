@@ -289,8 +289,9 @@ fi
 
 if (($vimGo==1));then
     echo "modify $cfg for vim-go"
-    sed -ibak "s|\"[ ]*\(Plug '.*/vim-go'\)|\1|" $cfg
+    sed -ibak -e "s|\"[ ]*\(Plug '.*/vim-go'\)|\1|" -e "s|\"[ ]*\(Plug '.*/coc.nvim'\)|\1|" $cfg
     rm -f "${cfg}bak"
+
     echo "Set GOPATH to ~/go"
     if [ -z $GOPATH ];then
         export GOPATH=~/go
@@ -298,6 +299,7 @@ if (($vimGo==1));then
     if [[ ! -d $GOPATH ]];then
         mkdir -pv $GOPATH
     fi
+    cp coc-settings.json $root
 fi
 
 echo "Install plugins..."

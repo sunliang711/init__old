@@ -217,7 +217,7 @@ Plug 'sunliang711/DoxygenToolkit.vim'
 
 "Coc Conquer of Completion
 " need install yarn on your OS
-Plug 'neoclide/coc.nvim', {'do': 'yarn install --frozen-lockfile'}
+" Plug 'sunliang711/coc.nvim', {'do': 'yarn install --frozen-lockfile'}
 
 if v:version > 704
     " Plug 'sunliang711/YouCompleteMe'
