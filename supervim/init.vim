@@ -201,16 +201,22 @@ Plug 'tpope/vim-endwise'
 Plug 'vim-scripts/DoxygenToolkit.vim'
 
 "vim-go
-" Plug 'fatih/vim-go'
-"better document viewer
-Plug 'garyburd/go-explorer'
+" run :GoInstallBinaries in vim/nvim to install go binaries used by vim-go
+Plug 'fatih/vim-go'
 
-if has('nvim')
-    Plug 'Shougo/deoplete.nvim'
-    Plug 'zchee/deoplete-go'
-else
-    Plug 'Shougo/neocomplete.vim'
-endif
+"better document viewer
+" Plug 'garyburd/go-explorer'
+
+" if has('nvim')
+"     Plug 'Shougo/deoplete.nvim'
+"     Plug 'zchee/deoplete-go'
+" else
+"     Plug 'Shougo/neocomplete.vim'
+" endif
+
+"Coc Conquer of Completion
+" need install yarn on your OS
+Plug 'neoclide/coc.nvim', {'do': 'yarn install --frozen-lockfile'}
 
 if v:version > 704
     " Plug 'Valloric/YouCompleteMe'
@@ -222,6 +228,7 @@ Plug 'honza/vim-snippets'
 "给其他插件比如ctrlp nerdtree startify增加图标
 Plug 'ryanoasis/vim-devicons'
 
+" BSD ctags not work,use 'brew install ctags on MacOS'
 Plug 'majutsushi/tagbar'
 
 "Usage
@@ -229,7 +236,7 @@ Plug 'majutsushi/tagbar'
 Plug 'will133/vim-dirdiff'
 
 "emmet-vim
-Plug 'sunliang711/emmet-vim'
+Plug 'mattn/emmet-vim'
 
 call plug#end()
 "}}}
@@ -422,6 +429,16 @@ let g:go_highlight_operators = 1
 let g:go_highlight_build_constraints = 1
 let g:go_def_mode = 'gopls'
 let g:go_info_mode = 'gopls'
+let g:go_fmt_command = "goimports"
+
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+"
+"      coc
+"
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+"
+let g:go_def_mapping_enabled = 0
+
 
 " let g:go_fmt_fail_silently = 1
 " au FileType go map <F3> <Plug>(go-def-vertical)

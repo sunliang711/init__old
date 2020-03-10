@@ -174,6 +174,7 @@ if [[ -n "$ycm" ]];then
 fi
 if (($vimGo==1));then
     needCmd go
+    needCmd yarn
 fi
 shift $((OPTIND-1))
 USER=${SUDO_USER:-$(whoami)}

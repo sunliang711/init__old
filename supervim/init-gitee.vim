@@ -202,16 +202,22 @@ Plug 'sunliang711/vim-endwise'
 Plug 'sunliang711/DoxygenToolkit.vim'
 
 "vim-go
+" run :GoInstallBinaries in vim/nvim to install go binaries used by vim-go
 " Plug 'sunliang711/vim-go'
-"better document viewer
-Plug 'sunliang711/go-explorer'
 
-if has('nvim')
-    Plug 'sunliang711/deoplete.nvim'
-    Plug 'sunliang711/deoplete-go'
-else
-    Plug 'sunliang711/neocomplete.vim'
-endif
+"better document viewer
+" Plug 'sunliang711/go-explorer'
+
+" if has('nvim')
+"     Plug 'sunliang711/deoplete.nvim'
+"     Plug 'sunliang711/deoplete-go'
+" else
+"     Plug 'sunliang711/neocomplete.vim'
+" endif
+
+"Coc Conquer of Completion
+" need install yarn on your OS
+Plug 'neoclide/coc.nvim', {'do': 'yarn install --frozen-lockfile'}
 
 if v:version > 704
     " Plug 'sunliang711/YouCompleteMe'
@@ -223,6 +229,7 @@ Plug 'sunliang711/vim-snippets'
 "给其他插件比如ctrlp nerdtree startify增加图标
 Plug 'sunliang711/vim-devicons'
 
+" BSD ctags not work,use 'brew install ctags on MacOS'
 Plug 'sunliang711/tagbar'
 
 "Usage
@@ -423,6 +430,16 @@ let g:go_highlight_operators = 1
 let g:go_highlight_build_constraints = 1
 let g:go_def_mode = 'gopls'
 let g:go_info_mode = 'gopls'
+let g:go_fmt_command = "goimports"
+
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+"
+"      coc
+"
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+"
+let g:go_def_mapping_enabled = 0
+
 
 " let g:go_fmt_fail_silently = 1
 " au FileType go map <F3> <Plug>(go-def-vertical)
