@@ -18,7 +18,7 @@ else
 endif
 
 set cursorline
-" set cursorcolumn
+set cursorcolumn
 
 "set mouse=c
 set mouse=a
@@ -43,6 +43,13 @@ set fileencodings=utf8,ucs-bom,gbk,cp936,gb2312,gb18030
 set hidden
 set showcmd
 set autochdir
+
+" Better display for messages
+set cmdheight=2
+
+" You will have bad experience for diagnostic messages when it's default 4000.
+set updatetime=300
+
 set clipboard=unnamed
 nnoremap j gj
 nnoremap k gk
