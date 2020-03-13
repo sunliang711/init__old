@@ -12,6 +12,9 @@ case $1 in
         ;;
 esac
 
+username="quick-source"
+quickSourceURL="https://gitee.com/${username}/zsh-syntax-highlighting.git"
+
 user=${SUDO_USER:-$(whoami)}
 HOME=$(eval echo ~$user)
 if [ ! -d $HOME/.oh-my-zsh ];then
@@ -30,7 +33,7 @@ if [[ ! -d $HOME/.zsh-syntax-highlighting ]];then
     else
         echo "clone from gitee.com..."
         echo "$(tput setaf 2)If you want to clone from github.com,add -o option.$(tput sgr0)"
-        git clone https://gitee.com/sunliang711/zsh-syntax-highlighting.git $HOME/.zsh-syntax-highlighting
+        git clone "${quickSourceURL}" $HOME/.zsh-syntax-highlighting
     fi
 fi
 echo "source ~/.zsh-syntax-highlighting/zsh-syntax-highlighting.zsh" >> $HOME/.zshrc

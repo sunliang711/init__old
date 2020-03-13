@@ -36,9 +36,9 @@ install(){
         echo  "Downloading vim-plug from gitee..."
         echo "$(tput setaf 1)Make sure not use git proxy!!$(tput sgr0)"
         curl -fLo $root/autoload/plug.vim --create-dirs \
-            https://gitee.com/sunliang711/vim-plug/raw/master/plug.vim || { echo "download vim-plug failed.";uninstall; exit 1; }
+            https://gitee.com/quick-source/vim-plug/raw/master/plug.vim || { echo "download vim-plug failed.";uninstall; exit 1; }
         #use gitee.com repo (in China!!)
-        sed -ibak -e 's|github.com/junegunn|gitee.com/sunliang711|g' -e 's|github\.com|gitee.com|g'  -e 's|github\\\.com|gitee\\.com|g' $root/autoload/plug.vim
+        sed -ibak -e 's|github.com/junegunn|gitee.com/quick-source|g' -e 's|github\.com|gitee.com|g'  -e 's|github\\\.com|gitee\\.com|g' $root/autoload/plug.vim
     fi
 
 
@@ -51,7 +51,7 @@ install(){
     ### user choose plugins
     echo "## Set plugin name to 1 to install it." > choice.user
     for i in plugins/*;do
-        printf "%-25s =    0\n" $(basename $i)
+        printf "%-25s =    1\n" $(basename $i)
     done >> choice.user
     $VIM choice.user
 
@@ -72,7 +72,7 @@ install(){
 
     for name in "${toBeInstalledPlugins[@]}";do
         echo "Debug plugin name: $name"
-        perl -pe "s|(Plug ').+(/.+)|\1sunliang711\2|" "plugins/$name" >> "$cfg"
+        perl -pe "s|(Plug ').+(/.+)|\1quick-source\2|" "plugins/$name" >> "$cfg"
     done
     echo  >> "$cfg"
     echo "call plug#end()" >> "$cfg"

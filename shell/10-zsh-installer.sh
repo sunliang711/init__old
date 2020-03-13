@@ -35,6 +35,9 @@ case $1 in
         ;;
 esac
 
+username="quick-source"
+quickSourceURL="https://gitee.com/${username}/oh-my-zsh.git"
+
 main() {
   # Use colors, but only if connected to a terminal, and that terminal
   # supports them.
@@ -108,7 +111,7 @@ main() {
   else
       echo "clone from gitee.com..."
       echo "$(tput setaf 2)If you want to clone from github.com add -o option.$(tput sgr0)"
-      env git clone --depth=1 https://gitee.com/sunliang711/oh-my-zsh.git $ZSH || {
+      env git clone --depth=1 "${quickSourceURL}" $ZSH || {
           printf "Error: git clone of oh-my-zsh repo failed\n"
       exit 1
   }
