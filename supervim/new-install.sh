@@ -74,7 +74,7 @@ install(){
         if (($origin==1));then
             cat "plugins/$name" >> "$cfg"
         else
-            perl -pe "s|(Plug ').+(/.+)|\1https://gitee.com/quick-source\2|" "plugins/$name" >> "$cfg"
+            perl -pe "s|(Plug ')[^/]+(/.+)|\1https://gitee.com/quick-source\2|" "plugins/$name" >> "$cfg"
         fi
         echo >> "$cfg"
     done
