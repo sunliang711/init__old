@@ -6,9 +6,6 @@ fi
 me="$(cd $(dirname $rpath) && pwd)"
 cd "$me"
 
-echo "install go binaries..."
-echo "VIM: $VIM"
-echo "root: $root"
+echo "Install go binaries..."
 $VIM -c GoInstallBinaries -c qall
 cp coc-settings.json $root
-echo "go binaries done"

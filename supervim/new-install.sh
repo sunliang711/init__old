@@ -38,7 +38,7 @@ install(){
         curl -fLo $root/autoload/plug.vim --create-dirs \
             https://gitee.com/quick-source/vim-plug/raw/master/plug.vim || { echo "download vim-plug failed.";uninstall; exit 1; }
         #use gitee.com repo (in China!!)
-        sed -ibak -e 's|github.com/junegunn|gitee.com/quick-source|g' -e 's|github\.com|gitee.com|g'  -e 's|github\\\.com|gitee\\.com|g' $root/autoload/plug.vim
+        # sed -ibak -e 's|github.com/junegunn|gitee.com/quick-source|g' -e 's|github\.com|gitee.com|g'  -e 's|github\\\.com|gitee\\.com|g' $root/autoload/plug.vim
     fi
 
 
@@ -71,8 +71,12 @@ install(){
     rm choice.user
 
     for name in "${toBeInstalledPlugins[@]}";do
-        echo "Debug plugin name: $name"
-        perl -pe "s|(Plug ').+(/.+)|\1quick-source\2|" "plugins/$name" >> "$cfg"
+        if (($origin==1));then
+            cat "plugins/$name" >> "$cfg"
+        else
+            perl -pe "s|(Plug ').+(/.+)|\1https://gitee.com/quick-source\2|" "plugins/$name" >> "$cfg"
+        fi
+        echo >> "$cfg"
     done
     echo  >> "$cfg"
     echo "call plug#end()" >> "$cfg"
