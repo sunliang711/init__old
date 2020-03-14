@@ -6,8 +6,6 @@ fi
 me="$(cd $(dirname $rpath) && pwd)"
 cd "$me"
 
-echo "Install go binaries..."
-$VIM -c GoInstallBinaries -c qall
 
 cp coc-settings.json $root
 
@@ -15,4 +13,10 @@ if ! command -v pip3 >/dev/null 2>&1;then
     echo "install pip3,then use it to install cmake-language-server"
 else
     pip3 install cmake-language-server
+fi
+
+if ! command -v npm >/dev/null 2>&1;then
+    echo "Install npm,then use it to install bash-language-server"
+else
+    npm i -g bash-language-server
 fi
