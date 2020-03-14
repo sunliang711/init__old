@@ -101,9 +101,9 @@ install(){
     export root
     ## plugin script
     for name in "${toBeInstalledPlugins[@]}";do
-        if [ -f "pluginScripts/$name" ];then
-            echo "run pluginScripts/$name"
-            bash "pluginScripts/$name"
+        if [ -f "pluginScripts/${name}.sh" ];then
+            echo "run pluginScripts/${name}.sh"
+            bash "pluginScripts/${name}.sh"
         fi
     done
     echo "done."
