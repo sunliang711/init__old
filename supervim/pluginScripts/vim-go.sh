@@ -6,6 +6,6 @@ fi
 me="$(cd $(dirname $rpath) && pwd)"
 cd "$me"
 
-echo "Install go binaries..."
-$VIM -c GoInstallBinaries -c qall
+# echo "Install go binaries..."
+# $VIM -c GoInstallBinaries -c qall
 
