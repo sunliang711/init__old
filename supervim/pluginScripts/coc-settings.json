@@ -12,6 +12,20 @@
                 "~"
             ]
         },
+        "clangd": {
+            "command": "clangd",
+            "filetypes": [
+                "c",
+                "cpp",
+                "objc",
+                "objcpp"
+            ],
+            "rootPatterns": [
+                ".vim/",
+                "compile_flags.txt",
+                "compile_commands.json"
+            ]
+        },
         "cmake": {
             "command": "cmake-language-server",
             "filetypes": [
