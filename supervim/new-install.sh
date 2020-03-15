@@ -196,7 +196,7 @@ while getopts ":fo" opt;do
             exit 1
             ;;
         \?)
-            ehco "Unknown option: '$OPTARG'"
+           echo "Unknown option: '$OPTARG'"
             exit 1
             ;;
     esac

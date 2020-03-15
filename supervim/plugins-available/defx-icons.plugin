@@ -1,0 +1,28 @@
+NAME:"defx-icons"
+
+PATH BEGIN
+Plug 'kristijanhusak/defx-icons'
+PATH END
+
+DEFAULT:1
+
+CONFIG BEGIN
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+"
+"     defx-icons.nvim CONFIG
+"
+""""""""""""""""""""""""""""""""""""""""""""""""""""""map <silent> - :Defx<CR>
+" disbale syntax highlighting to prevent performence issue
+let g:defx_icons_enable_syntax_highlight = 1
+
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+"
+"     defx-icons.nvim END
+"
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+CONFIG END
+
+SCRIPTS BEGIN
+#!/bin/bash
+
+SCRIPTS END

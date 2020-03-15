@@ -1,0 +1,45 @@
+NAME:"defx-git"
+
+PATH BEGIN
+Plug 'kristijanhusak/defx-git'
+PATH END
+
+DEFAULT:1
+
+CONFIG BEGIN
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+"
+"     defx-git.nvim CONFIG
+"
+""""""""""""""""""""""""""""""""""""""""""""""""""""""map <silent> - :Defx<CR>
+let g:defx_git#indicators = {
+  \ 'Modified'  : '✹',
+  \ 'Staged'    : '✚',
+  \ 'Untracked' : '✭',
+  \ 'Renamed'   : '➜',
+  \ 'Unmerged'  : '═',
+  \ 'Ignored'   : '☒',
+  \ 'Deleted'   : '✖',
+  \ 'Unknown'   : '?'
+  \ }
+let g:defx_git#column_length = 0
+hi def link Defx_filename_directory NERDTreeDirSlash
+hi def link Defx_git_Modified Special
+hi def link Defx_git_Staged Function
+hi def link Defx_git_Renamed Title
+hi def link Defx_git_Unmerged Label
+hi def link Defx_git_Untracked Tag
+hi def link Defx_git_Ignored Comment
+
+
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+"
+"     defx-git.nvim END
+"
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+CONFIG END
+
+SCRIPTS BEGIN
+#!/bin/bash
+
+SCRIPTS END
