@@ -1,0 +1,30 @@
+NAME:"nerdtree-git-plugin"
+
+PATH BEGIN
+Plug 'Xuyuanp/nerdtree-git-plugin'
+PATH END
+
+DEFAULT:1
+
+CONFIG BEGIN
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+"
+"       nerdtree git plugin Config
+"
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+let g:NERDTreeIndicatorMapCustom = {
+    \ "Modified"  : "✹",
+    \ "Staged"    : "✚",
+    \ "Untracked" : "✭",
+    \ "Renamed"   : "➜",
+    \ "Unmerged"  : "═",
+    \ "Deleted"   : "✖",
+    \ "Dirty"     : "✗",
+    \ "Clean"     : "✔︎",
+    \ 'Ignored'   : '☒',
+    \ "Unknown"   : "?"
+    \ }
+CONFIG END
+
+SCRIPTS BEGIN
+SCRIPTS END

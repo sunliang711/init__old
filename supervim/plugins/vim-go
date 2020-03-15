@@ -1,3 +1,0 @@
-"vim-go
-" run :GoInstallBinaries in vim/nvim to install go binaries used by vim-go
-Plug 'fatih/vim-go' ,{'do':':GoInstallBinaries'}

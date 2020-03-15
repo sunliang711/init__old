@@ -1,0 +1,23 @@
+NAME:"nerdtree"
+
+PATH BEGIN
+Plug 'scrooloose/nerdtree', { 'on':  'NERDTreeToggle'  }
+PATH END
+
+DEFAULT:1
+
+CONFIG BEGIN
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+"
+"      Nerdtree Config
+"
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" Toggle NerdTree
+nnoremap <silent> <F2> :NERDTreeToggle<CR>
+
+nnoremap <F8> :TagbarToggle<CR>
+
+CONFIG END
+
+SCRIPTS BEGIN
+SCRIPTS END

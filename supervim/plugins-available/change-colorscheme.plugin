@@ -1,0 +1,15 @@
+NAME:"change-colorscheme"
+
+PATH BEGIN
+Plug 'chxuan/change-colorscheme'
+PATH END
+
+DEFAULT:1
+
+CONFIG BEGIN
+nnoremap <silent> <F9> :PreviousColorScheme<CR>
+nnoremap <silent> <F10> :NextColorScheme<CR>
+CONFIG END
+
+SCRIPTS BEGIN
+SCRIPTS END

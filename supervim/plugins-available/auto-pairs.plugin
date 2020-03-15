@@ -1,0 +1,8 @@
+NAME:"auto-pairs"
+
+PATH BEGIN
+"括号补全
+Plug 'jiangmiao/auto-pairs'
+PATH END
+
+DEFAULT:1

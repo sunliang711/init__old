@@ -1,0 +1,14 @@
+NAME:"tagbar"
+
+PATH BEGIN
+" BSD ctags not work,use 'brew install ctags on MacOS'
+Plug 'majutsushi/tagbar'
+PATH END
+
+DEFAULT:1
+
+CONFIG BEGIN
+CONFIG END
+
+SCRIPTS BEGIN
+SCRIPTS END

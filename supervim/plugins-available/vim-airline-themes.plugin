@@ -1,0 +1,13 @@
+NAME:"vim-airline-themes"
+
+PATH BEGIN
+Plug 'vim-airline/vim-airline-themes'
+PATH END
+
+DEFAULT:1
+
+CONFIG BEGIN
+CONFIG END
+
+SCRIPTS BEGIN
+SCRIPTS END

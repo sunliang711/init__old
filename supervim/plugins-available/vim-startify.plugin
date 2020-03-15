@@ -1,0 +1,14 @@
+NAME:"vim-startify"
+
+PATH BEGIN
+"起始页插件
+Plug 'mhinz/vim-startify'
+PATH END
+
+DEFAULT:1
+
+CONFIG BEGIN
+CONFIG END
+
+SCRIPTS BEGIN
+SCRIPTS END

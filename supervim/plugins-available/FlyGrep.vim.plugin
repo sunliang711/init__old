@@ -1,0 +1,23 @@
+NAME:"FlyGrep"
+
+PATH BEGIN
+Plug 'wsdjeg/FlyGrep.vim'
+PATH END
+
+DEFAULT:1
+
+CONFIG BEGIN
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+"
+"     FlyGrep
+"
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+nnoremap <f6> :FlyGrep<cr>
+CONFIG END
+
+SCRIPTS BEGIN
+#!/bin/bash
+
+echo "Suggest: Install ripgrep to speed up search speed of FlyGrep"
+echo "Issue: brew install ripgrep to install ripgrep"
+SCRIPTS END

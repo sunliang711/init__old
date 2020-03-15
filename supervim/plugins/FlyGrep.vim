@@ -1,1 +1,0 @@
-Plug 'wsdjeg/FlyGrep.vim'

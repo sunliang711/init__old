@@ -1,0 +1,14 @@
+NAME:"tabular"
+
+PATH BEGIN
+"对齐插件 :Tab /<char-to-be-alignment>
+Plug 'godlygeek/tabular'
+PATH END
+
+DEFAULT:1
+
+CONFIG BEGIN
+CONFIG END
+
+SCRIPTS BEGIN
+SCRIPTS END

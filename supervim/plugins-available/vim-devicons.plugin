@@ -1,0 +1,14 @@
+NAME:"vim-devicons"
+
+PATH BEGIN
+"给其他插件比如ctrlp nerdtree startify增加图标
+Plug 'ryanoasis/vim-devicons'
+PATH END
+
+DEFAULT:1
+
+CONFIG BEGIN
+CONFIG END
+
+SCRIPTS BEGIN
+SCRIPTS END

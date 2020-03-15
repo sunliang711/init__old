@@ -1,0 +1,13 @@
+NAME:"ctrlp.vim"
+
+PATH BEGIN
+Plug 'ctrlpvim/ctrlp.vim'
+PATH END
+
+DEFAULT:0
+
+CONFIG BEGIN
+CONFIG END
+
+SCRIPTS BEGIN
+SCRIPTS END

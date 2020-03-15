@@ -1,0 +1,14 @@
+NAME:"closetag.vim"
+
+PATH BEGIN
+"自动补全xml html标签
+Plug 'docunext/closetag.vim'
+PATH END
+
+DEFAULT:1
+
+CONFIG BEGIN
+CONFIG END
+
+SCRIPTS BEGIN
+SCRIPTS END

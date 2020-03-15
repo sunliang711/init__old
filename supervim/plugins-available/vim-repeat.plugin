@@ -1,0 +1,14 @@
+NAME:"vim-repeat"
+
+PATH BEGIN
+"使用surround操作之后，使用.号重复操作
+Plug 'tpope/vim-repeat'
+PATH END
+
+DEFAULT:1
+
+CONFIG BEGIN
+CONFIG END
+
+SCRIPTS BEGIN
+SCRIPTS END

@@ -1,0 +1,23 @@
+NAME:"incsearch.vim"
+
+PATH BEGIN
+"同时高亮所有的匹配单词
+Plug 'haya14busa/incsearch.vim'
+PATH END
+
+DEFAULT:1
+
+CONFIG BEGIN
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+"
+"       incsearch.vim config
+"
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+map / <Plug>(incsearch-forward)
+map ? <Plug>(incsearch-backward)
+map g/ <Plug>(incsearch-stay)
+
+CONFIG END
+
+SCRIPTS BEGIN
+SCRIPTS END

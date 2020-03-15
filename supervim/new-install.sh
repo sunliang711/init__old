@@ -1,4 +1,10 @@
 #!/usr/bin/env bash
+rpath="$(readlink ${BASH_SOURCE})"
+if [ -z "$rpath" ];then
+    rpath=${BASH_SOURCE}
+fi
+thisDir="$(cd $(dirname $rpath) && pwd)"
+cd "$thisDir"
 
 needCmd(){
     cmd=$1
@@ -48,47 +54,79 @@ install(){
     ### header
     cat ./header.vim > $cfg
 
-    ### user choose plugins
-    echo "## Set plugin name to 1 to install it." > choice.user
-    for i in plugins/*;do
-        printf "%-25s =    1\n" $(basename $i)
-    done >> choice.user
-    $VIM choice.user
+    ### display menu for user to choose which plugins to be installed
+    pluginsDir="plugins-available"
+    echo "Available plugins are in ${pluginsDir}"
+    userChoiceFile="/tmp/vim-plugin-install-menu"
+    echo "## Set plugin name to 1 to install it." > ${userChoiceFile}
+    cd ${pluginsDir}
+    for plugin in *.plugin;do
+        echo "Debug: plugin: ${plugin}"
+        #1. get plugin name
+        pluginName=`perl -ne 'print $1 if /^\s*NAME\s*:\s*"([^"]+)"\s*$/' ${plugin}`
+        echo "Debug: pluginName: ${pluginName}"
+        #2. get default
+        pluginDefault=`perl -ne 'print $1 if /^\s*DEFAULT\s*:\s*(.+)$/' ${plugin}`
+        echo "Debug: pluginDefault: ${pluginDefault}"
+
+        printf "%-25s = %s\n" ${pluginName} ${pluginDefault} >> ${userChoiceFile}
+    done
+
+    $VIM ${userChoiceFile}
 
     declare -a toBeInstalledPlugins
     # vimrc (init.vim) plugin item
     while read -r line;do
-        if echo "$line" | grep -q '^[ \t]*#';then
+         if echo "$line" | grep -q '^[ \t]*#';then
             # ignore comment
-            continue
-        fi
+             continue
+         fi
 
         enable=$(echo "$line" | perl -ne 'print $1 if /^\s*(\S+)\s*=\s*1\s*$/')
         if [ -n "$enable" ];then
             toBeInstalledPlugins+=("$enable")
         fi
-    done < choice.user
-    rm choice.user
+    done < ${userChoiceFile}
+    rm ${userChoiceFile}
 
-    for name in "${toBeInstalledPlugins[@]}";do
-        if (($origin==1));then
-            cat "plugins/$name" >> "$cfg"
-        else
-            perl -pe "s|(Plug ')[^/]+(/.+)|\1https://gitee.com/quick-source\2|" "plugins/$name" >> "$cfg"
+    echo "Debug: toBeInstalledPlugins: ${toBeInstalledPlugins}"
+
+    for plugin in *.plugin;do
+        echo "Debug: plugin: ${plugin}"
+        #1. get plugin name
+        pluginName=`perl -ne 'print $1 if /^\s*NAME\s*:\s*"([^"]+)"\s*$/' ${plugin}`
+        echo "Debug: pluginName: ${pluginName}"
+        if ! printf "%s\n" ${toBeInstalledPlugins[@]} | grep -q "$pluginName";then
+            #skip
+            continue
         fi
-        echo >> "$cfg"
+        #2. get plugin path
+        pluginPath=`perl -ne 'print if /PATH BEGIN/.../PATH END/' ${plugin} | sed -e '1d;$d'`
+        echo "Debug: pluginPath: ${pluginPath}"
+        if (($origin==1));then
+            echo "$pluginPath" >> $cfg
+        else
+            echo "$pluginPath" | perl -pe "s|(Plug ')[^/]+(/.+)|\1https://gitee.com/quick-source\2|" >> "$cfg"
+        fi
     done
+
     echo  >> "$cfg"
     echo "call plug#end()" >> "$cfg"
 
     echo  >> "$cfg"
-    echo  >> "$cfg"
 
-    ## vimrc (init.vim) plugin settings
-    for name in "${toBeInstalledPlugins[@]}";do
-        if [ -f  "pluginSettings/$name" ];then
-            cat "pluginSettings/$name" >> "$cfg"
+    ## CONFIG
+    for plugin in *.plugin;do
+        echo "Debug: plugin: ${plugin}"
+        #1. get plugin name
+        pluginName=`perl -ne 'print $1 if /^\s*NAME\s*:\s*"([^"]+)"\s*$/' ${plugin}`
+        echo "Debug: pluginName: ${pluginName}"
+        if ! printf "%s\n" ${toBeInstalledPlugins[@]} | grep -q "$pluginName";then
+            #skip
+            continue
         fi
+        #2. get plugin config
+        perl -ne 'print if /CONFIG BEGIN/.../CONFIG END/' ${plugin} |sed -e '1d;$d' >> "$cfg"
     done
 
 
@@ -96,16 +134,32 @@ install(){
     echo "Install plugin..."
     $VIM -c PlugInstall -c qall
 
-    # export VIM for script use
+    # export VIM,root,thisDir for script use
     export VIM
     export root
-    ## plugin script
-    for name in "${toBeInstalledPlugins[@]}";do
-        if [ -f "pluginScripts/${name}.sh" ];then
-            echo "run pluginScripts/${name}.sh"
-            bash "pluginScripts/${name}.sh"
+    export thisDir
+
+    ## SCRIPT
+    echo "RUN scripts."
+    for plugin in *.plugin;do
+        echo "Debug: plugin: ${plugin}"
+        #1. get plugin name
+        pluginName=`perl -ne 'print $1 if /^\s*NAME\s*:\s*"([^"]+)"\s*$/' ${plugin}`
+        echo "Debug: pluginName: ${pluginName}"
+        if ! printf "%s\n" ${toBeInstalledPlugins[@]} | grep -q "$pluginName";then
+            continue
+        fi
+        #2. get plugin script
+        perl -ne 'print if /SCRIPTS BEGIN/.../SCRIPTS END/' ${plugin} |sed -e '1d;$d' > /tmp/${pluginName}.sh
+        if [ -f /tmp/${pluginName}.sh ];then
+            echo "Run /tmp/${pluginName}.sh"
+            bash /tmp/${pluginName}.sh
+            /bin/rm -rf /tmp/${pluginName}.sh
         fi
     done
+    ## restore PWD
+    cd ${thisDir}
+
     echo "done."
 
 
@@ -127,7 +181,6 @@ font=0
 origin=0
 root=
 cfg=
-choiceFile="choice"
 
 
 while getopts ":fo" opt;do
