@@ -170,6 +170,16 @@ command! Wq :execute ':silent w !sudo tee % > /dev/null' | :edit! | :quit
 map <f3> :execute "noautocmd vimgrep /" .expand("<cword>") . "/gj " . expand("%") <Bar>cw<CR>
 map <f4> :execute "noautocmd vimgrep /" . expand("<cword>") . "/gj **" <Bar>  cw<CR>
 
+
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+"
+"      terminal escape
+"
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+if has('nvim')
+    tnoremap <Esc> <C-\><C-n>
+endif
+
 "vim-plug
 "{{{
 if has('nvim')

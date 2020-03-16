@@ -27,7 +27,7 @@ fi
 
 #vim
 if [ "$option" == "-o" ];then
-    (cd supervim && bash new-install.sh vim -o)
+    (cd supervim && bash new-install.sh -o vim)
 else
     (cd supervim && bash new-install.sh vim)
 fi
