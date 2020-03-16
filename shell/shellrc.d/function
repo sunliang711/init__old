@@ -78,6 +78,15 @@ if command -v git >/dev/null 2>&1;then
             git clone "https://git.coding.net/$p"
         fi
     }
+    function geclone(){
+        p=${1:?"Usage: geclone giteeAccount/xx.git [newDir]"}
+        if (($#>1));then
+            newname=${2}
+            git clone "https://gitee.com/$p" "$newname"
+        else
+            git clone "https://gitee.com/$p"
+        fi
+    }
     #gpon(){
     #    #add default parameter
     #    local proxy=${1:-http://localhost:6116}
