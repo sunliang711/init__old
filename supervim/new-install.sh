@@ -61,13 +61,10 @@ install(){
     echo "## Set plugin name to 1 to install it." > ${userChoiceFile}
     cd ${pluginsDir}
     for plugin in *.plugin;do
-        echo "Debug: plugin: ${plugin}"
         #1. get plugin name
         pluginName=`perl -ne 'print $1 if /^\s*NAME\s*:\s*"([^"]+)"\s*$/' ${plugin}`
-        echo "Debug: pluginName: ${pluginName}"
         #2. get default
         pluginDefault=`perl -ne 'print $1 if /^\s*DEFAULT\s*:\s*(.+)$/' ${plugin}`
-        echo "Debug: pluginDefault: ${pluginDefault}"
 
         printf "%-25s = %s\n" ${pluginName} ${pluginDefault} >> ${userChoiceFile}
     done
@@ -89,20 +86,16 @@ install(){
     done < ${userChoiceFile}
     rm ${userChoiceFile}
 
-    echo "Debug: toBeInstalledPlugins: ${toBeInstalledPlugins}"
 
     for plugin in *.plugin;do
-        echo "Debug: plugin: ${plugin}"
         #1. get plugin name
         pluginName=`perl -ne 'print $1 if /^\s*NAME\s*:\s*"([^"]+)"\s*$/' ${plugin}`
-        echo "Debug: pluginName: ${pluginName}"
         if ! printf "%s\n" ${toBeInstalledPlugins[@]} | grep -q "$pluginName";then
             #skip
             continue
         fi
         #2. get plugin path
         pluginPath=`perl -ne 'print if /PATH BEGIN/.../PATH END/' ${plugin} | sed -e '1d;$d'`
-        echo "Debug: pluginPath: ${pluginPath}"
         if (($origin==1));then
             echo "$pluginPath" >> $cfg
         else
@@ -117,10 +110,8 @@ install(){
 
     ## CONFIG
     for plugin in *.plugin;do
-        echo "Debug: plugin: ${plugin}"
         #1. get plugin name
         pluginName=`perl -ne 'print $1 if /^\s*NAME\s*:\s*"([^"]+)"\s*$/' ${plugin}`
-        echo "Debug: pluginName: ${pluginName}"
         if ! printf "%s\n" ${toBeInstalledPlugins[@]} | grep -q "$pluginName";then
             #skip
             continue
@@ -142,10 +133,8 @@ install(){
     ## SCRIPT
     echo "RUN scripts."
     for plugin in *.plugin;do
-        echo "Debug: plugin: ${plugin}"
         #1. get plugin name
         pluginName=`perl -ne 'print $1 if /^\s*NAME\s*:\s*"([^"]+)"\s*$/' ${plugin}`
-        echo "Debug: pluginName: ${pluginName}"
         if ! printf "%s\n" ${toBeInstalledPlugins[@]} | grep -q "$pluginName";then
             continue
         fi

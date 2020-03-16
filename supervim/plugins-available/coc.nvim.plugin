@@ -162,7 +162,6 @@ CONFIG END
 
 SCRIPTS BEGIN
 #!/bin/bash
-echo "cp coc-settings.json #TODO  change PWD!!!!"
 cp ${thisDir}/coc-settings.json $root
 
 echo "Install cmake-language-server..."
