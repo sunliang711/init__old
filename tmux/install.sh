@@ -34,7 +34,7 @@ bind L resize-pane -R 4
 bind J resize-pane -D 4
 bind K resize-pane -U 4
 
-bind S source-file ~/.tmux.conf
+bind r source-file ~/.tmux.conf
 
 EOF
 
