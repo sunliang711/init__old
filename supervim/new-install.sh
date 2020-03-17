@@ -108,6 +108,9 @@ install(){
 
     echo  >> "$cfg"
 
+    echo "Install plugin..."
+    $VIM -c PlugInstall -c qall
+
     ## CONFIG
     for plugin in *.plugin;do
         #1. get plugin name
@@ -120,10 +123,6 @@ install(){
         perl -ne 'print if /CONFIG BEGIN/.../CONFIG END/' ${plugin} |sed -e '1d;$d' >> "$cfg"
     done
 
-
-
-    echo "Install plugin..."
-    $VIM -c PlugInstall -c qall
 
     # export VIM,root,thisDir for script use
     export VIM
