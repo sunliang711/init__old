@@ -26,4 +26,5 @@ let g:go_fmt_command = "goimports"
 CONFIG END
 
 SCRIPTS BEGIN
+echo "vim-go need pkg-config cmd, use 'brew install pkg-config' to install it"
 SCRIPTS END
