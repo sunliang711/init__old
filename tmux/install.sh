@@ -18,6 +18,10 @@ set -g display-panes-time 10000 #10s
 set -g history-limit 8000
 
 ##################################################
+# secape time: fix vim esc delay in tmux problem
+set -s escape-time 0
+
+##################################################
 # split window
 bind | split-window -h -c "#{pane_current_path}"
 bind - split-window -v -c "#{pane_current_path}"
