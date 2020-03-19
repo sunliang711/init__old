@@ -69,6 +69,20 @@ bind r source-file ~/.tmux.conf \; display "Reloaded tmux config!"
 # show options
 bind o show-options -g
 
+#-------------------------------------------------------#
+# Pane colours
+#-------------------------------------------------------#
+# set active-inactive window styles
+set -g window-style 'fg=colour247,bg=colour236'
+set -g window-active-style 'fg=default,bg=colour234'
+
+# Pane border
+set -g pane-border-bg default
+set -g pane-border-fg colour238
+
+# Active pane border
+set -g pane-active-border-bg default
+set -g pane-active-border-fg blue
 
 EOF
 
