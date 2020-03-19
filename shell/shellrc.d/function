@@ -701,7 +701,7 @@ Description=
 #ExecStop=
 
 #WorkingDirectory=/path/to/wd
-#Restart=on-failure
+#Restart=always
 #Environment=
 [Install]
 WantedBy=multi-user.target
