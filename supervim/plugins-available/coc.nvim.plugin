@@ -175,5 +175,5 @@ if ! command -v bash-language-server >/dev/null 2>&1;then
     npm i -g bash-language-server >/dev/null 2>&1 || { echo "Please use npm to install bash-language-server"; }
 fi
 
-echo "Issue command: "brew install llvm" to install clangd on MacOS and Linux if you want to use cland as language server"
+echo "Issue command: "brew install llvm" to install clangd on MacOS and Linux if you want to use cland as C/C++ language server"
 SCRIPTS END

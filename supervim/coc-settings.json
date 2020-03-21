@@ -3,20 +3,20 @@
         //  coc.nvim supports json comments
         //  Uncomment below to enable clangd as c/cpp language server
         //  (use brew to install clangd)
-        // "clangd": {
-        //     "command": "clangd",
-        //     "filetypes": [
-        //         "c",
-        //         "cpp",
-        //         "objc",
-        //         "objcpp"
-        //     ],
-        //     "rootPatterns": [
-        //         ".vim/",
-        //         "compile_flags.txt",
-        //         "compile_commands.json"
-        //     ]
-        // },
+        "clangd": {
+            "command": "clangd",
+            "filetypes": [
+                "c",
+                "cpp",
+                "objc",
+                "objcpp"
+            ],
+            "rootPatterns": [
+                ".vim/",
+                "compile_flags.txt",
+                "compile_commands.json"
+            ]
+        },
         "bash": {
             "args": [
                 "start"
