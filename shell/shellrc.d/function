@@ -1020,6 +1020,7 @@ function newsh(){
 		yellow=$(tput setaf 3)
 		blue=$(tput setaf 4)
 		cyan=$(tput setaf 5)
+        bold=$(tput bold)
 		reset=$(tput sgr0)
 		runAsRoot(){
 		    verbose=0
@@ -1067,9 +1068,9 @@ function newsh(){
 		###############################################################################
 		help(){
 		    cat<<EOF2
-		Usage: $(basename $0) CMD
+		Usage: $(basename $0) ${bold}CMD${reset}
 
-		CMD:
+		${bold}CMD${reset}:
 		EOF2
 	    perl -lne 'print "\t$2" if /^(function)?\s*?(\w+)\(\)\{$/' $(basename ${BASH_SOURCE})
 		}
