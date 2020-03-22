@@ -1188,6 +1188,9 @@ function comma(){
     echo "$digit" | perl -pe 's|(?<=\d)(?=(\d{3})+\D)|,|g'
 }
 
+defaultpath(){
+    export PATH=/usr/local/bin:/usr/local/sbin:/usr/bin:/usr/sbin:/bin:/sbin
+}
 source ~/.shellrc.d/function-snippets
 #END function
 
