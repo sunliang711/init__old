@@ -32,9 +32,14 @@ set -g mouse on
 
 ##################################################
 # vi mode copy
-# works well
-bind-key -Tcopy-mode-vi 'v' send -X begin-selection
-bind-key -Tcopy-mode-vi 'y' send -X copy-selection
+# version 2.4+
+ bind-key -T copy-mode-vi 'v' send -X begin-selection
+ bind-key -T copy-mode-vi 'y' send -X copy-selection
+
+# old version
+# bind-key -t vi-copy v begin-selection;
+# bind-key -t vi-copy y copy-selection;
+
 # not work
 # bind-key -T vi-copy 'v' begin-selection
 # bind-key -T vi-copy 'y' copy-selection
@@ -69,6 +74,16 @@ bind r source-file ~/.tmux.conf \; display "Reloaded tmux config!"
 # show options
 bind o show-options -g
 
+##################################################
+#highlight active pane
+
+ # set -g window-style 'fg=colour247,bg=colour236'
+ # set -g window-active-style 'fg=colour250,bg=black'
+ # set -g pane-border-bg colour235
+ # set -g pane-border-fg colour238
+ # set -g pane-active-border-bg colour236
+ # set -g pane-active-border-fg colour51
+# set -g pane-active-border-style fg=colour208,bg=default
 #-------------------------------------------------------#
 # Pane colours
 #-------------------------------------------------------#
@@ -76,13 +91,12 @@ bind o show-options -g
 set -g window-style 'fg=colour247,bg=colour236'
 set -g window-active-style 'fg=default,bg=colour234'
 
-# Pane border
-set -g pane-border-bg default
-set -g pane-border-fg colour238
+# # Pane border
+# set -g pane-border-bg default
+# set -g pane-border-fg colour238
 
-# Active pane border
-set -g pane-active-border-bg default
-set -g pane-active-border-fg blue
-
+# # Active pane border
+# set -g pane-active-border-bg default
+# set -g pane-active-border-fg blue
 EOF
 
