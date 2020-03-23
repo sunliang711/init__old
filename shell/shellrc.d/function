@@ -1208,6 +1208,55 @@ function bak(){
     done
 }
 
+function sendmail(){
+    local url=https://aliyun.eagle711.win:9000/send
+    receiver="sunliang711@163.com"
+    subject=
+    body=
+    auth_key=
+    while getopts ":s:b:k:r:" opt;do
+        case "${opt}" in
+            s)
+                subject="$OPTARG"
+                ;;
+            b)
+                body="$OPTARG"
+                ;;
+            k)
+                auth_key="$OPTARG"
+                ;;
+            r)
+                receiver="$OPTARG"
+                ;;
+            :)
+                echo "missing arg for option: \"$OPTARG\""
+                return 1
+                ;;
+            \?)
+                echo "Valid option -s <subject> -b <body> -k <auth_key> [-r <receiver>]"
+                return 1
+                ;;
+        esac
+    done
+
+    if [ -z "$receiver" ] || [ -z "$subject" ] || [ -z "$auth_key" ];then
+        echo "Valid option -s <subject> -b <body> -k <auth_key> [-r <receiver>]"
+        return 1
+    fi
+
+    if [ -z "$body" ];then
+        body="$subject"
+    fi
+
+    data=$(cat<<EOF
+    {"to":"$receiver", "subject":"$subject", "body":"$body", "auth_key":"$auth_key"}
+EOF
+)
+    # echo "data: ${data}"
+    curl -X POST -d  "${data}" "$url"
+
+}
+
 source ~/.shellrc.d/function-snippets
 #END function
 
