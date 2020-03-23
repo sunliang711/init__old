@@ -16,6 +16,11 @@ gitconfig(){
     git config --global push.default simple
     #save password for several minutes
     git config --global credential.helper cache
+    if command -v vimdiff >/dev/null 2>&1;then
+        git config --global merge.tool vimdiff
+    else
+        echo "No vimdiff, so merge.tool is empty"
+    fi
     # git config --global alias.tree "log --oneline --graph --decorate --all"
     git config --global alias.tree "log --pretty=format:\"%Cgreen%h %Cred%d %Cblue%s %x09%Creset[%cn %cd]\" --graph --date=iso"
     git config --global alias.list "config --global --list"
