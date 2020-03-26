@@ -138,6 +138,9 @@ inoremap <silent> <C-j> <esc><C-W>j
 " noremap <silent> <C-k> <C-W>k
 " inoremap <silent> <C-k> <esc><C-W>k
 
+nnoremap <leader>U gUiw
+nnoremap <leader>u guiw
+
 "save as root
 "cmap w!! w !sudo tee>/dev/null %
 
