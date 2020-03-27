@@ -51,6 +51,8 @@ install(){
     ## fill plugins to vimrc(init.vim)
     # source ./allPlugins.sh || { echo "load allPlugins.sh error"; exit 1; }
 
+    cp ./basic.vim $root/
+
     ### header
     cat ./header.vim > $cfg
 
@@ -150,7 +152,6 @@ install(){
 
     echo "done."
 
-    cp ./basic.vim $root/
 
 
 }
