@@ -150,6 +150,8 @@ install(){
 
     echo "done."
 
+    cp ./basic.vim $root/
+
 
 }
 
@@ -160,6 +162,7 @@ Usage: $(basename $0) [options] <vim/nvim>
 options:
         -f              install nerd font used by color theme
         -o              install plugin from original source(github.com),instead of gitee.com
+        -u              update basic setting
 EOF
 exit 1
 }
@@ -169,15 +172,19 @@ font=0
 origin=0
 root=
 cfg=
+update=0
 
 
-while getopts ":fo" opt;do
+while getopts ":fou" opt;do
     case $opt in
         f)
             font=1
             ;;
         o)
             origin=1
+            ;;
+        u)
+            update=1
             ;;
         :)
             echo "Option '$OPTARG' need argument"
@@ -221,5 +228,12 @@ case $VIM in
         usage
         ;;
 esac
+echo "update: $update"
+
+if (( $update==1 ));then
+    echo "update basic.vim..."
+    cp ./basic.vim $root/
+    exit 0
+fi
 
 install
