@@ -1262,6 +1262,15 @@ function cmakeclean(){
     cd .. && /bin/rm -rf build && mkdir build && cd $_
 }
 
+function editService(){
+    local $serviceName=$1
+    if [ -z "$serviceName" ];then
+        echo "Usage: $(basename $0) <systemd service name>"
+        return 1
+    fi
+    sudo -E systemctl edit --full $serviceName
+}
+
 source ~/.shellrc.d/function-snippets
 #END function
 
