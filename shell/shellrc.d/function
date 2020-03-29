@@ -1263,7 +1263,7 @@ function cmakeclean(){
 }
 
 function editService(){
-    local $serviceName=$1
+    local serviceName=$1
     if [ -z "$serviceName" ];then
         echo "Usage: $(basename $0) <systemd service name>"
         return 1
