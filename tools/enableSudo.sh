@@ -13,14 +13,22 @@ user=${1}
 if [ -z "$user" ];then
     if [ -n "${SUDO_USER}" ];then
         user="${SUDO_USER}"
-        echo -n "Enable user:$user ?[y/n] "
+        echo -n "Enable user:'$user' ?[y/n] "
         read xx
         if [ $xx = n* ];then
             echo "${red}Exit${reset}."
             exit 1
         fi
+    else
+        echo -n "Enter user to enable sudo privilege: "
+        read user
+        if [ -z "$user" ];then
+            echo "Empty input,exit!!"
+            exit 1
+        fi
     fi
 fi
+
 
 echo "Enable user:${green}$user${reset} to sudo nopass permission..."
 customRule=/etc/sudoers.d/nopass
