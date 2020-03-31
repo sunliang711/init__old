@@ -30,7 +30,7 @@ if [ -z "$user" ];then
 fi
 
 
-echo "Enable user:${green}$user${reset} to sudo nopass permission..."
+echo "Enable user: ${green}$user${reset} to sudo nopass permission..."
 customRule=/etc/sudoers.d/nopass
 cat<<EOF>>"$customRule"
 $user ALL=(ALL:ALL) NOPASSWD:ALL
