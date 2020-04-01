@@ -172,7 +172,7 @@ cyan=$(tput setaf 5)
 bold=$(tput bold)
 reset=$(tput sgr0)
 
-npm install -g neovim >/dev/null 2>&1 || { echo "${red}Warning${reset}: Install neovim by npm install failed.Please install it manaually." }
+npm install -g neovim >/dev/null 2>&1 || { echo "${red}Warning${reset}: Install neovim by npm install failed.Please install it manaually."; }
 
 echo "Install cmake-language-server..."
 if ! command -v cmake-language-server >/dev/null 2>&1;then
