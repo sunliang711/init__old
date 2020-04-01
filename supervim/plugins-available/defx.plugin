@@ -18,7 +18,7 @@ CONFIG BEGIN
 "     defx.nvim CONFIG
 "
 """"""""""""""""""""""""""""""""""""""""""""""""""""""
-map <silent> - :Defx<CR>
+map <silent> <F2> :Defx<CR>
 " Avoid the white space highting issue
 " autocmd FileType defx match ExtraWhitespace /^^/
 " Keymap in defx

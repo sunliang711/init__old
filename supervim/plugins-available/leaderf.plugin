@@ -13,12 +13,17 @@ CONFIG BEGIN
 "
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " LeaderF need python,use 'pip3 install pynvim' to install python support on nvim
-let g:Lf_ShortcutF = '<c-p>'
-let g:Lf_ShortcutB = '<m-n>'
-noremap <c-n> :LeaderfMru<cr>
-noremap <m-p> :LeaderfFunction!<cr>
-noremap <m-n> :LeaderfBuffer<cr>
-noremap <m-m> :LeaderfTag<cr>
+nnoremap <Leader>p :Leaderf file<CR>
+nnoremap <Leader>r :Leaderf mru<CR>
+nnoremap <Leader>b :Leaderf buffer<CR>
+nnoremap <Leader>g :Leaderf rg<CR>
+
+" let g:Lf_ShortcutF = '<c-p>'
+" let g:Lf_ShortcutB = '<m-n>'
+" noremap <c-n> :LeaderfMru<cr>
+" noremap <m-p> :LeaderfFunction!<cr>
+" noremap <m-n> :LeaderfBuffer<cr>
+" noremap <m-m> :LeaderfTag<cr>
 let g:Lf_StlSeparator = { 'left': '', 'right': '', 'font': '' }
 
 " let g:Lf_WindowPosition = 'popup'
@@ -43,4 +48,8 @@ SCRIPTS BEGIN
 #!/bin/bash
 
 echo "LeaderF need python,use 'pip3 install pynvim' to install python support on nvim"
+if ! command -v rg >/dev/null 2>&1;then
+    echo "Warning: Need rg for LeaderF, please rg(ripgrep) on your OS!!"
+fi
+
 SCRIPTS END

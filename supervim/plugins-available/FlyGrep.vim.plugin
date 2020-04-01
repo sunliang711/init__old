@@ -12,7 +12,7 @@ CONFIG BEGIN
 "     FlyGrep
 "
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-nnoremap <f6> :FlyGrep<cr>
+nnoremap <F6> :FlyGrep<cr>
 CONFIG END
 
 SCRIPTS BEGIN

@@ -172,8 +172,10 @@ command! JsonFormat :%!python -m json.tool
 command! W :execute ':silent w !sudo tee % > /dev/null' | :edit!
 command! Wq :execute ':silent w !sudo tee % > /dev/null' | :edit! | :quit
 
-map <F3> :execute "noautocmd vimgrep /" .expand("<cword>") . "/gj " . expand("%") <Bar>cw<CR>
-map <F4> :execute "noautocmd vimgrep /" . expand("<cword>") . "/gj **" <Bar>  cw<CR>
+" search in current file
+nnoremap <F3> :execute "noautocmd vimgrep /" .expand("<cword>") . "/gj " . expand("%") <Bar>cw<CR>
+" search in current directory and all subdirectories
+nnoremap <F4> :execute "noautocmd vimgrep /" . expand("<cword>") . "/gj **" <Bar>  cw<CR>
 
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -193,8 +195,9 @@ set splitright
 
 " 执行完<leader>b后可以输入buffer
 " 数字编号或者buffer名字来切换到buffer，或者使用tab来循环补全
-nnoremap <leader>b :buffers<CR>:buffer<Space>
-nnoremap <leader>t :bel terminal<CR>
+" <leader>b快键键已被Leaderf buffer占用，那个比这个好
+" nnoremap <leader>b :buffers<CR>:buffer<Space>
+nnoremap <F5> :bel terminal<CR>
 
 "在jump list中跳转
 "输入普通数字表示向后跳转(<C-O>),数字之前加个'+'表示向前跳转(<C-I>)
