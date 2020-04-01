@@ -24,32 +24,58 @@ map <silent> - :Defx<CR>
 " Keymap in defx
 autocmd FileType defx call s:defx_my_settings()
 function! s:defx_my_settings() abort
-"  IndentLinesDisable
+  " IndentLinesDisable
   setl nospell
   setl signcolumn=no
-  setl nonumber
+  setl number
+  setl relativenumber
+
   nnoremap <silent><buffer><expr> <CR>
-  \ defx#is_directory() ?
-  \ defx#do_action('open_or_close_tree') :
-  \ defx#do_action('drop',)
+                                  \ defx#is_directory() ?
+                                  \ defx#do_action('open_or_close_tree') :
+                                  \ defx#do_action('drop',)
+  nnoremap <silent><buffer><expr> o
+                                  \ defx#is_directory() ?
+                                  \ defx#do_action('open_or_close_tree') :
+                                  \ defx#do_action('drop',)
   nmap <silent><buffer><expr> <2-LeftMouse>
-  \ defx#is_directory() ?
-  \ defx#do_action('open_or_close_tree') :
-  \ defx#do_action('drop',)
+                                  \ defx#is_directory() ?
+                                  \ defx#do_action('open_or_close_tree') :
+                                  \ defx#do_action('drop',)
+
   nnoremap <silent><buffer><expr> s defx#do_action('drop', 'split')
   nnoremap <silent><buffer><expr> v defx#do_action('drop', 'vsplit')
   nnoremap <silent><buffer><expr> t defx#do_action('drop', 'tabe')
-  nnoremap <silent><buffer><expr> o defx#do_action('open_tree')
+  " nnoremap <silent><buffer><expr> o defx#do_action('open_tree')
   nnoremap <silent><buffer><expr> O defx#do_action('open_tree_recursive')
-  nnoremap <silent><buffer><expr> C defx#do_action('copy')
-  nnoremap <silent><buffer><expr> P defx#do_action('paste')
-  nnoremap <silent><buffer><expr> M defx#do_action('rename')
-  nnoremap <silent><buffer><expr> D defx#do_action('remove_trash')
-  nnoremap <silent><buffer><expr> A defx#do_action('new_multiple_files')
+
+  nnoremap <silent><buffer><expr> j line('.') == line('$') ? 'gg' : 'j'
+  nnoremap <silent><buffer><expr> k line('.') == 1 ? 'G' : 'k'
+
+  nnoremap <silent><buffer><expr> <C-C> defx#do_action('copy')
+  nnoremap <silent><buffer><expr> <C-V> defx#do_action('paste')
+
+  nnoremap <silent><buffer><expr> r defx#do_action('rename')
+  " safe remove
+  nnoremap <silent><buffer><expr> d defx#do_action('remove_trash')
+  " unsafe remove
+  nnoremap <silent><buffer><expr> D defx#do_action('remove')
+
+  nnoremap <silent><buffer><expr> nF defx#do_action('new_multiple_files')
+  nnoremap <silent><buffer><expr> nf defx#do_action('new_file')
+  nnoremap <silent><buffer><expr> nd defx#do_action('new_directory')
+
   nnoremap <silent><buffer><expr> U defx#do_action('cd', ['..'])
+  nnoremap <silent><buffer><expr> q defx#do_action('quit')
   nnoremap <silent><buffer><expr> . defx#do_action('toggle_ignored_files')
-  nnoremap <silent><buffer><expr> <Space> defx#do_action('toggle_select')
+  nnoremap <silent><buffer><expr> ! defx#do_action('execute_command')
   nnoremap <silent><buffer><expr> R defx#do_action('redraw')
+  nnoremap <silent><buffer><expr> <Space> defx#do_action('toggle_select')
+
+  nnoremap <silent><buffer><expr> C
+                                \ defx#is_directory() ?
+                                \ defx#do_action('cd',[defx#get_context()]):
+                                \ defx#do_action()
 endfunction"""""""""""""""""""""""""""""""""""
 
 call defx#custom#column('icon', {
@@ -71,7 +97,7 @@ call defx#custom#option('_', {
       \ 'split': 'vertical',
       \ 'direction': 'topleft',
       \ 'show_ignored_files': 0,
-      \ 'buffer_name': '',
+      \ 'buffer_name': 'defxplorer',
       \ 'toggle': 1,
       \ 'resume': 1
       \ })
@@ -85,5 +111,6 @@ CONFIG END
 
 SCRIPTS BEGIN
 #!/bin/bash
+pip3 install send2trash || { echo "pip3 install send2trash error!"; }
 
 SCRIPTS END
