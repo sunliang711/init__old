@@ -188,8 +188,27 @@ map <F4> :execute "noautocmd vimgrep /" . expand("<cword>") . "/gj **" <Bar>  cw
 " tnoremap <Esc> <C-\><C-n>
 tnoremap <leader>c <C-\><C-n>
 
+" 执行完<leader>b后可以输入buffer
+" 数字编号或者buffer名字来切换到buffer，或者使用tab来循环补全
 nnoremap <leader>b :buffers<CR>:buffer<Space>
 nnoremap <leader>t :bel terminal<CR>
+
+"在jump list中跳转
+"输入普通数字表示向后跳转(<C-O>),数字之前加个'+'表示向前跳转(<C-I>)
+nnoremap <leader>j :call GotoJump()<CR>
+function! GotoJump()
+  jumps
+  let j = input("Please select your jump: ")
+  if j != ''
+    let pattern = '\v\c^\+'
+    if j =~ pattern
+      let j = substitute(j, pattern, '', 'g')
+      execute "normal " . j . "\<c-i>"
+    else
+      execute "normal " . j . "\<c-o>"
+    endif
+  endif
+endfunction
 
 "vim-plug
 "{{{
