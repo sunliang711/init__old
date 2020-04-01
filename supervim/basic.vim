@@ -188,6 +188,9 @@ map <F4> :execute "noautocmd vimgrep /" . expand("<cword>") . "/gj **" <Bar>  cw
 " tnoremap <Esc> <C-\><C-n>
 tnoremap <leader>c <C-\><C-n>
 
+set splitbelow
+set splitright
+
 " 执行完<leader>b后可以输入buffer
 " 数字编号或者buffer名字来切换到buffer，或者使用tab来循环补全
 nnoremap <leader>b :buffers<CR>:buffer<Space>
