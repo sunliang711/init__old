@@ -18,6 +18,16 @@ CONFIG END
 SCRIPTS BEGIN
 #!/bin/bash
 
-echo "Suggest: Install ripgrep to speed up search speed of FlyGrep"
-echo "Run 'brew install ripgrep' to install ripgrep"
+red=$(tput setaf 1)
+green=$(tput setaf 2)
+yellow=$(tput setaf 3)
+blue=$(tput setaf 4)
+cyan=$(tput setaf 5)
+bold=$(tput bold)
+reset=$(tput sgr0)
+
+echo "FLyGrep need python,use 'pip3 install pynvim' to install python support on nvim"
+if ! command -v rg >/dev/null 2>&1;then
+    echo "${red}Warning${reset}: Need rg for FlyGrep, please rg(ripgrep) on your OS!!"
+fi
 SCRIPTS END

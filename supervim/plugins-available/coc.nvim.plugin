@@ -164,15 +164,25 @@ SCRIPTS BEGIN
 #!/bin/bash
 cp ${thisDir}/coc-settings.json $root
 
+red=$(tput setaf 1)
+green=$(tput setaf 2)
+yellow=$(tput setaf 3)
+blue=$(tput setaf 4)
+cyan=$(tput setaf 5)
+bold=$(tput bold)
+reset=$(tput sgr0)
+
+npm install -g neovim >/dev/null 2>&1 || { echo "${red}Warning${reset}: Install neovim by npm install failed.Please install it manaually." }
+
 echo "Install cmake-language-server..."
 if ! command -v cmake-language-server >/dev/null 2>&1;then
-    pip3 install cmake-language-server >/dev/null 2>&1 || { echo "Please use pip to install cmake-language-server"; }
+    pip3 install cmake-language-server >/dev/null 2>&1 || { echo "${red}Warning${reset}:Please use pip to install cmake-language-server"; }
 fi
 
 
 echo "Install bash-language-server..."
 if ! command -v bash-language-server >/dev/null 2>&1;then
-    npm i -g bash-language-server >/dev/null 2>&1 || { echo "Please use npm to install bash-language-server"; }
+    npm i -g bash-language-server >/dev/null 2>&1 || { echo "${red}Warning${reset}:Please use npm to install bash-language-server"; }
 fi
 
 echo "Issue command: "brew install llvm" to install clangd on MacOS and Linux if you want to use cland as C/C++ language server"

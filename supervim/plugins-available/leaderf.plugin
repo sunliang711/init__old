@@ -50,9 +50,17 @@ CONFIG END
 SCRIPTS BEGIN
 #!/bin/bash
 
+red=$(tput setaf 1)
+green=$(tput setaf 2)
+yellow=$(tput setaf 3)
+blue=$(tput setaf 4)
+cyan=$(tput setaf 5)
+bold=$(tput bold)
+reset=$(tput sgr0)
+
 echo "LeaderF need python,use 'pip3 install pynvim' to install python support on nvim"
 if ! command -v rg >/dev/null 2>&1;then
-    echo "Warning: Need rg for LeaderF, please rg(ripgrep) on your OS!!"
+    echo "${red}Warning${reset}: Need rg for LeaderF, please rg(ripgrep) on your OS!!"
 fi
 
 SCRIPTS END
