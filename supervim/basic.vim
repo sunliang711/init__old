@@ -42,7 +42,7 @@ set fileencodings=utf8,ucs-bom,gbk,cp936,gb2312,gb18030
 "允许在未保存时切换buffer
 set hidden
 set showcmd
-set autochdir
+" set autochdir
 
 " Better display for messages
 set cmdheight=2
@@ -115,6 +115,7 @@ if has('nvim')
     "has bug
     " let $NVIM_TUI_ENABLE_CURSOR_SHAPE = 1
     nnoremap <silent> <leader>e :tab e ~/.config/nvim/init.vim<CR>
+    nnoremap <silent> <leader>c :tab e ~/.config/nvim/basic.vim<CR>
 else
     " when vim version is 7.4, v:version is 704
     if v:version >= 704
@@ -126,6 +127,7 @@ else
     else
         nnoremap <silent> <leader>e :tab e ~/.vimrc<CR>
     endif
+    nnoremap <silent> <leader>c :tab e ~/.vim/basic.vim<CR>
 endif
 
 "移动窗口指令
@@ -170,8 +172,8 @@ command! JsonFormat :%!python -m json.tool
 command! W :execute ':silent w !sudo tee % > /dev/null' | :edit!
 command! Wq :execute ':silent w !sudo tee % > /dev/null' | :edit! | :quit
 
-map <f3> :execute "noautocmd vimgrep /" .expand("<cword>") . "/gj " . expand("%") <Bar>cw<CR>
-map <f4> :execute "noautocmd vimgrep /" . expand("<cword>") . "/gj **" <Bar>  cw<CR>
+map <F3> :execute "noautocmd vimgrep /" .expand("<cword>") . "/gj " . expand("%") <Bar>cw<CR>
+map <F4> :execute "noautocmd vimgrep /" . expand("<cword>") . "/gj **" <Bar>  cw<CR>
 
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -185,6 +187,9 @@ map <f4> :execute "noautocmd vimgrep /" . expand("<cword>") . "/gj **" <Bar>  cw
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " tnoremap <Esc> <C-\><C-n>
 tnoremap <leader>c <C-\><C-n>
+
+nnoremap <leader>b :buffers<CR>:buffer<Space>
+nnoremap <leader>t :bel terminal<CR>
 
 "vim-plug
 "{{{
