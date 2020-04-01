@@ -20,11 +20,11 @@ CONFIG BEGIN
 """"""""""""""""""""""""""""""""""""""""""""""""""""""
 map <silent> - :Defx<CR>
 " Avoid the white space highting issue
-autocmd FileType defx match ExtraWhitespace /^^/
+" autocmd FileType defx match ExtraWhitespace /^^/
 " Keymap in defx
 autocmd FileType defx call s:defx_my_settings()
 function! s:defx_my_settings() abort
-  IndentLinesDisable
+"  IndentLinesDisable
   setl nospell
   setl signcolumn=no
   setl nonumber
