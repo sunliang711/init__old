@@ -13,10 +13,13 @@ CONFIG BEGIN
 "
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " LeaderF need python,use 'pip3 install pynvim' to install python support on nvim
-nnoremap <Leader>p :Leaderf file<CR>
-nnoremap <Leader>r :Leaderf mru<CR>
-nnoremap <Leader>b :Leaderf buffer<CR>
-nnoremap <Leader>g :Leaderf rg<CR>
+nnoremap <C-L>p :Leaderf file<CR>
+nnoremap <C-L>m :Leaderf mru<CR>
+nnoremap <C-L>b :Leaderf buffer<CR>
+nnoremap <C-L>g :Leaderf rg<CR>
+nnoremap <C-L>c :Leaderf command<CR>
+nnoremap <C-L>h :Leaderf cmdHistory<CR>
+nnoremap <C-L>w :Leaderf window<CR>
 
 " let g:Lf_ShortcutF = '<c-p>'
 " let g:Lf_ShortcutB = '<m-n>'
