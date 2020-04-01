@@ -131,12 +131,12 @@ else
 endif
 
 "移动窗口指令
-" noremap <silent> <C-h> <C-W>h
-" inoremap <silent> <C-h> <esc><C-W>h
-" noremap <silent> <C-l> <C-W>l
-" inoremap <silent> <C-l> <esc><C-W>l
-" noremap <silent> <C-j> <C-W>j
-" inoremap <silent> <C-j> <esc><C-W>j
+noremap <silent> <C-h> <C-W>h
+inoremap <silent> <C-h> <esc><C-W>h
+noremap <silent> <C-l> <C-W>l
+inoremap <silent> <C-l> <esc><C-W>l
+noremap <silent> <C-j> <C-W>j
+inoremap <silent> <C-j> <esc><C-W>j
 " noremap <silent> <C-k> <C-W>k
 " inoremap <silent> <C-k> <esc><C-W>k
 
