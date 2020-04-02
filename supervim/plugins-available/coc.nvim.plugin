@@ -92,9 +92,13 @@ autocmd CursorHold * silent call CocActionAsync('highlight')
 " Symbol renaming.
 nmap <leader>rn <Plug>(coc-rename)
 
-" Formatting selected code.
-xmap <leader>f  <Plug>(coc-format-selected)
-nmap <leader>f  <Plug>(coc-format-selected)
+nnoremap <expr><C-f> coc#util#has_float() ? coc#util#float_scroll(1) : "\<C-f>"
+nnoremap <expr><C-b> coc#util#has_float() ? coc#util#float_scroll(0) : "\<C-b>"
+
+"" Formatting selected code.
+"" format js/typescript/css/json
+"xmap <leader>f  <Plug>(coc-format-selected)
+"nmap <leader>f  <Plug>(coc-format-selected)
 
 augroup mygroup
   autocmd!
@@ -172,7 +176,7 @@ cyan=$(tput setaf 5)
 bold=$(tput bold)
 reset=$(tput sgr0)
 
-npm install -g neovim >/dev/null 2>&1 || { echo "${red}Warning${reset}: Install neovim by npm install failed.Please install it manaually."; }
+npm install -g neovim >/dev/null 2>&1 || { echo "${red}Warning${reset}: Install neovim by npm install failed.Please install it with sudo privilege manaually."; }
 
 echo "Install cmake-language-server..."
 if ! command -v cmake-language-server >/dev/null 2>&1;then

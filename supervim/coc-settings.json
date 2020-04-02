@@ -1,4 +1,12 @@
 {
+    //Valid options: ["preview", "echo", "float"]
+    "coc.preferences.hoverTarget":"float",
+
+    // python
+    // install coc-python by :CocInstall coc-python first
+    // [https://www.npmjs.com/package/coc-python]
+    "python.jediEnabled":false,
+
     "languageserver": {
         //  coc.nvim supports json comments
         //  Uncomment below to enable clangd as c/cpp language server

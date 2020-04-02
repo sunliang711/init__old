@@ -23,8 +23,25 @@ let g:go_highlight_build_constraints = 1
 let g:go_def_mode = 'gopls'
 let g:go_info_mode = 'gopls'
 let g:go_fmt_command = "goimports"
+
+"disable K to show doc, K is used by coc for doc-show
+let g:go_doc_keywordprg_enabled = 0
+
+" disable popup window,use preview window
+let g:go_doc_popup_window = 0
 CONFIG END
 
 SCRIPTS BEGIN
-echo "vim-go need pkg-config cmd, use 'brew install pkg-config' to install it"
+#!/bin/bash
+
+red=$(tput setaf 1)
+green=$(tput setaf 2)
+yellow=$(tput setaf 3)
+blue=$(tput setaf 4)
+cyan=$(tput setaf 5)
+bold=$(tput bold)
+reset=$(tput sgr0)
+
+echo "${red}Warning${reset}: vim-go need pkg-config cmd, use 'brew install pkg-config' to install it"
+
 SCRIPTS END
