@@ -1,0 +1,50 @@
+NAME:"vim-gitgutter"
+
+PATH BEGIN
+Plug  'airblade/vim-gitgutter'
+PATH END
+
+DEFAULT:1
+
+CONFIG BEGIN
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+"
+"      vim-gitgutter
+"
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+
+CONFIG END
+
+"preview the hunk: <Leader>hp;
+
+"jump to next hunk (change): ]c
+"jump to previous hunk (change): [c
+
+"You can stage or undo an individual hunk when your cursor is in it:
+" stage the hunk with <Leader>hs or
+" undo it with <Leader>hu.
+
+"you can turn line highlighting on and off (defaults to off):
+" turn on with :GitGutterLineHighlightsEnable
+" turn off with :GitGutterLineHighlightsDisable
+" toggle with :GitGutterLineHighlightsToggle
+
+"With Neovim 0.3.2 or higher, you can turn line number highlighting on and off (defaults to off):
+" turn on with :GitGutterLineNrHighlightsEnable
+" turn off with :GitGutterLineNrHighlightsDisable
+" toggle with :GitGutterLineNrHighlightsToggle.
+GitGutterLineNrHighlightsEnable
+
+SCRIPTS BEGIN
+#!/bin/bash
+
+red=$(tput setaf 1)
+green=$(tput setaf 2)
+yellow=$(tput setaf 3)
+blue=$(tput setaf 4)
+cyan=$(tput setaf 5)
+bold=$(tput bold)
+reset=$(tput sgr0)
+
+
+SCRIPTS END
