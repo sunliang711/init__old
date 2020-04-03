@@ -12,23 +12,19 @@ CONFIG BEGIN
 "     LeaderF CONFIG
 "
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-nnoremap <leader>f :Leaderf file<CR>
-nnoremap <leader>m :Leaderf mru<CR>
-nnoremap <leader>b :Leaderf buffer<CR>
-nnoremap <leader>g :Leaderf rg<CR>
-"nnoremap <leader>c :Leaderf command<CR>
-nnoremap <leader>h :Leaderf cmdHistory<CR>
-nnoremap <leader>w :Leaderf window<CR>
+nnoremap <leader><leader>f :Leaderf file<CR>
+nnoremap <leader><leader>m :Leaderf mru<CR>
+nnoremap <leader><leader>b :Leaderf buffer<CR>
+nnoremap <leader><leader>g :Leaderf rg<CR>
+nnoremap <leader><leader>c :Leaderf command<CR>
+nnoremap <leader><leader>h :Leaderf cmdHistory<CR>
+nnoremap <leader><leader>w :Leaderf window<CR>
 
-" let g:Lf_ShortcutF = '<c-p>'
-" let g:Lf_ShortcutB = '<m-n>'
-" noremap <c-n> :LeaderfMru<cr>
-" noremap <m-p> :LeaderfFunction!<cr>
-" noremap <m-n> :LeaderfBuffer<cr>
-" noremap <m-m> :LeaderfTag<cr>
 let g:Lf_StlSeparator = { 'left': '', 'right': '', 'font': '' }
 
 " let g:Lf_WindowPosition = 'popup'
+" use <Ctrl>P to preview
+let g:Lf_PreviewInPopup = 1
 
 let g:Lf_RootMarkers = ['.project', '.root', '.svn', '.git']
 let g:Lf_WorkingDirectoryMode = 'Ac'
