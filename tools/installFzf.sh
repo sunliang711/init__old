@@ -58,8 +58,10 @@ install(){
     git clone --depth 1 https://github.com/junegunn/fzf.git ~/.fzf
     ~/.fzf/install
 
-    echo "install fd-find from npm"
-    npm install -g fd-find >/dev/null 2>&1 || { echo "install fd-find error,please install it manaualy"; }
+    if ! command -v fd >/dev/null 2>&1;then
+        echo "Install fd-find by npm"
+        npm install -g fd-find >/dev/null 2>&1 || { echo "${red}Warning${reset}:install fd-find error,please install it manaualy"; }
+    fi
 }
 
 

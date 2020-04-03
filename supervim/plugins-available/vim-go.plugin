@@ -42,6 +42,8 @@ cyan=$(tput setaf 5)
 bold=$(tput bold)
 reset=$(tput sgr0)
 
-echo "${red}Warning${reset}: vim-go need pkg-config cmd, use 'brew install pkg-config' to install it"
+if ! command -v pkg-config >/dev/null 2>&1;then
+    echo "${red}Warning${reset}: vim-go need pkg-config cmd, install it manaually when needed!"
+fi
 
 SCRIPTS END

@@ -4,7 +4,8 @@ PATH BEGIN
 "Coc Conquer of Completion
 " need install yarn on your OS
 " Plug 'neoclide/coc.nvim', {'do': 'yarn install --frozen-lockfile'}
-Plug 'neoclide/coc.nvim', {'do': { -> coc#util#install() }}
+" Plug 'neoclide/coc.nvim', {'do': { -> coc#util#install() }}
+Plug 'neoclide/coc.nvim', {'branch':'release'}
 PATH END
 
 DEFAULT:1
@@ -176,18 +177,23 @@ cyan=$(tput setaf 5)
 bold=$(tput bold)
 reset=$(tput sgr0)
 
-npm install -g neovim >/dev/null 2>&1 || { echo "${red}Warning${reset}: Install neovim by npm install failed.Please install it with sudo privilege manaually."; }
+if ! npm list -g | grep -q neovim ;then
+    echo "coc need neovim module in npm, install it..."
+    npm install -g neovim >/dev/null 2>&1 || { echo "${red}Warning${reset}: Install neovim by npm failed.Please install it with sudo privilege manaually."; }
+fi
 
-echo "Install cmake-language-server..."
 if ! command -v cmake-language-server >/dev/null 2>&1;then
-    pip3 install cmake-language-server >/dev/null 2>&1 || { echo "${red}Warning${reset}:Please use pip to install cmake-language-server"; }
+    echo "No cmake-language-server in python module, install it..."
+    pip3 install cmake-language-server >/dev/null 2>&1 || { echo "${red}Warning${reset}:Please use pip3 to install cmake-language-server"; }
 fi
 
 
-echo "Install bash-language-server..."
 if ! command -v bash-language-server >/dev/null 2>&1;then
-    npm i -g bash-language-server >/dev/null 2>&1 || { echo "${red}Warning${reset}:Please use npm to install bash-language-server"; }
+    echo "No bash-language-server, install it ..."
+    npm install -g bash-language-server >/dev/null 2>&1 || { echo "${red}Warning${reset}:Please use npm to install bash-language-server"; }
 fi
 
-echo "Issue command: "brew install llvm" to install clangd on MacOS and Linux if you want to use cland as C/C++ language server"
+if ! command -v clangd >/dev/null 2>&1;then
+    echo "${green}Recommend${reset}: install clangd as C/C++ language server when needed. Clangd usually belongs to clang package or llvm package. "
+fi
 SCRIPTS END

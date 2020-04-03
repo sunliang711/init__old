@@ -110,7 +110,7 @@ install(){
 
     echo  >> "$cfg"
 
-    echo "Install plugin..."
+    echo "Install plugins..."
     $VIM -c PlugInstall -c qall
 
     ## CONFIG
@@ -132,7 +132,7 @@ install(){
     export thisDir
 
     ## SCRIPT
-    echo "RUN scripts."
+    echo "RUN post scripts..."
     for plugin in *.plugin;do
         #1. get plugin name
         pluginName=`perl -ne 'print $1 if /^\s*NAME\s*:\s*"([^"]+)"\s*$/' ${plugin}`
@@ -142,7 +142,7 @@ install(){
         #2. get plugin script
         perl -ne 'print if /SCRIPTS BEGIN/.../SCRIPTS END/' ${plugin} |sed -e '1d;$d' > /tmp/${pluginName}.sh
         if [ -f /tmp/${pluginName}.sh ];then
-            echo "Run /tmp/${pluginName}.sh"
+            # echo "Run /tmp/${pluginName}.sh"
             bash /tmp/${pluginName}.sh
             /bin/rm -rf /tmp/${pluginName}.sh
         fi
@@ -150,7 +150,7 @@ install(){
     ## restore PWD
     cd ${thisDir}
 
-    echo "done."
+    echo "Done."
 
 
 
