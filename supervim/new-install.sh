@@ -152,7 +152,7 @@ cfgEOFx
         #2. get plugin script
         perl -ne 'print if /SCRIPTS BEGIN/.../SCRIPTS END/' ${plugin} |sed -e '1d;$d' > /tmp/${pluginName}.sh
         if [ -f /tmp/${pluginName}.sh ];then
-            # echo "Run /tmp/${pluginName}.sh"
+            echo "Run /tmp/${pluginName}.sh"
             bash /tmp/${pluginName}.sh
             /bin/rm -rf /tmp/${pluginName}.sh
         fi

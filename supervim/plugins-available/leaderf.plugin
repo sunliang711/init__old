@@ -7,19 +7,23 @@ PATH END
 DEFAULT:1
 
 CONFIG BEGIN
-nnoremap <leader><leader>f :Leaderf file<CR>
+let g:Lf_ShowDevIcons = 1
+
+" let g:Lf_WindowPosition = 'popup'
+" use <Ctrl>P to preview
+let g:Lf_PreviewInPopup = 1
+let g:Lf_StlSeparator = { 'left': "\ue0b0", 'right': "\ue0b2", 'font': "DejaVu Sans Mono for Powerline" }
+let g:Lf_PreviewResult = {'Function':0, 'BufTag':0}
+
+" file
+let g:Lf_ShortcutF = "<leader><leader>f"
+let g:Lf_ShortcutB = "<leader><leader>b"
 nnoremap <leader><leader>m :Leaderf mru<CR>
-nnoremap <leader><leader>b :Leaderf buffer<CR>
 nnoremap <leader><leader>g :Leaderf rg<CR>
 nnoremap <leader><leader>c :Leaderf command<CR>
 nnoremap <leader><leader>h :Leaderf cmdHistory<CR>
 nnoremap <leader><leader>w :Leaderf window<CR>
 
-let g:Lf_StlSeparator = { 'left': '', 'right': '', 'font': '' }
-
-" let g:Lf_WindowPosition = 'popup'
-" use <Ctrl>P to preview
-let g:Lf_PreviewInPopup = 1
 
 let g:Lf_RootMarkers = ['.project', '.root', '.svn', '.git']
 let g:Lf_WorkingDirectoryMode = 'Ac'
@@ -28,7 +32,6 @@ let g:Lf_CacheDirectory = expand('~/.vim/cache')
 let g:Lf_ShowRelativePath = 0
 let g:Lf_HideHelp = 1
 let g:Lf_StlColorscheme = 'powerline'
-let g:Lf_PreviewResult = {'Function':0, 'BufTag':0}
 CONFIG END
 
 SCRIPTS BEGIN

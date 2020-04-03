@@ -172,7 +172,7 @@ cyan=$(tput setaf 5)
 bold=$(tput bold)
 reset=$(tput sgr0)
 
-if ! npm list -g | grep -q neovim ;then
+if ! npm list -g | grep neovim >/dev/null 2>&1 ;then
     echo "coc need neovim module in npm, install it..."
     npm install -g neovim >/dev/null 2>&1 || { echo "${red}Warning${reset}: Install neovim by npm failed.Please install it with sudo privilege manaually."; }
 fi
