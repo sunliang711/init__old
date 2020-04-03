@@ -193,6 +193,9 @@ tnoremap <leader>c <C-\><C-n>
 set splitbelow
 set splitright
 
+" show current buffer hotkeys
+nnoremap <leader>hk :map <buffer><CR>
+
 " 执行完<leader>b后可以输入buffer
 " 数字编号或者buffer名字来切换到buffer，或者使用tab来循环补全
 " <leader>b快键键已被Leaderf buffer占用，那个比这个好

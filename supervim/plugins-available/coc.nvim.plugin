@@ -179,7 +179,7 @@ fi
 
 if ! command -v cmake-language-server >/dev/null 2>&1;then
     echo "No cmake-language-server in python module, install it..."
-    pip3 install cmake-language-server >/dev/null 2>&1 || { echo "${red}Warning${reset}:Please use pip3 to install cmake-language-server"; }
+    pip3 install --user cmake-language-server >/dev/null 2>&1 || { echo "${red}Warning${reset}:Please use pip3 to install cmake-language-server"; }
 fi
 
 

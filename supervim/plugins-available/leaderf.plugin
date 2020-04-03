@@ -45,7 +45,7 @@ reset=$(tput sgr0)
 if [[ "$VIM" = "nvim" ]];then
     if ! pip3 list | grep -i pynvim >/dev/null 2>&1;then
         echo "LeaderF need python support, install pynvim..."
-        pip3 install pynvim || { echo "${red}Warning${reset}: faild. Please use pip3 to install pynvim manaually!"; }
+        pip3 install --user pynvim || { echo "${red}Warning${reset}: faild. Please use pip3 to install pynvim manaually!"; }
     fi
 fi
 

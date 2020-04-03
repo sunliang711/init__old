@@ -38,9 +38,16 @@ let g:airline_symbols.spell = 'Ꞩ'
 let g:airline_symbols.notexists = '∄'
 let g:airline_symbols.whitespace = 'Ξ'
 
-"除了section_b之外，默认都有设置，而且设置的也都蛮好用的
-"就不改它们了，这里在section_b处显示当前时间
-let g:airline_section_b = '  %{strftime("%m/%d")}  %{strftime("%H:%M")}   0X%B'
+" 除了section_b之外，默认都有设置，而且设置的也都蛮好用的
+" 需要gitgutter插件配合
+function! GitStatus()
+  let [a,m,r] = GitGutterGetHunkSummary()
+  return printf('+%d ~%d -%d', a, m, r)
+endfunction
+
+let g:airline_section_b ='git:%{GitStatus()}'
+" let g:airline_section_b = '  %{strftime("%m/%d")}  %{strftime("%H:%M")}   0X%B'
+" let g:airline_section_b = '  %{strftime("%m/%d")}  %{strftime("%H:%M")}   0X%B'
 " if os ==? "Darwin"
 "     let g:airline_section_b = '📅  %{strftime("%m/%d")} ⏰ %{strftime("%H:%M")}   0X%B'
 " else

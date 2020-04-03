@@ -25,7 +25,8 @@ CONFIG BEGIN
 " turn on with :GitGutterLineNrHighlightsEnable
 " turn off with :GitGutterLineNrHighlightsDisable
 " toggle with :GitGutterLineNrHighlightsToggle.
-GitGutterLineNrHighlightsEnable
+" TODO enable LineNrHighlight
+" GitGutterLineNrHighlightsEnable
 CONFIG END
 
 
