@@ -7,11 +7,6 @@ PATH END
 DEFAULT:1
 
 CONFIG BEGIN
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-"
-"         Vim-airline
-"
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 "the fonts airline used is here ->  https://github.com/powerline/fonts
 let g:airline_powerline_fonts = 1
 let g:airline#extensions#tabline#enabled = 1
@@ -51,18 +46,6 @@ let g:airline_section_b = '  %{strftime("%m/%d")}  %{strftime("%H:%M")} �
 " else
 "     let g:airline_section_b = '  %{strftime("%m/%d")}  %{strftime("%H:%M")}   0X%B'
 " endif
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-"以下的设置可以测试出section a,b,c,gutter,x,y,z在statusline中的具体位置
-" let g:airline_section_a = 'section a'
-" let g:airline_section_b = 'section b'
-" let g:airline_section_c = 'section c'
-" let g:airline_section_gutter = 'section gutter'
-" let g:airline_section_x = 'section x'
-" let g:airline_section_y = 'section y'
-" let g:airline_section_z = 'section z'
-" let g:airline_section_error = 'section error'
-" let g:airline_section_warning = 'section warning'
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 CONFIG END
 
 SCRIPTS BEGIN

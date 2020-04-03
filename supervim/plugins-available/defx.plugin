@@ -13,11 +13,6 @@ PATH END
 DEFAULT:1
 
 CONFIG BEGIN
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-"
-"     defx.nvim CONFIG
-"
-""""""""""""""""""""""""""""""""""""""""""""""""""""""
 map <silent> <F2> :Defx<CR>
 " Avoid the white space highting issue
 " autocmd FileType defx match ExtraWhitespace /^^/
@@ -102,11 +97,6 @@ call defx#custom#option('_', {
       \ 'resume': 1
       \ })
 
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-"
-"     defx.nvim END
-"
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 CONFIG END
 
 SCRIPTS BEGIN

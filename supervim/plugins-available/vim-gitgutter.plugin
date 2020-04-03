@@ -7,14 +7,6 @@ PATH END
 DEFAULT:1
 
 CONFIG BEGIN
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-"
-"      vim-gitgutter
-"
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-
-CONFIG END
-
 "preview the hunk: <Leader>hp;
 
 "jump to next hunk (change): ]c
@@ -34,6 +26,8 @@ CONFIG END
 " turn off with :GitGutterLineNrHighlightsDisable
 " toggle with :GitGutterLineNrHighlightsToggle.
 GitGutterLineNrHighlightsEnable
+CONFIG END
+
 
 SCRIPTS BEGIN
 #!/bin/bash

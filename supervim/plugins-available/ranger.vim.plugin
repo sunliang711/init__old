@@ -1,0 +1,32 @@
+NAME:"range.vim"
+
+PATH BEGIN
+Plug 'francoiscabrol/ranger.vim'
+if has('nvim')
+    Plug 'rbgrouleff/bclose.vim'
+endif
+PATH END
+
+DEFAULT:1
+
+CONFIG BEGIN
+" disable default shortcut
+let g:ranger_map_keys = 0
+" map custom shortcut
+" nnoremap <leader>file :Ranger<CR>
+CONFIG END
+
+SCRIPTS BEGIN
+#!/bin/bash
+
+red=$(tput setaf 1)
+green=$(tput setaf 2)
+yellow=$(tput setaf 3)
+blue=$(tput setaf 4)
+cyan=$(tput setaf 5)
+
+if ! command -v ranger >/dev/null 2>&1;then
+    echo "${red}Warning${reset}: install ranger manaually!"
+fi
+
+SCRIPTS END

@@ -7,11 +7,6 @@ PATH END
 DEFAULT:1
 
 CONFIG BEGIN
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-"
-"     defx-git.nvim CONFIG
-"
-""""""""""""""""""""""""""""""""""""""""""""""""""""""map <silent> - :Defx<CR>
 let g:defx_git#indicators = {
   \ 'Modified'  : '✹',
   \ 'Staged'    : '✚',
@@ -30,13 +25,6 @@ hi def link Defx_git_Renamed Title
 hi def link Defx_git_Unmerged Label
 hi def link Defx_git_Untracked Tag
 hi def link Defx_git_Ignored Comment
-
-
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-"
-"     defx-git.nvim END
-"
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 CONFIG END
 
 SCRIPTS BEGIN

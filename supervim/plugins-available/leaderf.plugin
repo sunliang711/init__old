@@ -7,11 +7,6 @@ PATH END
 DEFAULT:1
 
 CONFIG BEGIN
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-"
-"     LeaderF CONFIG
-"
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 nnoremap <leader><leader>f :Leaderf file<CR>
 nnoremap <leader><leader>m :Leaderf mru<CR>
 nnoremap <leader><leader>b :Leaderf buffer<CR>
@@ -34,12 +29,6 @@ let g:Lf_ShowRelativePath = 0
 let g:Lf_HideHelp = 1
 let g:Lf_StlColorscheme = 'powerline'
 let g:Lf_PreviewResult = {'Function':0, 'BufTag':0}
-
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-"
-"     LeaderF END
-"
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 CONFIG END
 
 SCRIPTS BEGIN
