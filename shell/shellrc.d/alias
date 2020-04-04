@@ -72,7 +72,7 @@ fi
 alias cd..='cd ..'
 alias cd-='cd -'
 alias grep='grep --color=auto'
-alias cdgo="cd $GOPATH/src"
+alias cdgo="cd $workspace/go/src"
 
 if command -v emacs >/dev/null 2>&1;then
     alias emacs='emacs -nw'

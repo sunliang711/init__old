@@ -10,10 +10,17 @@ user=${SUDO_USER:-$(whoami)}
 home=$(eval echo ~$user)
 
 #BEGIN environment variable
-export WORKSPACE=$HOME/Workspace
-export GOPATH=$WORKSPACE/go
+export workspace=$HOME/Workspace
+export GOPATH=$HOME/.go
 export GOBIN=$GOPATH/bin
+
+
+[ ! -d $workspace ] && mkdir -p $WORKSPACE
 [ ! -d $GOPATH ] && mkdir -p $GOPATH
+[ ! -d $GOBIN ] && mkdir -p $GOBIN
+
+export gopath=${GOPATH}
+export gobin=${GOBIN}
 
 #default editor for `systemctl edit --full <service>`
 #sudo -E systemctl edit --full <service>
