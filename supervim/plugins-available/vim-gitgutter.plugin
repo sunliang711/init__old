@@ -34,10 +34,15 @@ CONFIG BEGIN
 " turn on with :GitGutterLineNrHighlightsEnable
 " turn off with :GitGutterLineNrHighlightsDisable
 " toggle with :GitGutterLineNrHighlightsToggle.
-" TODO enable LineNrHighlight
-" GitGutterLineNrHighlightsEnable
-" GitGutterLineNrHighlightsEnable
 
+".vimrc is executed before plugins are loaded.
+let g:gitgutter_highlight_linenrs = 1
+" Or
+" autocmd VimEnter * GitGutterLineNrHighlightsEnable
+
+let g:gitgutter_highlight_lines = 1
+" Or
+" autocmd VimEnter * GitGutterLineHighlightsEnable
 "禁用所有默认快捷键
 "let g:gitgutter_map_keys = 0
 CONFIG END
