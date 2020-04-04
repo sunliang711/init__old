@@ -1,0 +1,16 @@
+NAME:"asyncrun.vim"
+
+PATH BEGIN
+Plug 'skywind3000/asyncrun.vim'
+PATH END
+
+DEFAULT:1
+
+CONFIG BEGIN
+let g:asyncrun_open = 10
+CONFIG END
+
+SCRIPTS BEGIN
+#!/bin/bash
+
+SCRIPTS END
