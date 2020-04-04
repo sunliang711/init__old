@@ -1,4 +1,13 @@
 #!/usr/bin/env bash
+
+red=$(tput setaf 1)
+green=$(tput setaf 2)
+yellow=$(tput setaf 3)
+blue=$(tput setaf 4)
+cyan=$(tput setaf 5)
+bold=$(tput bold)
+reset=$(tput sgr0)
+
 rpath="$(readlink ${BASH_SOURCE})"
 if [ -z "$rpath" ];then
     rpath=${BASH_SOURCE}
@@ -110,7 +119,7 @@ install(){
 
     echo  >> "$cfg"
 
-    echo "Install plugins..."
+    echo "${bold}${cyan}Install plugins...${reset}"
     $VIM -c PlugInstall -c qall
 
     ## CONFIG
@@ -134,6 +143,7 @@ cfgEOF
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 cfgEOFx
     done
+    echo "${bold}${cyan}Done.${reset}"
 
 
     # export VIM,root,thisDir for script use
@@ -142,7 +152,7 @@ cfgEOFx
     export thisDir
 
     ## SCRIPT
-    echo "RUN post scripts..."
+    echo "${bold}${cyan}Run post scripts...${reset}"
     for plugin in *.plugin;do
         #1. get plugin name
         pluginName=`perl -ne 'print $1 if /^\s*NAME\s*:\s*"([^"]+)"\s*$/' ${plugin}`
@@ -152,7 +162,7 @@ cfgEOFx
         #2. get plugin script
         perl -ne 'print if /SCRIPTS BEGIN/.../SCRIPTS END/' ${plugin} |sed -e '1d;$d' > /tmp/${pluginName}.sh
         if [ -f /tmp/${pluginName}.sh ];then
-            echo "Run /tmp/${pluginName}.sh"
+            echo "${green}Running${reset} ${bold}/tmp/${pluginName}.sh${reset} ..."
             bash /tmp/${pluginName}.sh
             /bin/rm -rf /tmp/${pluginName}.sh
         fi
@@ -160,7 +170,7 @@ cfgEOFx
     ## restore PWD
     cd ${thisDir}
 
-    echo "Done."
+    echo "${bold}${cyan}Done.${reset}"
 
 
 
@@ -239,7 +249,7 @@ case $VIM in
         usage
         ;;
 esac
-echo "update: $update"
+# echo "update: $update"
 
 if (( $update==1 ));then
     echo "update basic.vim..."

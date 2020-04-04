@@ -172,7 +172,7 @@ cyan=$(tput setaf 5)
 bold=$(tput bold)
 reset=$(tput sgr0)
 
-if ! npm list -g | grep neovim >/dev/null 2>&1 ;then
+if ! npm list -g 2>/dev/null | grep neovim >/dev/null 2>&1 ;then
     echo "coc need neovim module in npm, install it..."
     npm install -g neovim >/dev/null 2>&1 || { echo "${red}Warning${reset}: Install neovim by npm failed.Please install it with sudo privilege manaually."; }
 fi
@@ -189,6 +189,6 @@ if ! command -v bash-language-server >/dev/null 2>&1;then
 fi
 
 if ! command -v clangd >/dev/null 2>&1;then
-    echo "${green}Recommend${reset}: install clangd as C/C++ language server when needed. Clangd usually belongs to clang package or llvm package. "
+    echo "${green}Recommend${reset}: install ${bold}clangd${reset} as C/C++ language server when needed. Clangd usually belongs to clang package or llvm package. "
 fi
 SCRIPTS END

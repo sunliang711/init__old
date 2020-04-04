@@ -21,12 +21,25 @@ CONFIG BEGIN
 " turn off with :GitGutterLineHighlightsDisable
 " toggle with :GitGutterLineHighlightsToggle
 
+" 跳转到下一个修改点: ]c
+" 跳转到上一个修改点: [c
+" nmap ]c <Plug>(GitGutterNextHunk)
+" nmap [c <Plug>(GitGutterPrevHunk)
+
+" stage the hunk with <Leader>hs
+" undo it with <Leader>hu
+" preview the hunk, e.g. <Leader>hp;
+
 "With Neovim 0.3.2 or higher, you can turn line number highlighting on and off (defaults to off):
 " turn on with :GitGutterLineNrHighlightsEnable
 " turn off with :GitGutterLineNrHighlightsDisable
 " toggle with :GitGutterLineNrHighlightsToggle.
 " TODO enable LineNrHighlight
 " GitGutterLineNrHighlightsEnable
+" GitGutterLineNrHighlightsEnable
+
+"禁用所有默认快捷键
+"let g:gitgutter_map_keys = 0
 CONFIG END
 
 
