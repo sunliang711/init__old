@@ -35,12 +35,13 @@ CONFIG BEGIN
 " turn off with :GitGutterLineNrHighlightsDisable
 " toggle with :GitGutterLineNrHighlightsToggle.
 
-".vimrc is executed before plugins are loaded.
+"NOTE .vimrc is executed before plugins are loaded.
 let g:gitgutter_highlight_linenrs = 1
 " Or
 " autocmd VimEnter * GitGutterLineNrHighlightsEnable
 
-let g:gitgutter_highlight_lines = 1
+" 高亮所有修改的行，如果太多行，视觉效果不太好
+" let g:gitgutter_highlight_lines = 1
 " Or
 " autocmd VimEnter * GitGutterLineHighlightsEnable
 "禁用所有默认快捷键
