@@ -8,6 +8,7 @@ PATH END
 DEFAULT:1
 
 CONFIG BEGIN
+nnoremap <F8> :TagbarToggle<CR>
 CONFIG END
 
 SCRIPTS BEGIN
