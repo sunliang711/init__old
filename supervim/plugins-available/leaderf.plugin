@@ -16,28 +16,35 @@ let g:Lf_StlSeparator = { 'left': "\ue0b0", 'right': "\ue0b2", 'font': "DejaVu S
 let g:Lf_PreviewResult = {'Function':0, 'BufTag':0}
 
 " file
-let g:Lf_ShortcutF = "<leader><leader>f"
-let g:Lf_ShortcutB = "<leader><leader>b"
-nnoremap <leader><leader>m :Leaderf mru<CR>
+let g:Lf_ShortcutF = "<leader>ff"
+let g:Lf_ShortcutB = "<leader>fb"
+nnoremap <leader>fm :Leaderf mru<CR>
 
 " 使用rg(ripgrep)来搜索
-nnoremap <leader><leader>g :Leaderf rg<CR>
+nnoremap <leader>fr :Leaderf rg<CR>
 " 当跳转到一条搜索结果后，继续跳到下一条的结果
-nnoremap <leader>gn :Leaderf rg --next<CR>
+nnoremap <leader>rn :Leaderf rg --next<CR>
 " 当跳转到一条搜索结果后，继续跳到上一条的结果
-nnoremap <leader>gp :Leaderf rg --previous<CR>
+nnoremap <leader>rp :Leaderf rg --previous<CR>
 " cword表示光标处的单词，只有rg命令才有实际意义；file，buffer的话很少需要
-nnoremap <leader>gc :Leaderf --cword rg<CR>
+nnoremap <leader>rc :Leaderf --cword rg<CR>
 
-nnoremap <leader><leader>c :Leaderf command<CR>
-nnoremap <leader><leader>h :Leaderf cmdHistory<CR>
-nnoremap <leader><leader>w :Leaderf window<CR>
+nnoremap <leader>fg :Leaderf gtags<CR>
+
+nnoremap <leader>fc :Leaderf command<CR>
+nnoremap <leader>fh :Leaderf cmdHistory<CR>
+nnoremap <leader>fw :Leaderf window<CR>
 
 
+" 查找项目根目录
 let g:Lf_RootMarkers = ['.project', '.root', '.svn', '.git']
 let g:Lf_WorkingDirectoryMode = 'Ac'
 let g:Lf_WindowHeight = 0.30
-let g:Lf_CacheDirectory = expand('~/.vim/cache')
+if has('nvim')
+    let g:Lf_CacheDirectory = expand('~/.config/.nvim/cache')
+else
+    let g:Lf_CacheDirectory = expand('~/.vim/cache')
+endif
 let g:Lf_ShowRelativePath = 0
 let g:Lf_HideHelp = 1
 let g:Lf_StlColorscheme = 'powerline'
