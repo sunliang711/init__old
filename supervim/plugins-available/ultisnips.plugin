@@ -19,8 +19,7 @@ CONFIG END
 
 SCRIPTS BEGIN
 #!/bin/bash
-if [ ! -d "$root"/UltiSnips ];then
-    mkdir "$root"/UltiSnips
-fi
+echo "Copy UltiSnips ..."
+cp -r ${thisDir}/UltiSnips $root && { echo "Done."; } || { echo "Failed!"; }
 
 SCRIPTS END
