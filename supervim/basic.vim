@@ -220,6 +220,8 @@ function! GotoJump()
   endif
 endfunction
 
+set completeopt=longest,menuone
+
 "vim-plug
 "{{{
 if has('nvim')
