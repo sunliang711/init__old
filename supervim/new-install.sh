@@ -172,8 +172,6 @@ cfgEOFx
 
     echo "${bold}${cyan}Done.${reset}"
 
-
-
 }
 
 usage(){

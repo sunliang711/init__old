@@ -135,8 +135,9 @@ noremap <silent> <C-h> <C-W>h
 inoremap <silent> <C-h> <esc><C-W>h
 noremap <silent> <C-l> <C-W>l
 inoremap <silent> <C-l> <esc><C-W>l
-noremap <silent> <C-j> <C-W>j
-inoremap <silent> <C-j> <esc><C-W>j
+" 上下分割窗口较少使用到，因此把快捷键留出来给UltiSnips插件用(虽然同时设置也不会冲突)
+" noremap <silent> <C-j> <C-W>j
+" inoremap <silent> <C-j> <esc><C-W>j
 " noremap <silent> <C-k> <C-W>k
 " inoremap <silent> <C-k> <esc><C-W>k
 

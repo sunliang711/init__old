@@ -4,7 +4,7 @@ PATH BEGIN
 Plug 'ctrlpvim/ctrlp.vim'
 PATH END
 
-DEFAULT:1
+DEFAULT:0
 
 CONFIG BEGIN
 CONFIG END
