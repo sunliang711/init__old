@@ -122,6 +122,14 @@ install(){
     echo "${bold}${cyan}Install plugins...${reset}"
     $VIM -c PlugInstall -c qall
 
+    # Note VIMRUNTIME is important when executing vim command in shell
+    if [ "$VIM" = "vim" ];then
+        export VIMRUNTIME=`vim -e -T dumb --cmd 'exe "set t_cm=\<C-M>"|echo $VIMRUNTIME|quit' | tr -d '\015' `
+    elif [ "$VIM" = "nvim" ];then
+        export VIMRUNTIME="`nvim --clean --headless --cmd 'echo $VIMRUNTIME|q'`"
+    fi
+    echo "${cyan}VIMRUNTIME:${reset} $VIMRUNTIME"
+
     ## CONFIG
     for plugin in *.plugin;do
         #1. get plugin name
@@ -144,7 +152,6 @@ cfgEOF
 cfgEOFx
     done
     echo "${bold}${cyan}Done.${reset}"
-
 
     # export VIM,root,thisDir for script use
     export VIM

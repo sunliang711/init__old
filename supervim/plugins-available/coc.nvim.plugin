@@ -210,7 +210,9 @@ if ! command -v clangd >/dev/null 2>&1;then
     echo "${green}Recommend${reset}: install ${bold}clangd${reset} as C/C++ language server when needed. Clangd usually belongs to clang package or llvm package. "
 fi
 
-echo "${green}Recommend${reset}: install coc-snippets plugin by 'CocInstall coc-snippets' if you need."
+echo "${cyan}Install coc-snippets..."
+$VIM -c 'CocInstall coc-snippets' -c 'qall' && { echo "Done${reset}"; }
+
 echo "${green}Recommend${reset}: install coc-python plugin by 'CocInstall coc-python' if you need."
 echo "${red}NOTE${reset} disable npm registry before run 'CocInstall' command !!"
 
