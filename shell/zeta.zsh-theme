@@ -142,7 +142,7 @@ function print_prompt_head {
 %{$blue%}# \
 %{$green_bold%}$(get_usr_name)\
 %{$blue%}@\
-%{$black_bold%}$(get_box_name): \
+%{$magenta_bold%}$(get_box_name): \
 %{$magenta_bold%}$(get_current_dir)%{$reset_color%}\
 $(get_git_prompt)"
     local right_prompt="%{$blue%}($(get_time_stamp))%{$reset_color%} "
