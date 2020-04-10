@@ -1072,7 +1072,7 @@ function newsh(){
 
 		${bold}CMD${reset}:
 		EOF2
-	    perl -lne 'print "\t$2" if /^(function)?\s*?(\w+)\(\)\{$/' $(basename ${BASH_SOURCE})
+	    perl -lne 'print "\t$2" if /^(function)?\s*?(\w+)\(\)\{$/' $(basename ${BASH_SOURCE}) | grep -v runAsRoot
 		}
 
 		case "$1" in

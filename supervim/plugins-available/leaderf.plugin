@@ -2,6 +2,7 @@ NAME:"leaderf"
 
 PATH BEGIN
 Plug 'Yggdroot/LeaderF' , { 'do': './install.sh' }
+Plug 'Yggdroot/LeaderF-marks'
 PATH END
 
 DEFAULT:1
