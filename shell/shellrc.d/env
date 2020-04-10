@@ -15,7 +15,7 @@ export GOPATH=$HOME/.go
 export GOBIN=$GOPATH/bin
 
 
-[ ! -d $workspace ] && mkdir -p $WORKSPACE
+[ ! -d $workspace ] && mkdir -p $workspace
 [ ! -d $GOPATH ] && mkdir -p $GOPATH
 [ ! -d $GOBIN ] && mkdir -p $GOBIN
 
@@ -52,12 +52,16 @@ export LESSCHARSET=utf-8
 # export LC_CTYPE="en_US.utf8"
 
 #BEGIN PATH
-[ -n "$GOPATH" ] && insert_path $GOPATH/bin
-[ -d "$HOME/bin" ] && insert_path "$HOME/bin"
+export PATH=""
+append_path "$HOME/.bin"
+[ -n "$GOPATH" ] && append_path $GOPATH/bin
+
 append_path /usr/local/sbin
 append_path /usr/local/bin
+
 append_path /usr/sbin
 append_path /usr/bin
+
 append_path /sbin
 append_path /bin
 #BEGIN custom PATH
