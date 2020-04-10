@@ -21,14 +21,14 @@ let g:Lf_ShortcutF = "<leader><leader>f"
 let g:Lf_ShortcutB = "<leader><leader>b"
 nnoremap <leader><leader>m :Leaderf mru<CR>
 
-" 使用rg(ripgrep)来搜索
-nnoremap <leader><leader>r :Leaderf rg<CR>
+" 使用rg(ripgrep)来搜索(search)
+nnoremap <leader><leader>s :Leaderf rg<CR>
 " 当跳转到一条搜索结果后，继续跳到下一条的结果
-nnoremap <leader>rn :Leaderf rg --next<CR>
+nnoremap <leader>sn :Leaderf rg --next<CR>
 " 当跳转到一条搜索结果后，继续跳到上一条的结果
-nnoremap <leader>rp :Leaderf rg --previous<CR>
+nnoremap <leader>sp :Leaderf rg --previous<CR>
 " cword表示光标处的单词，只有rg命令才有实际意义；file，buffer的话很少需要
-nnoremap <leader>rc :Leaderf --cword rg<CR>
+nnoremap <leader>sc :Leaderf --cword rg<CR>
 
 nnoremap <leader><leader>g :Leaderf gtags<CR>
 
