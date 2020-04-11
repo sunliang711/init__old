@@ -1,0 +1,28 @@
+NAME:"floaterm"
+
+PATH BEGIN
+Plug 'voldikss/vim-floaterm'
+PATH END
+
+DEFAULT:1
+
+CONFIG BEGIN
+if has('nvim')
+    let g:floaterm_position = 'center'
+    let g:floaterm_width = 0.8
+    let g:floaterm_height = 0.8
+    let g:floaterm_wintype = 'floating'
+else
+    let g:floaterm_wintype = 'normal'
+endif
+
+"let g:floaterm_rootmarkers = ['.project', '.git', '.hg', '.svn', '.root', '.gitignore']
+
+nnoremap   <silent>   <F7>   :FloatermToggle<CR>
+tnoremap   <silent>   <F7>   <C-\><C-n>:FloatermToggle<CR>
+CONFIG END
+
+SCRIPTS BEGIN
+#!/bin/bash
+
+SCRIPTS END
