@@ -1259,7 +1259,18 @@ EOF
 }
 
 function cmakeclean(){
-    cd .. && /bin/rm -rf build && mkdir build && cd $_
+    #if PWD is 'build'
+    if [ "$(basename $(pwd))" = "build" ];then
+        echo "${green}In build directory${reset}"
+        echo "${cyan}create cleaning build directory${reset}"
+        cd .. && /bin/rm -rf build && mkdir build && cd build
+    elif [ -f CMakeLists.txt ] && [ -d build ];then
+        echo "${green}build directory is in PWD${reset}"
+        echo "${cyan}create cleaning build directory${reset}"
+        /bin/rm -rf build && mkdir build
+    else
+        echo "Not in cmake project directory"
+    fi
 }
 
 function editService(){
