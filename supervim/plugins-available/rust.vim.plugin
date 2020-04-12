@@ -1,0 +1,26 @@
+NAME:"rust.vim"
+
+PATH BEGIN
+rust-lang/rust.vim
+PATH END
+
+DEFAULT:1
+
+CONFIG BEGIN
+let g:rustfmt_autosave = 1
+CONFIG END
+
+SCRIPTS BEGIN
+#!/bin/bash
+red=$(tput setaf 1)
+green=$(tput setaf 2)
+yellow=$(tput setaf 3)
+blue=$(tput setaf 4)
+cyan=$(tput setaf 5)
+reset=$(tput sgr0)
+
+if ! command -v rustfmt >/dev/null 2>&1;then
+    echo "${red}Warning: need rustfmt command, please install it."
+fi
+
+SCRIPTS END

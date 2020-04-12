@@ -214,6 +214,7 @@ echo "${cyan}Install coc-snippets..."
 $VIM -c 'CocInstall coc-snippets' -c 'qall' && { echo "Done${reset}"; }
 
 echo "${green}Recommend${reset}: install coc-python plugin by 'CocInstall coc-python' if you need."
+echo "${green}Recommend${reset}: install coc-rls plugin by 'CocInstall coc-rls' if you need."
 echo "${red}NOTE${reset} disable npm registry before run 'CocInstall' command !!"
 
 SCRIPTS END
