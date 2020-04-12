@@ -18,8 +18,9 @@ endif
 
 "let g:floaterm_rootmarkers = ['.project', '.git', '.hg', '.svn', '.root', '.gitignore']
 
-nnoremap   <silent>   <F7>   :FloatermToggle<CR>
-tnoremap   <silent>   <F7>   <C-\><C-n>:FloatermToggle<CR>
+inoremap <silent> <F7>  <Esc>:FloatermToggle<CR>
+nnoremap <silent> <F7>  :FloatermToggle<CR>
+tnoremap <silent> <F7>  <C-\><C-n>:FloatermToggle<CR>
 CONFIG END
 
 SCRIPTS BEGIN
