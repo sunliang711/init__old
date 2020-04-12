@@ -1,7 +1,7 @@
 NAME:"rust.vim"
 
 PATH BEGIN
-rust-lang/rust.vim
+Plug 'rust-lang/rust.vim'
 PATH END
 
 DEFAULT:1
