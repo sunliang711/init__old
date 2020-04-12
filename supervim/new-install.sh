@@ -124,11 +124,11 @@ install(){
 
     # Note VIMRUNTIME is important when executing vim command in shell
     if [ "$VIM" = "vim" ];then
-        export VIMRUNTIME=`vim -e -T dumb --cmd 'exe "set t_cm=\<C-M>"|echo $VIMRUNTIME|quit' | tr -d '\015' `
+        export VIMRUNTIME="`vim -e -T dumb --cmd 'exe "set t_cm=\<C-M>"|echo $VIMRUNTIME|quit' | tr -d '\015' `"
     elif [ "$VIM" = "nvim" ];then
-        export VIMRUNTIME="`nvim --clean --headless --cmd 'echo $VIMRUNTIME|q'`"
+        export VIMRUNTIME="`nvim --clean --headless --cmd 'echo $VIMRUNTIME|q' 2>&1`"
     fi
-    echo "${cyan}VIMRUNTIME:${reset} $VIMRUNTIME"
+    echo "${cyan}VIMRUNTIME:${reset} ${VIMRUNTIME}"
 
     ## CONFIG
     for plugin in *.plugin;do
