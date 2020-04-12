@@ -22,5 +22,6 @@ reset=$(tput sgr0)
 if ! command -v rustfmt >/dev/null 2>&1;then
     echo "${red}Warning: need rustfmt command, please install it."
 fi
+echo "${green}run 'rustup component add rls rust-analysis rust-src' add rust support"
 
 SCRIPTS END
