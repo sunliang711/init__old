@@ -1,0 +1,16 @@
+NAME:"fzf.vim"
+
+PATH BEGIN
+Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
+Plug 'junegunn/fzf.vim'
+PATH END
+
+DEFAULT:1
+
+CONFIG BEGIN
+CONFIG END
+
+SCRIPTS BEGIN
+#!/bin/bash
+
+SCRIPTS END
