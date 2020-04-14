@@ -21,5 +21,8 @@ CONFIG END
 
 SCRIPTS BEGIN
 #!/bin/bash
+if ! command -v bat >/dev/null 2>&1;then
+    echo "Need 'bat' command."
+fi
 
 SCRIPTS END
