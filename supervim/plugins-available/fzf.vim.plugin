@@ -16,7 +16,7 @@ command! -bang -nargs=? -complete=dir FzfFiles
 command! -bang -nargs=* FzfRg
   \ call fzf#vim#grep(
   \   'rg --column --line-number --no-heading --color=always --smart-case '.shellescape(<q-args>), 1,
-  \   fzf#vim#with_preview({'options':['--layout=reverse']}), <bang>0)
+  \   fzf#vim#with_preview({'options':'--delimiter : --nth 4..'}), <bang>0)
 
 nnoremap <leader><leader>f :FzfFiles<CR>
 nnoremap <leader><leader>s :FzfRg<CR>
