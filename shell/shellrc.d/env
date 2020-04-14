@@ -52,7 +52,7 @@ export LESSCHARSET=utf-8
 # export LC_CTYPE="en_US.utf8"
 
 #BEGIN PATH
-export PATH=""
+# export PATH=""
 append_path "$HOME/.bin"
 [ -n "$GOPATH" ] && append_path $GOPATH/bin
 
