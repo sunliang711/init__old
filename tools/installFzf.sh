@@ -14,7 +14,7 @@ green=$(tput setaf 2)
 yellow=$(tput setaf 3)
 blue=$(tput setaf 4)
 cyan=$(tput setaf 5)
-        bold=$(tput bold)
+bold=$(tput bold)
 reset=$(tput sgr0)
 runAsRoot(){
     verbose=0
@@ -58,9 +58,15 @@ install(){
     git clone --depth 1 https://github.com/junegunn/fzf.git ~/.fzf
     ~/.fzf/install
 
+    #TODO source ./fzffunctions.sh
+
     if ! command -v fd >/dev/null 2>&1;then
         echo "Install fd-find by npm"
         npm install -g fd-find >/dev/null 2>&1 || { echo "${red}Warning${reset}:install fd-find error,please install it manaualy"; }
+    fi
+
+    if ! command -v bat >/dev/null 2>&1;then
+        echo "${cyan}Recommend: install bat for fzf preview${reset}"
     fi
 }
 

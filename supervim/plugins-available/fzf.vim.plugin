@@ -25,4 +25,12 @@ if ! command -v bat >/dev/null 2>&1;then
     echo "Need 'bat' command."
 fi
 
+if ! command -v fd >/dev/null 2>&1;then
+    echo "Need 'fd' command."
+fi
+
+if ! command -v rg >/dev/null 2>&1;then
+    echo "Need 'rg' command."
+fi
+
 SCRIPTS END
