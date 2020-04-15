@@ -4,7 +4,7 @@ fi
 export FZF_DEFAULT_OPTS='--height 70% --reverse --border'
 
 fzfp() {
-    fzf --bind 'ctrl-f:preview-page-down' --bind 'ctrl-b:preview-page-up' --preview '[[ $(file --mime {}) =~ binary ]] && echo {} is a binary file || (bat --style=numbers --color=always {} || rougify {}  || highlight -O ansi -l {} || coderay {} || cat {}) 2> /dev/null | head -500'
+    fzf --bind 'ctrl-f:preview-page-down' --bind 'ctrl-b:preview-page-up' --preview '[[ $(file --mime {}) =~ binary ]] && echo {} is a binary file || (bat --style=numbers --color=always {} || rougify {}  || highlight -O ansi -l {} || coderay {} || cat -n {}) 2> /dev/null | head -500'
 }
 
 fzfe(){
@@ -27,9 +27,9 @@ fzfe(){
     fi
 
     if command -v fd >/dev/null 2>&1;then
-        file=$(fd --type f | fzf --border --height 60% --reverse -m --bind 'ctrl-f:preview-page-down' --bind 'ctrl-b:preview-page-up' --preview '[[ $(file --mime {}) =~ binary ]] && echo {} is a binary file || (bat --style=numbers --color=always {} || rougify {}  || highlight -O ansi -l {} || coderay {} || cat {}) 2> /dev/null | head -500')
+        file=$(fd --type f | fzf --border --height 60% --reverse -m --bind 'ctrl-f:preview-page-down' --bind 'ctrl-b:preview-page-up' --preview '[[ $(file --mime {}) =~ binary ]] && echo {} is a binary file || (bat --style=numbers --color=always {} || rougify {}  || highlight -O ansi -l {} || coderay {} || cat -n {}) 2> /dev/null | head -500')
     else
-        file=$(find . -not -path '*/\.*' -type f | fzf --border --height 60% --reverse -m --bind 'ctrl-f:preview-page-down' --bind 'ctrl-b:preview-page-up' --preview '[[ $(file --mime {}) =~ binary ]] && echo {} is a binary file || (bat --style=numbers --color=always {} || rougify {}  || highlight -O ansi -l {} || coderay {} || cat {}) 2> /dev/null | head -500')
+        file=$(find . -not -path '*/\.*' -type f | fzf --border --height 60% --reverse -m --bind 'ctrl-f:preview-page-down' --bind 'ctrl-b:preview-page-up' --preview '[[ $(file --mime {}) =~ binary ]] && echo {} is a binary file || (bat --style=numbers --color=always {} || rougify {}  || highlight -O ansi -l {} || coderay {} || cat -n {}) 2> /dev/null | head -500')
     fi
     if [ -n "$file" ];then
         # multi files
@@ -58,9 +58,9 @@ fzfE(){
     fi
 
     if command -v fd >/dev/null 2>&1;then
-        file=$(fd -HI --type f | fzf --border --height 60% --reverse -m --bind 'ctrl-f:preview-page-down' --bind 'ctrl-b:preview-page-up' --preview '[[ $(file --mime {}) =~ binary ]] && echo {} is a binary file || (bat --style=numbers --color=always {} || rougify {}  || highlight -O ansi -l {} || coderay {} || cat {}) 2> /dev/null | head -500')
+        file=$(fd -HI --type f | fzf --border --height 60% --reverse -m --bind 'ctrl-f:preview-page-down' --bind 'ctrl-b:preview-page-up' --preview '[[ $(file --mime {}) =~ binary ]] && echo {} is a binary file || (bat --style=numbers --color=always {} || rougify {}  || highlight -O ansi -l {} || coderay {} || cat -n {}) 2> /dev/null | head -500')
     else
-        file=$(find . -type f | fzf --border --height 60% --reverse -m --bind 'ctrl-f:preview-page-down' --bind 'ctrl-b:preview-page-up' --preview '[[ $(file --mime {}) =~ binary ]] && echo {} is a binary file || (bat --style=numbers --color=always {} || rougify {}  || highlight -O ansi -l {} || coderay {} || cat {}) 2> /dev/null | head -500')
+        file=$(find . -type f | fzf --border --height 60% --reverse -m --bind 'ctrl-f:preview-page-down' --bind 'ctrl-b:preview-page-up' --preview '[[ $(file --mime {}) =~ binary ]] && echo {} is a binary file || (bat --style=numbers --color=always {} || rougify {}  || highlight -O ansi -l {} || coderay {} || cat -n {}) 2> /dev/null | head -500')
     fi
     if [ -n "$file" ];then
         # multi files
