@@ -58,13 +58,21 @@ install(){
     git clone --depth 1 https://github.com/junegunn/fzf.git ~/.fzf
     ~/.fzf/install
 
-    cat<<-EOF>~/.zshrc
-    source $(pwd)/fzffunctions.sh
-	EOF
+    if ! grep -q '#BEGIN FZF function' ~/.zshrc;then
+        cat<<-EOF>>~/.zshrc
+		#BEGIN FZF function
+		source $(pwd)/fzffunctions.sh
+		#END FZF function
+		EOF
+    fi
 
-    cat<<-EOF>~/.bashrc
-    source $(pwd)/fzffunctions.sh
-	EOF
+    if ! grep -q '#BEGIN FZF function' ~/.bashrc;then
+        cat<<-EOF>>~/.bashrc
+		#BEGIN FZF function
+		source $(pwd)/fzffunctions.sh
+		#END FZF function
+		EOF
+    fi
 
     if ! command -v fd >/dev/null 2>&1;then
         echo "Install fd-find by npm"
