@@ -19,16 +19,22 @@ command! -bang -nargs=* FzfRg
   \   'rg --column --line-number --no-heading --color=always --smart-case '.shellescape(<q-args>), 1,
   \   fzf#vim#with_preview({'options':'--layout=reverse --info=inline --delimiter : --nth 4..'}), <bang>0)
 
+command! -bang -nargs=* FzfRgc
+  \ call fzf#vim#grep(
+  \   'rg --column --line-number --no-heading --color=always --smart-case '.shellescape(expand('<cword>')), 1,
+  \   fzf#vim#with_preview({'options':'--layout=reverse --info=inline --delimiter : --nth 4..'}), <bang>0)
+
 command! -bang -nargs=* FzfCommands  call fzf#vim#commands(fzf#vim#with_preview({'options':'--layout=reverse --info=inline'}),<bang>0)
 
-
 nnoremap <leader><leader>f :FzfFiles<CR>
-nnoremap <leader><leader>s :FzfRg<CR>
 nnoremap <leader><leader>h :FzfHistory:<CR>
 nnoremap <leader><leader>m :FzfHistory<CR>
 nnoremap <leader><leader>b :FzfBuffers<CR>
 nnoremap <leader><leader>w :FzfWindows<CR>
 nnoremap <leader><leader>c :FzfCommands<CR>
+
+nnoremap <leader><leader>s :FzfRg<CR>
+nnoremap <leader>sc :FzfRgc<CR>
 
 " start fzf in popup window
 let g:fzf_layout = { 'window': { 'width': 0.9, 'height': 0.6 } }
