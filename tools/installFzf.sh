@@ -75,8 +75,7 @@ install(){
     fi
 
     if ! command -v fd >/dev/null 2>&1;then
-        echo "Install fd-find by npm"
-        npm install -g fd-find >/dev/null 2>&1 || { echo "${red}Warning${reset}:install fd-find error,please install it manaualy"; }
+        echo "${red}Warning: install fd or fd-find for fzf${reset}"
     fi
 
     if ! command -v bat >/dev/null 2>&1;then
