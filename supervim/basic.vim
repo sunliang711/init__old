@@ -53,7 +53,7 @@ set updatetime=300
 set clipboard=unnamed
 nnoremap j gj
 nnoremap k gk
-nnoremap ; :
+" nnoremap ; :
 
 
 let os = substitute(system("uname"),"\n","","")
