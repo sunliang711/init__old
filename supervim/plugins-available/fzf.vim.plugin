@@ -10,13 +10,17 @@ DEFAULT:1
 CONFIG BEGIN
 let g:fzf_command_prefix = 'Fzf'
 
+" options entry can be either a string or a lis
 command! -bang -nargs=? -complete=dir FzfFiles
             \ call fzf#vim#files(<q-args>, {'options': ['--layout=reverse',  '--info=inline', '--bind','ctrl-f:preview-page-down','--bind','ctrl-b:preview-page-up','--preview',  'bat --color=always {}']}, <bang>0)
 
 command! -bang -nargs=* FzfRg
   \ call fzf#vim#grep(
   \   'rg --column --line-number --no-heading --color=always --smart-case '.shellescape(<q-args>), 1,
-  \   fzf#vim#with_preview({'options':'--delimiter : --nth 4..'}), <bang>0)
+  \   fzf#vim#with_preview({'options':'--layout=reverse --info=inline --delimiter : --nth 4..'}), <bang>0)
+
+command! -bang -nargs=* FzfCommands  call fzf#vim#commands(fzf#vim#with_preview({'options':'--layout=reverse --info=inline'}),<bang>0)
+
 
 nnoremap <leader><leader>f :FzfFiles<CR>
 nnoremap <leader><leader>s :FzfRg<CR>
@@ -25,6 +29,18 @@ nnoremap <leader><leader>m :FzfHistory<CR>
 nnoremap <leader><leader>b :FzfBuffers<CR>
 nnoremap <leader><leader>w :FzfWindows<CR>
 nnoremap <leader><leader>c :FzfCommands<CR>
+
+" start fzf in popup window
+let g:fzf_layout = { 'window': { 'width': 0.9, 'height': 0.6 } }
+function! TogglePopup()
+    if !exists("g:fzf_layout")
+        let g:fzf_layout = { 'window': { 'width': 0.9, 'height': 0.6 } }
+    else
+        unlet g:fzf_layout
+    endif
+endfunction
+
+command! -nargs=0 FzfTogglePopup call TogglePopup()
 
 CONFIG END
 

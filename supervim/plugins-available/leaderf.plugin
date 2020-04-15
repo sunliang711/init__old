@@ -5,7 +5,7 @@ Plug 'Yggdroot/LeaderF' , { 'do': './install.sh' }
 Plug 'Yggdroot/LeaderF-marks'
 PATH END
 
-DEFAULT:1
+DEFAULT:0
 
 CONFIG BEGIN
 let g:Lf_ShowDevIcons = 1
