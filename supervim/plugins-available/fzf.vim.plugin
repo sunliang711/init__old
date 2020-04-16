@@ -48,6 +48,10 @@ endfunction
 
 command! -nargs=0 FzfTogglePopup call TogglePopup()
 
+let g:fzf_action = {
+      \ 'ctrl-t': 'tab split',
+      \ 'ctrl-s': 'split',
+      \ 'ctrl-v': 'vsplit' }
 CONFIG END
 
 
