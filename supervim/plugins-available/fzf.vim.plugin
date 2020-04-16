@@ -24,7 +24,8 @@ command! -bang -nargs=* FzfRgc
   \   'rg --column --line-number --no-heading --color=always --smart-case '.shellescape(expand('<cword>')), 1,
   \   fzf#vim#with_preview({'options':'--layout=reverse --info=inline --delimiter : --nth 4..'}), <bang>0)
 
-command! -bang -nargs=* FzfCommands  call fzf#vim#commands(fzf#vim#with_preview({'options':'--layout=reverse --info=inline'}),<bang>0)
+"command! -bang -nargs=* FzfCommands  call fzf#vim#commands(fzf#vim#with_preview({'options':'--layout=reverse --info=inline'}),<bang>0)
+command! -bang -nargs=* FzfCommands  call fzf#vim#commands(<bang>0)
 
 nnoremap <leader><leader>f :FzfFiles<CR>
 nnoremap <leader><leader>h :FzfHistory:<CR>
