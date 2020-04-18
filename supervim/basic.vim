@@ -142,6 +142,17 @@ inoremap <silent> <C-l> <esc><C-W>l
 " noremap <silent> <C-k> <C-W>k
 " inoremap <silent> <C-k> <esc><C-W>k
 
+" set grepprg to use ripgrep(rg) if it exists
+if executable('rg')
+    set grepprg=rg\ --vimgrep\ --no-heading\ --smart-case
+    set grepformat=%f:%l:%c:%m,%f:%l:%m
+    " nnoremap <silent> [l :lprevious<CR>
+    " nnoremap <silent> ]l :lnext<CR>
+
+    " nnoremap <silent> [f :cprevious<CR>
+    " nnoremap <silent> ]f :cnext<CR>
+endif
+
 nnoremap <leader>U gUiw
 nnoremap <leader>u guiw
 
